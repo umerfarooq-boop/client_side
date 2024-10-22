@@ -1,77 +1,61 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import axios from '../axios';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RotatingLines } from 'react-loader-spinner';
+import { useState } from 'react';
 import { OtpInput } from 'reactjs-otp-input';
 
-
-
 function Otp() {
-  const [otp, setOtp] = useState('');
+  const { register, handleSubmit, reset } = useForm();
   const [loading, setLoading] = useState(false);
-  const [timer, setTimer] = useState(60); 
-  const [showResend, setShowResend] = useState(false); 
   const navigate = useNavigate();
-
+  const [otp,setOtp] = useState('');
   const email = localStorage.getItem('email');
 
   // Function to verify OTP
   const loginOtp = async (data) => {
-    const otp = `${data.otp1}${data.otp2}${data.otp3}${data.otp4}`;
+    // const otp = `${data.otp1}${data.otp2}${data.otp3}${data.otp4}`;
+    
     const submissionData = { email, otp };
     setLoading(true);
 
     try {
       const response = await axios.post('/verify-otp', submissionData);
       toast.success('OTP is Verified');
-      navigate('/login');
+      // alert("Found");
+      reset();
+      navigate('/profile');
+      reset();
     } catch (error) {
       toast.error('Invalid OTP or Time Over');
+      reset();
       console.error('Error verifying OTP:', error);
     } finally {
       setLoading(false);
     }
   };
 
-
-  const Resendemail = async () => {
+  // Function to resend OTP
+  const Resendemail = async (e) => {
+    // e.preventDefault();
     setLoading(true);
 
+    const email = localStorage.getItem('email');
     const resendData = { email };
 
     try {
       const response = await axios.post('/resend-otp', resendData);
       toast.success('New OTP sent to your email');
-      setTimer(60); 
-      setShowResend(false); 
     } catch (error) {
       toast.error('Failed to send OTP, please try again');
       console.error('Error resending OTP:', error);
     } finally {
       setLoading(false);
     }
-  };
-
-  // Timer logic
-  useEffect(() => {
-    let interval;
-    if (timer > 0) {
-      interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
-      }, 1000);
-    } else {
-      setShowResend(true); 
-    }
-    return () => clearInterval(interval); 
-  }, [timer]);
-
-  const handleChange = (otpValue) => setOtp(otpValue);
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    loginOtp({ otp });
   };
 
   return (
@@ -86,97 +70,56 @@ function Otp() {
             strokeWidth="5"
             animationDuration="0.75"
             ariaLabel="rotating-lines-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
           />
         </div>
       ) : (
-        <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-12">
-          <div className="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
-            <div className="mx-auto flex w-full max-w-md flex-col space-y-16">
-              <div className="flex flex-col items-center justify-center text-center space-y-2">
-                <div className="font-semibold text-3xl">
-                  <p>Email Verification</p>
-                </div>
-                <div className="flex flex-row text-sm font-medium text-gray-400">
-                  <p>We have sent a code to your email {email}</p>
-                </div>
-              </div>
-
-              <div>
-                
-                <div className="text-center mb-5 text-blue-600 text-lg">
-                  {timer > 0 ? (
-                    <span>Resend available in {timer} seconds</span>
-                  ) : null}
-                </div>
-
-                
-                <form onSubmit={onSubmit}>
-                  <div className="flex flex-col space-y-16">
-                    <div className="flex flex-col items-center justify-between mx-auto w-full max-w-xs">
-                      <OtpInput
-                        value={otp}
-                        onChange={handleChange}
-                        numInputs={4} 
-                        separator={<span>-</span>}
-                        inputStyle={{
-                          width: '3rem',
-                          height: '3rem',
-                          margin: '0 0.5rem',
-                          fontSize: '1.5rem',
-                          borderRadius: '8px',
-                          border: '1px solid rgba(0,0,0,0.3)',
-                        }}
-                        focusStyle={{
-                          border: '1px solid blue',
-                        }}
-                      />
-                    </div>
-
-                    <div className="flex flex-col space-y-5">
-                      <div>
-                        <button
-                          type="submit"
-                          className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
-                        >
-                          <svg
-                            className="w-6 h-6 -ml-2"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                            <circle cx="8.5" cy="7" r="4" />
-                            <path d="M20 8v6M23 11h-6" />
-                          </svg>
-                          <span className="ml-3">Verify OTP</span>
-                        </button>
-                      </div>
-
-                      <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
-                        <p>Didn't receive a code?</p>
-
-                        {showResend ? (
-                          <a
-                            className="flex flex-row items-center text-blue-600 cursor-pointer"
-                            onClick={Resendemail}
-                          >
-                            Resend
-                          </a>
-                        ) : (
-                          <span className="text-gray-400">Resend in 1 minute</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
+        
+        <>
+        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+          <div className="bg-gray-200 p-8 rounded-lg shadow-lg w-full max-w-lg h-full">
+            <h2 className="text-2xl font-semibold text-center mb-4">Verify OTP</h2>
+            <p className="text-sm font-semibold text-center mb-10">Otp Send on Your {email}</p>
+      
+            <OtpInput
+              value={otp}
+              onChange={setOtp}
+              numInputs={4}
+              inputType="number"
+              renderSeparator={<span className="mx-4 text-green-500">-</span>}
+              renderInput={(props) => (
+                <input
+                  {...props}
+                  className="w-20 h-20 text-center rounded-lg border-2 border-blue-500 bg-gray-200 text-blue-800 text-3xl font-semibold shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+              )}
+              containerStyle="flex justify-center space-x-20 mb-10 text-5xl"
+            />
+            <button
+              className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+              onClick={loginOtp}
+              disabled={loading}
+            >
+              {loading ? 'Verifying...' : 'Verify OTP'}
+            </button>
+      
+            <div className="mt-4 flex justify-center text-gray-600">
+              <p>Didn't receive a code?&nbsp;</p>
+              <a
+                href="#"
+                onClick={Resendemail}
+                className="text-blue-500 hover:underline"
+              >
+                Resend
+              </a>
             </div>
           </div>
         </div>
+      </>
+      
       )}
-      <ToastContainer />
+      <ToastContainer /> 
     </>
   );
 }
