@@ -53,9 +53,9 @@ const Profile = () => {
       console.log(response.data);
       localStorage.setItem('coach_id',response.data.profile.coach_id);
       localStorage.setItem('location',response.data.profile.profile_location);
-      setLoader(false); // Hide loader after successful request
+      localStorage.setItem('player_id',response.data.profile.player_id);
+      setLoader(false); 
 
-      // Show SweetAlert and navigate to dashboard after user clicks "OK"
       Swal.fire({
         title: "Success!",
         text: "Profile Created Successfully",
@@ -63,12 +63,16 @@ const Profile = () => {
         confirmButtonText: "OK",
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate('/dashboard'); // Redirect after confirmation
+          const role = localStorage.getItem('role');
+          if(role === 'player'){
+            // navigate('/dashboard');
+            navigate('/coachpost');
+          } 
         }
       });
     } catch (error) {
       console.error(error);
-      setLoader(false); // Hide loader if an error occurs
+      setLoader(false); 
       Swal.fire({
         title: "Error!",
         text: "Something went wrong. Please try again.",

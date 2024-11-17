@@ -13,12 +13,13 @@ import NewsFeed from './sidebar/News/NewsFeed';
 import AddPost from './sidebar/News/AddPost';
 import Home from './website/Home';
 import About from './website/About';
+import CoachPost from './website/CoachPost';
+import Addvedio from './sidebar/vedios/Addvedio';
+import ProtectedRoute from './ProtectedRoute';
+import CoachDetail from './website/CoachDetail';
 // import AddPost from './sidebar/News/AddPost';
 
 function App() {
-
-  const authenticated = localStorage.getItem('email');
-
   return (
     <>
       <Link to='/'></Link>
@@ -28,17 +29,39 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
         <Route path='/otp' element={<Otp />} />
+        <Route path='/coachpost' element={<CoachPost />} />
         <Route path='/page' element={<Page />} />
         <Route path='/admin-profile' element={<AdminProfile />} />
-        <Route path='/dashboard' element={<Dashboard />} />
-        {
-          authenticated ? (
-            <Route path='/dashboard/*' element={<Dashboard />} />
-          ):(
-            <Route path='*' element={<Navigate to='/signup' />} />
-          )
-        }
-        {/* Wrap only the Profile component in Container and Box */}
+        <Route path='/coachdetail/:id' element={<CoachDetail />} />
+        
+        {/* Wrap the dashboard and other private routes with ProtectedRoute */}
+        <Route
+          path='/dashboard/*'
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/vedio'
+          element={
+            <ProtectedRoute>
+              <Addvedio />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/AddPost'
+          element={
+            <ProtectedRoute>
+              <AddPost />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Public Profile route with a container */}
         <Route 
           path='/profile' 
           element={
@@ -47,8 +70,6 @@ function App() {
             </Container>
           } 
         />
-        {/* <Route path="/newsfeed" element={<NewsFeed />} />
-        <Route path="/addpost" element={<AddPost />} /> */}
       </Routes>
     </>
   );

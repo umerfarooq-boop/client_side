@@ -86,9 +86,9 @@ function Nav() {
               fill="#90A4AE"
             />
           </svg>
-          <a href="#" className="flex items-center text-black">
+          <Link to={'/coachpost'} className="flex items-center text-black">
             Coaches
-          </a>
+          </Link>
         </Typography>
         <Typography
           as="li"
