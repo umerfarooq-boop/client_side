@@ -22,6 +22,13 @@ const CoachProfile = () => {
         getCategory();
     }, []);
 
+
+    // Start here again store locaiton in 
+
+
+    const location = localStorage.getItem('location');
+    // console.log(location);
+
     return (
         <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
             <Grid container spacing={3}>
@@ -130,6 +137,7 @@ const CoachProfile = () => {
                 <Grid item xs={12} sm={12}>
                     <TextField
                         label="Coach Location"
+                        value={location}
                         {...register('coach_location', { 
                             required: 'Coach Location is required',
                             pattern: {

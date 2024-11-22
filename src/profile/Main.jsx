@@ -45,12 +45,15 @@ const Main = ({ nextStep, setRole }) => {
     // setInputValue(query);
     setValue('profile_location', query); // Sync with react-hook-form
     fetchCities(query);
+    
   };
 
   const handleCitySelect = (city) => {
     // setInputValue(city);
     setValue('profile_location', city); // Sync with react-hook-form
     setCitySuggestions([]);
+    const location = localStorage.setItem('location',JSON.stringify(city));
+    // console.log(location);
   };
 
   return (

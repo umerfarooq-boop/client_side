@@ -52,7 +52,7 @@ const Profile = () => {
       });
       console.log(response.data);
       localStorage.setItem('coach_id',response.data.profile.coach_id);
-      localStorage.setItem('location',response.data.profile.profile_location);
+      // localStorage.setItem('location',response.data.profile.profile_location);
       localStorage.setItem('player_id',response.data.profile.player_id);
       setLoader(false); 
 
