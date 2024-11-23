@@ -16,6 +16,7 @@ function AddPost() {
       } = useForm();
     
       const coach_id = localStorage.getItem('coach_id');
+      const location = localStorage.getItem('location');
       const post_image = watch('post_image');
     
       const addPost = (data) => {
@@ -116,11 +117,12 @@ function AddPost() {
 
       {/* Post Location */}
       <div className="md:w-1/2 px-3">
-        <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor="post_location">
+        {/* <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor="post_location">
           Post Location
-        </label>
+        </label> */}
         <input
-          type="text"
+          type="hidden"
+          value={location}
           id="post_location"
           placeholder="Post Location"
           {...register('post_location')}

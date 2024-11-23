@@ -4,8 +4,11 @@ import { useState, useEffect } from 'react';
 import axios from '../axios';
 
 const CoachProfile = () => {
-    const { register, formState: { errors } } = useFormContext();
+    const { register,watch, formState: { errors } } = useFormContext();
     const [category, setCategory] = useState('');
+    
+    const [citySuggestions, setCitySuggestions] = useState([]);
+    const inputValue = watch('coach_location', '');
 
     // const role = localStorage.getItem('role');
 
@@ -22,12 +25,29 @@ const CoachProfile = () => {
         getCategory();
     }, []);
 
+    /**
+     * !Drop Down api setting
+     */
+    /**
+     * !Drop Down api setting
+     */
+
 
     // Start here again store locaiton in 
 
 
-    const location = localStorage.getItem('location');
-    // console.log(location);
+    let location = localStorage.getItem('location'); // Use 'let' for reassignment
+    if (location) {
+        location = location.replace(/"/g, ''); // Remove all double quotes
+        location = location.replace(/,/g, ''); // Remove all double quotes
+        // const arr = location.split(','); // Split the string by commas
+        // const firstRecord = arr[0].trim(); // Get the first element and trim spaces
+        // console.log(firstRecord); // Display the first record
+        // location = firstRecord; // Reassign 'location' to the first record
+        console.log("The Location is " + location);
+    } else {
+        console.log("No location found in localStorage");
+    }
 
     return (
         <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
