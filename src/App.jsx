@@ -17,6 +17,8 @@ import CoachPost from './website/CoachPost';
 import Addvedio from './sidebar/vedios/Addvedio';
 import ProtectedRoute from './ProtectedRoute';
 import CoachDetail from './website/CoachDetail';
+import AllCoach from './sidebar/User/Coach/AllCoach';
+import ShowCoach from './sidebar/User/Coach/ShowCoach';
 // import AddPost from './sidebar/News/AddPost';
 
 function App() {
@@ -43,6 +45,35 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        /**
+          * ? User Profile Route
+        */
+        <Route
+          path='/showcoach/:id'
+          element={
+            <ProtectedRoute>
+              <ShowCoach />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Show Single Coach */}
+
+        <Route
+          path='/allcoach'
+          element={
+            <ProtectedRoute>
+              <AllCoach />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Show Single Coach */}
+
+        /**
+          * ? User Profile Route
+        */
         <Route
           path='/vedio'
           element={

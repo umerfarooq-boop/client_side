@@ -4,7 +4,18 @@ import { TextField, Grid } from "@mui/material";
 
 const AcademyDetailsForm = () => {
   const { register, formState: { errors } } = useFormContext();
-
+  let location = localStorage.getItem('location'); // Use 'let' for reassignment
+    if (location) {
+        location = location.replace(/"/g, ''); // Remove all double quotes
+        location = location.replace(/,/g, ''); // Remove all double quotes
+        // const arr = location.split(','); // Split the string by commas
+        // const firstRecord = arr[0].trim(); // Get the first element and trim spaces
+        // console.log(firstRecord); // Display the first record
+        // location = firstRecord; // Reassign 'location' to the first record
+        console.log("The Location is " + location);
+    } else {
+        console.log("No location found in localStorage");
+    }
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
       <Grid container spacing={2}>
@@ -24,6 +35,7 @@ const AcademyDetailsForm = () => {
             label="Academy Location"
             {...register("academy_location", { required: "Academy location is required" })}
             fullWidth
+            value={location}
             size="small"
             error={!!errors.academy_location}
             helperText={errors.academy_location?.message}

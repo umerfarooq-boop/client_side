@@ -20,10 +20,19 @@ export default function Dashboard({ children }) {
   const Menus = [
     { title: "Dashboard", src: Chat, path: "/dashboard" },
     {
+      title: "User", 
+      src: User, 
+      path: "", 
+      submenu: [
+        { title: "Coaches", src: Chat, path: "/allcoach" }
+      ]
+    },
+    {
       title: "Post", 
       src: User, 
       path: "", 
       submenu: [
+        { title: "AddPost", src: Chat, path: "/AddPost" },
         { title: "AddPost", src: Chat, path: "/AddPost" },
         { title: "EditPost", path: "/Editpost" }
       ]
