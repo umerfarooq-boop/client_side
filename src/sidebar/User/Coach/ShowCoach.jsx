@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom";
 import Dashboard from "../../Dashboard";
 import axios from "../../../axios";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import { RotatingLines } from "react-loader-spinner";
 
 function ShowCoach() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-
+  const [loading,setLoading] = useState(true);
   useEffect(() => {
     const fetchRecord = async () => {
       try {
@@ -15,6 +16,7 @@ function ShowCoach() {
         if (response.data && response.data.coach_record) {
           setData(response.data.coach_record);
           // console.log('Record is', response.data.coach_record);
+          setLoading(false);
         } else {
           console.error("Unexpected response structure:", response);
         }
@@ -27,7 +29,22 @@ function ShowCoach() {
 
   return (
     <Dashboard>
-      {data.length > 0 ? (
+      {
+        loading ? (
+          <div className="flex flex-col items-center justify-center h-screen">
+            <RotatingLines 
+              visible={true}
+              height="96"
+              width="96"
+              color="grey"
+              strokeWidth="5"
+              animationDuration="0.75"
+              ariaLabel="rotating-lines-loading"
+            />
+          </div>
+        ) : (
+          <div>
+            {data.length > 0 ? (
         data.map((item, index) => (
           <div key={index} className="p-6 bg-gray-100">
             <div className="grid grid-cols-1 gap-6">
@@ -242,6 +259,11 @@ function ShowCoach() {
       ) : (
         <p className="text-center p-5">No records found for this coach.</p>
       )}
+          </div>
+        )
+      }
+
+      
     </Dashboard>
   );
 }

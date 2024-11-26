@@ -3,16 +3,21 @@ import Dashboard from '../../Dashboard';
 import { MaterialReactTable } from 'material-react-table';
 import axios from '../../../axios'; // Remove duplicate imports if necessary
 import { Link } from 'react-router-dom';
+import { RotatingLines } from 'react-loader-spinner';
 
 function AllCoach() {
   const [data, setData] = useState([]); // State for storing API data
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch data from the API
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/coach");
-      setData(response.data.coach); // Assuming the API returns an array of coaches
+      const response = await axios.get("/coach");
+      if (response.data && response.data.coach) {
+        setData(response.data.coach); // Assuming `coach` contains an array of data
+        setLoading(false)
+      } else {
+        console.error("Unexpected API response format:", response.data);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -21,20 +26,25 @@ function AllCoach() {
   // Handle status change
   const handleStatusChange = async (id) => {
     try {
-      await axios.get(`/changeStatus/${id}`);
-      setData((prevData) =>
-        prevData.map((item) =>
-          item.id === id
-            ? { ...item, status: item.status === "active" ? "inactive" : "active" }
-            : item
-        )
-      );
-      console.log("Status updated successfully!");
+      const response = await axios.get(`/changeStatus/${id}`);
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.id === id
+              ? { ...item, status: item.status === "active" ? "inactive" : "active" }
+              : item
+          )
+        );
+        console.log("Status updated successfully!");
+      } else {
+        console.error("Failed to update status:", response.data);
+      }
     } catch (error) {
       console.error("Error updating status:", error);
     }
   };
 
+  // Fetch data on component mount
   useEffect(() => {
     fetchData();
   }, []);
@@ -122,7 +132,7 @@ function AllCoach() {
             {/* <Link to={`/add/${row.original.id}`} className="action-button add">
               Add
             </Link> */}
-            <Link to={`/edit/${row.original.id}`} className="action-button edit">
+            <Link to={`/editcoach/${row.original.id}`} className="action-button edit">
               Edit
             </Link>
             <Link to={`/showcoach/${row.original.id}`} className="action-button show">
@@ -140,7 +150,7 @@ function AllCoach() {
             }}
               onClick={() => handleStatusChange(row.original.id)}
             >
-              {row.original.status === "active" ? "Active" : "Deactive"}
+              {row.original.status === "active" ? "Active" : "block"}
             </button>
 
           </div>
@@ -154,19 +164,36 @@ function AllCoach() {
 
   return (
     <Dashboard>
-        <MaterialReactTable
+          {
+            loading ? (
+              <div className="flex flex-col items-center justify-center h-screen">
+            <RotatingLines 
+              visible={true}
+              height="96"
+              width="96"
+              color="grey"
+              strokeWidth="5"
+              animationDuration="0.75"
+              ariaLabel="rotating-lines-loading"
+            />
+          </div>
+            ) :
+            (
+              <MaterialReactTable
           columns={columns}
           data={data}
-          state={{ isLoading }}
-        //   enableColumnResizing
-        //   enableColumnHiding
-        //   muiTableBodyCellProps={{
-        //     style: { wordWrap: 'break-word', maxWidth: '200px' },
-        //   }}
+          // state={{ isLoading }}
+          // enableColumnResizing
+          // enableColumnHiding
+          muiTableBodyCellProps={{
+            style: { wordWrap: 'break-word', maxWidth: '200px' },
+          }}
           muiTableContainerProps={{
             style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
           }}
         />
+            )
+          }
     </Dashboard>
 
   );

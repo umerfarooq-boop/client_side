@@ -19,6 +19,7 @@ import ProtectedRoute from './ProtectedRoute';
 import CoachDetail from './website/CoachDetail';
 import AllCoach from './sidebar/User/Coach/AllCoach';
 import ShowCoach from './sidebar/User/Coach/ShowCoach';
+import EditCoach from './sidebar/User/Coach/EditCoach';
 // import AddPost from './sidebar/News/AddPost';
 
 function App() {
@@ -54,6 +55,16 @@ function App() {
           element={
             <ProtectedRoute>
               <ShowCoach />
+            </ProtectedRoute>
+          }
+        />
+
+
+        <Route
+          path='/editcoach/:id'
+          element={
+            <ProtectedRoute>
+              <EditCoach />
             </ProtectedRoute>
           }
         />
