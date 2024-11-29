@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../../axios";
@@ -7,36 +7,39 @@ import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer
 import "react-toastify/dist/ReactToastify.css";
 
 function EditCoach() {
-  const { id } = useParams();
+  const { id } = useParams(); // Get the coach ID from URL parameters
+  const navigation = useNavigate();
   const {
     handleSubmit,
     register,
     reset,
+    setValue,
     formState: { errors },
   } = useForm();
-  let [data, setData] = useState([]);
-  let location = localStorage.getItem("location");
-  if (location) {
-    location = location.replace(/"/g, "");
-    location = location.replace(/,/g, "");
-  } else {
-    console.log("Location Not Found");
+  const [data, setData] = useState([]);
+
+  // Get
+
+
+
+  let location = localStorage.getItem('location');
+  if(location){
+    location = location.replace(/"/g, '');
+    location = location.replace(/,/g, '');
   }
+  
+  // Fetch existing coach data
   useEffect(() => {
     const getCoachData = async () => {
       try {
         const response = await axios.get(`/coach/${id}`);
-        setData(response.data.coach_record);
-        // console.log(response.data.coach_record);
+        setData(response.data.coach_record); // Assuming this contains coach details
       } catch (error) {
         console.log(error);
       }
     };
     getCoachData();
-  }, []);
-
-  const [imagePreview, setImagePreview] = useState();
-  const [certificateLink] = useState();
+  }, [id]);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -46,9 +49,48 @@ function EditCoach() {
   };
 
   const editCoachInfo = (data) => {
-    const editdata = JSON.stringify(data);
-    console.log(editdata);
+    const formData = new FormData();
+
+    // Append form data for coach and academy
+    formData.append('name', data.name);
+    formData.append('experience', data.experience);
+    formData.append('level', data.level);
+    formData.append('phone_number', data.phone_number);
+    formData.append('coach_location', data.coach_location);
+    formData.append('academy_name', data.academy_name);
+    formData.append('academy_location', data.academy_location);
+    formData.append('address', data.address);
+    formData.append('academy_phonenumber', data.academy_phonenumber);
+  
+    // Append files conditionally
+    if (data.image[0]) {
+      formData.append('image', data.image[0]);
+    }
+    if (data.certificate[0]) {
+      formData.append('certificate', data.certificate[0]);
+    }
+    if (data.academy_certificate[0]) {
+      formData.append('academy_certificate', data.academy_certificate[0]);
+    }
+
+    // Make the API call to update coach and academy details
+    axios
+      .post(`/updateRecord/${id}`, formData,{
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        toast.success("Record Updated Successfully");
+        console.log(response.data); // Debug response if needed
+        navigation('/allcoach');
+      })
+      .catch((error) => {
+        toast.error("Failed to Update Record");
+        console.error(error.response?.data || error.message);
+      });
   };
+  
 
   return (
     <>
@@ -73,19 +115,15 @@ function EditCoach() {
                     className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
                     htmlFor="post_title"
                   >
-                    Post Title
+                    Coach Name
                   </label>
                   <input
                     type="text"
                     id="name"
                     placeholder="Coach Name"
-                    value={index.name}
-                    {...register("name", {
-                      required: "Coach Name is required",
-                    })}
-                    className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
-                      errors.name ? "border-red-500" : "border-grey-lighter"
-                    } rounded py-3 px-4 mb-3`}
+                    defaultValue={index.name}
+                    {...register("name", { required: "Coach Name is required" })}
+                    className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${errors.name ? "border-red-500" : "border-grey-lighter"} rounded py-3 px-4 mb-3`}
                   />
                   {errors.name && (
                     <p className="text-red text-xs italic">
@@ -113,7 +151,7 @@ function EditCoach() {
                     } rounded py-3 px-4`}
                   >
                     <option
-                      value="1year"
+                      value="1year" 
                       selected={index.experience === "1year"}
                     >
                       1year
@@ -199,10 +237,10 @@ function EditCoach() {
                   </label>
                   <input
                     type="text"
-                    value={index.phone_number}
                     id="phone_number"
+                    defaultValue={index.phone_number}
                     placeholder="Phone Number"
-                    {...register("phone_number")}
+                    {...register("phone_number", { required: "Coach Name is required" })}
                     className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
                       errors.phone_number
                         ? "border-red-500"
@@ -222,9 +260,10 @@ function EditCoach() {
                   <input
                     type="text"
                     value={location}
+                    // defaultValue={index.coach_location}
                     id="location"
                     placeholder="Phone Number"
-                    {...register("post_location")}
+                    {...register("coach_location")}
                     className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
                       errors.post_location
                         ? "border-red-500"
@@ -323,7 +362,7 @@ function EditCoach() {
                   </label>
                   <input
                     type="text"
-                    value={index.single_academy.academy_name}
+                    defaultValue={index.single_academy.academy_name}
                     id="academy_name"
                     placeholder="Academy Name"
                     {...register("academy_name")}
@@ -333,6 +372,22 @@ function EditCoach() {
                         : "border-grey-lighter"
                     } rounded py-3 px-4`}
                   />
+                  {/* <input
+                    type="text"
+                    value="active"
+                    id="academy_name"
+                    placeholder="Academy Name"
+                    {...register("status")}
+                   
+                  />
+                  <input
+                    type="text"
+                    value="active"
+                    id="academy_name"
+                    placeholder="Academy Name"
+                    {...register("status")}
+                   
+                  /> */}
                 </div>
 
                 {/* Post Location */}
@@ -345,7 +400,7 @@ function EditCoach() {
                   </label>
                   <input
                     type="text"
-                    value={index.single_academy.academy_phonenumber}
+                    defaultValue={index.single_academy.academy_phonenumber}
                     id="phone_number"
                     placeholder="Phone Number"
                     {...register("academy_phonenumber")}
@@ -369,7 +424,7 @@ function EditCoach() {
                   </label>
                   <input
                     type="text"
-                    value={index.single_academy.address}
+                    defaultValue={index.single_academy.address}
                     id="address"
                     placeholder="Academy Address"
                     {...register("address")}
