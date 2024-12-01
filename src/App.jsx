@@ -9,7 +9,6 @@ import Profile from './profile/Profile';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Dashboard from './sidebar/Dashboard';
-import NewsFeed from './sidebar/News/NewsFeed';
 import AddPost from './sidebar/News/AddPost';
 import Home from './website/Home';
 import About from './website/About';
@@ -20,6 +19,8 @@ import CoachDetail from './website/CoachDetail';
 import AllCoach from './sidebar/User/Coach/AllCoach';
 import ShowCoach from './sidebar/User/Coach/ShowCoach';
 import EditCoach from './sidebar/User/Coach/EditCoach';
+import AllPost from './sidebar/News/AllPost';
+import SinglePost from './sidebar/News/SinglePost';
 // import AddPost from './sidebar/News/AddPost';
 
 function App() {
@@ -48,7 +49,7 @@ function App() {
         />
 
         /**
-          * ? User Profile Route
+          * ? Start User Profile Route
         */
         <Route
           path='/showcoach/:id'
@@ -69,8 +70,6 @@ function App() {
           }
         />
 
-        {/* Show Single Coach */}
-
         <Route
           path='/allcoach'
           element={
@@ -80,10 +79,33 @@ function App() {
           }
         />
 
-        {/* Show Single Coach */}
+        /**
+          * ? End User Profile Route
+        */
 
         /**
-          * ? User Profile Route
+          * ? START POST RECORD
+        */
+
+        <Route
+          path='/allpost'
+          element={
+            <ProtectedRoute>
+              <AllPost />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/singlepost/:id'
+          element={
+            <ProtectedRoute>
+              <SinglePost/>
+            </ProtectedRoute>
+          }
+        />
+
+        /**
+          * ? END POST RECORD
         */
         <Route
           path='/vedio'

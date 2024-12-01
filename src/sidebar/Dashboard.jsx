@@ -33,7 +33,7 @@ export default function Dashboard({ children }) {
       path: "", 
       submenu: [
         { title: "AddPost", src: Chat, path: "/AddPost" },
-        { title: "AddPost", src: Chat, path: "/AddPost" },
+        { title: "allPost", src: Chat, path: "/allpost" },
         { title: "EditPost", path: "/Editpost" }
       ]
     },

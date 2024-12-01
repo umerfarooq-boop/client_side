@@ -52,11 +52,11 @@ function AllCoach() {
   // Define table columns
   const columns = useMemo(
     () => [
-      {
-        accessorKey: 'id',
-        header: 'Id',
-        size: 150,
-      },
+      // {
+      //   accessorKey: 'id',
+      //   header: 'Id',
+      //   size: 150,
+      // },
       {
         accessorKey: 'name',
         header: 'Name',
@@ -126,16 +126,16 @@ function AllCoach() {
       {
         accessorKey: 'status',
         header: 'Actions',
-        size: 200,
+        size: 270,
         Cell: ({ row }) => (
           <div style={{ display: 'flex', gap: '10px' }}>
             {/* <Link to={`/add/${row.original.id}`} className="action-button add">
               Add
             </Link> */}
-            <Link to={`/editcoach/${row.original.id}`} className="action-button edit">
+            <Link to={`/editcoach/${row.original.id}`} className="relative z-50 block rounded-lg border border-yellow-900 bg-yellow-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-yellow-800">
               Edit
             </Link>
-            <Link to={`/showcoach/${row.original.id}`} className="action-button show">
+            <Link to={`/showcoach/${row.original.id}`} className="relative z-50 block rounded-lg border border-slate-800 bg-slate-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-slate-800">
               Show
             </Link>
             <button
@@ -144,7 +144,7 @@ function AllCoach() {
               backgroundColor: row.original.status === "active" ? "green" : "red",
               color: "white", // Ensure text is visible
               border: "none", // Optional for a clean look
-              padding: "10px 20px", // Adjust padding as needed
+              padding: "10px 15px", // Adjust padding as needed
               borderRadius: "5px", // Optional for rounded corners
               cursor: "pointer", // Pointer cursor for better UX
             }}
