@@ -21,6 +21,7 @@ import ShowCoach from './sidebar/User/Coach/ShowCoach';
 import EditCoach from './sidebar/User/Coach/EditCoach';
 import AllPost from './sidebar/News/AllPost';
 import SinglePost from './sidebar/News/SinglePost';
+import Updatenews from './sidebar/News/UpdateNews';
 // import AddPost from './sidebar/News/AddPost';
 
 function App() {
@@ -100,6 +101,14 @@ function App() {
           element={
             <ProtectedRoute>
               <SinglePost/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/updatepost/:id'
+          element={
+            <ProtectedRoute>
+              <Updatenews/>
             </ProtectedRoute>
           }
         />

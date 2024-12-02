@@ -1,9 +1,16 @@
 import React from 'react'
+import Dashboard from '../Dashboard'
+import { useParams } from 'react-router-dom'
 
 function Updatenews() {
+  const {id} = useParams();
   return (
     <>
-        <h1>Update News</h1>
+      <>
+        <Dashboard>
+          <h1>The id is {id}</h1>
+        </Dashboard>
+      </>
     </>
   )
 }
