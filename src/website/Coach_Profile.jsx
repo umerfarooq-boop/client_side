@@ -3,33 +3,33 @@ import axios from "../axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { RotatingLines  } from "react-loader-spinner";
+import { RotatingLines } from "react-loader-spinner";
 
 function Coach_Profile() {
-  const [loader, setLoader] = useState(true);  // Set loader to true initially
-const [videos, setVideos] = useState([]);
+  const [loader, setLoader] = useState(true); // Set loader to true initially
+  const [videos, setVideos] = useState([]);
 
-useEffect(() => {
-  const fetchVideoData = async () => {
-    try {
-      const response = await axios.get("/vedio");
-      console.log("API Response:", response.data); // Log the full API response
-      if (response.data && response.data.vedios) {  // Access `vedios` instead of `vedio`
-        setVideos(response.data.vedios);
+  useEffect(() => {
+    const fetchVideoData = async () => {
+      try {
+        const response = await axios.get("/vedio");
+        console.log("API Response:", response.data); // Log the full API response
+        if (response.data && response.data.vedios) {
+          // Access `vedios` instead of `vedio`
+          setVideos(response.data.vedios);
+        }
+      } catch (error) {
+        console.log("Error fetching video data:", error);
+      } finally {
+        setLoader(false); // Set loader to false after data fetch is complete
       }
-    } catch (error) {
-      console.log("Error fetching video data:", error);
-    } finally {
-      setLoader(false);  // Set loader to false after data fetch is complete
-    }
-  };
+    };
 
-  fetchVideoData();
-}, []);
-
+    fetchVideoData();
+  }, []);
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 4,
@@ -53,59 +53,57 @@ useEffect(() => {
     ],
   };
 
-
-
   return (
     <>
-      <div className="text-center mb-16 mt-16">
-            <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
-              Player{" "}
-              <span className="text-indigo-600">Sessions</span>
-            </h3>
-        </div>
-      
+      <div className="text-center mb-5 mt-16">
+        <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
+          Player <span className="text-indigo-600">Sessions</span>
+        </h3>
+      </div>
+
       {loader ? (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <RotatingLines 
-        visible={true}
-        height="96"
-        width="96"
-        color="grey"
-        strokeWidth="5"
-        animationDuration="0.75"
-        ariaLabel="rotating-lines-loading"
-      />
-    </div>
-  ) : (
-    <div className="slider-container max-w-full px-4 sm:px-6 lg:px-8">
-      <Slider {...settings}>
-        {videos.length > 0 ? (
-          videos.map((video, index) => {
-            const videoUrl = `http://127.0.0.1:8000/uploads/vedio_home_page/${video.vedio}`;
-            console.log("Video URL:", videoUrl);
-            return (
-              <div key={index} className="relative p-2">
-                <video
-                  className="w-[300px] h-[200px] sm:w-[400px] sm:h-[225px] md:w-[500px] md:h-[250px] mx-auto"
-                  controls
-                >
-                  <source src={videoUrl} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-                {/* <h3 className="absolute bottom-0 left-0 w-full bg-white  text-white text-center text-sm md:text-base font-semibold py-1">
+        <div className="flex flex-col items-center justify-center h-screen">
+          <RotatingLines
+            visible={true}
+            height="96"
+            width="96"
+            color="grey"
+            strokeWidth="5"
+            animationDuration="0.75"
+            ariaLabel="rotating-lines-loading"
+          />
+        </div>
+      ) : (
+        <div className="slider-container max-w-full px-4 sm:px-6 lg:px-8">
+          <Slider {...settings}>
+            {videos.length > 0 ? (
+              videos.map((video, index) => {
+                const videoUrl = `http://127.0.0.1:8000/uploads/vedio_home_page/${video.vedio}`;
+                console.log("Video URL:", videoUrl);
+                return (
+                  <div key={index} className="relative p-2">
+                    <video
+                      className="w-[300px] h-[200px] sm:w-[400px] sm:h-[225px] md:w-[500px] md:h-[250px] mx-auto"
+                      autoPlay
+                      loop
+                      muted // Optional: To ensure autoplay works in most browsers, mute the video.
+                    >
+                      <source src={videoUrl} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+
+                    {/* <h3 className="absolute bottom-0 left-0 w-full bg-white  text-white text-center text-sm md:text-base font-semibold py-1">
                   {video.vedio_title}
                 </h3> */}
-              </div>
-            );
-          })
-        ) : (
-          <div className="text-center">No videos available</div>
-        )}
-      </Slider>
-    </div>
-  )
-}
-
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-center">No videos available</div>
+            )}
+          </Slider>
+        </div>
+      )}
 
       <br />
       <br />
@@ -116,7 +114,8 @@ useEffect(() => {
 
 export default Coach_Profile;
 
-{/* <div>
+{
+  /* <div>
             <div class="max-w-sm p-6 border-blue-800 rounded-lg shadow dark:bg-green-500 dark:border-gray-700 mr-5">
               <img src="" alt="" />
               <a href="#">
@@ -184,8 +183,8 @@ export default Coach_Profile;
                 </svg>
               </a>
             </div>
-          </div> */}
-
+          </div> */
+}
 
 /**
  * {/* <div>

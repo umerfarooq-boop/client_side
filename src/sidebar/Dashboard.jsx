@@ -87,7 +87,7 @@ export default function Dashboard({ children }) {
                   )}
                 </div>
               ) : (
-                <Link to={Menu.path} className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4">
+                <Link to={Menu.path} className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-black text-sm items-center gap-x-4">
                   <img src={Menu.src} alt={Menu.title} />
                   <span className={`${!open && "hidden"} origin-left duration-200`}>
                     {Menu.title}

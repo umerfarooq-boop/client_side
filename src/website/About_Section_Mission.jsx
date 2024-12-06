@@ -7,6 +7,10 @@ import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import coach from '../../public/StepContent/coach.jpg';
+import booking from '../../public/StepContent/bookingcoach.jpg';
+import motivatation from '../../public/StepContent/motivitation.jpg';
+import team from '../../public/StepContent/team.jpg';
 
 const steps = [
     {
@@ -14,25 +18,25 @@ const steps = [
       description: `For each ad campaign that you create, you can control how much
                 you're willing to spend on clicks and conversions, which networks
                 and geographical locations you want your ads to show on, and more.`,
-        img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5cDfE482s_Hp2bBTNz5e2WBGecDJEsmC46Q&s'
+        img: coach
     },
     {
       label: 'Book Coach',
       description:
         'An ad group contains one or more ads which target a shared set of keywords.',
-        img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXm33IIPEAhmE6yztvEuEHuL1MVDIjCB4SIkSrP6ZUjO7VNpUpmwnYJXc5LY0iCJ3o0cM&usqp=CAU'
+        img: booking
     },
     {
       label: 'Training Programs',
       description:
         'An ad group contains one or more ads which target a shared set of keywords.',
-        img:'https://blogs.bmj.com/bjsm/files/2015/02/8084325613_86489343de_k.jpg'
+        img:team
     },
     {
       label: 'Discussion with Coach',
       description:
         'An ad group contains one or more ads which target a shared set of keywords.',
-        img:'https://www.contus.com/blog/wp-content/uploads/2023/11/how-chat-system-works.webp'
+        img:motivatation
     },
   ];
 

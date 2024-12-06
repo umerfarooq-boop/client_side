@@ -326,7 +326,7 @@ function About() {
                     <p className="text-xl">Huge time and cost saver!”</p>
                   </header>
 
-                  <footer className="flex items-center px-6 py-4 space-x-4 text-white bg-gradient-to-br from-blue-700 to-blue-500">
+                  <footer className="flex items-center px-6 py-4 space-x-4 text-white bg-gradient-to-br from-indigo-700 to-indigo-500">
                     <img
                       className="w-10 h-10 rounded-full ring-2 ring-white"
                       loading="lazy"
@@ -363,7 +363,7 @@ function About() {
                     <p className="text-xl">Huge time and cost saver!”</p>
                   </header>
 
-                  <footer className="flex items-center px-6 py-4 space-x-4 text-white bg-gradient-to-br from-blue-700 to-blue-500">
+                  <footer className="flex items-center px-6 py-4 space-x-4 text-white bg-gradient-to-br from-indigo-700 to-indigo-500">
                     <img
                       className="w-10 h-10 rounded-full ring-2 ring-white"
                       loading="lazy"
@@ -400,7 +400,7 @@ function About() {
                     <p className="text-xl">Huge time and cost saver!”</p>
                   </header>
 
-                  <footer className="flex items-center px-6 py-4 space-x-4 text-white bg-gradient-to-br from-blue-700 to-blue-500">
+                  <footer className="flex items-center px-6 py-4 space-x-4 text-white bg-gradient-to-br from-indigo-700 to-indigo-500">
                     <img
                       className="w-10 h-10 rounded-full ring-2 ring-white"
                       loading="lazy"

@@ -7,7 +7,7 @@ import {
     IconButton,
   } from "@material-tailwind/react";
   import { Link,Routes,Route } from 'react-router-dom';
-  import About from './About'
+  import About from './About' 
 
 function Nav() {
     const [openNav, setOpenNav] = React.useState(false);
@@ -110,9 +110,9 @@ function Nav() {
               fill="#90A4AE"
             />
           </svg>
-          <a href="#" className="flex items-center text-black">
+          <Link to={'/contact'} className="flex items-center text-black">
             Contact
-          </a>
+          </Link>
         </Typography>
       </ul>
     );

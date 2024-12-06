@@ -8,6 +8,12 @@ import Coach_Profile from './Coach_Profile';
 import Footer from './Footer';
 import { TypeAnimation } from 'react-type-animation';
 import ChatPopup from './ChatPopup';
+import coach from '../../public/SlidderWebimage/coach.jpg'
+import football from '../../public/SlidderWebimage/football.jpg'
+import footballkid from '../../public/SlidderWebimage/footballKid.jpg'
+import player from '../../public/SlidderWebimage/players.jpg'
+import stadium from '../../public/SlidderWebimage/stadium.jpg'
+import stadium1 from '../../public/SlidderWebimage/stadium1.jpg'
 
 
 
@@ -66,19 +72,19 @@ function Home() {
 
     {/* Other slides */}
     <div>
-      <img src="https://via.placeholder.com/1920x500?text=Slide+2" alt="Slide 2" className="slider-image" />
+      <img src={stadium} alt="Slide 2" className=" relative w-[1920px] h-[350px] object-cover"/>
     </div>
     <div>
-      <img src="https://via.placeholder.com/1920x500?text=Slide+3" alt="Slide 3" className="slider-image" />
+      <img src={player} alt="Slide 3" className="relative w-[1920px] h-[350px] object-cover" />
     </div>
     <div>
-      <img src="https://via.placeholder.com/1920x500?text=Slide+4" alt="Slide 4" className="slider-image" />
+      <img src={football} alt="Slide 4" className=" relative w-[1920px] h-[350px] object-cover"/>
     </div>
     <div>
-      <img src="https://via.placeholder.com/1920x500?text=Slide+5" alt="Slide 5" className="slider-image" />
+      <img src={stadium1} alt="Slide 5" className=" relative w-[1920px] h-[350px] object-cover"/>
     </div>
     <div>
-      <img src="https://via.placeholder.com/1920x500?text=Slide+6" alt="Slide 6" className="slider-image" />
+      <img src={stadium1} alt="Slide 6" className="relative w-[1920px] h-[350px] object-cover" />
     </div>
   </Slider>
 
@@ -117,8 +123,7 @@ function Home() {
   `}</style>
 </div>
 
-<Service />
-
+    <Service />
     <Coach_Profile />
     <ChatPopup />
     <Footer/>
