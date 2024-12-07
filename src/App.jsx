@@ -24,6 +24,9 @@ import SinglePost from './sidebar/News/SinglePost';
 import Updatenews from './sidebar/News/UpdateNews';
 import Contact from './website/Contact';
 import HomeSlidder from './sidebar/Menagewebsite/HomeSlidder';
+import HomeService from './sidebar/Menagewebsite/HomeService';
+import AboutService from './sidebar/Menagewebsite/AboutService';
+import AboutQuestion from './sidebar/Menagewebsite/AboutQuestion';
 // import AddPost from './sidebar/News/AddPost';
 
 function App() {
@@ -61,6 +64,30 @@ function App() {
           element={
             <ProtectedRoute>
               <HomeSlidder />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/home_services'
+          element={
+            <ProtectedRoute>
+              <HomeService />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/about_services'
+          element={
+            <ProtectedRoute>
+              <AboutService />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/about_question'
+          element={
+            <ProtectedRoute>
+              <AboutQuestion />
             </ProtectedRoute>
           }
         />

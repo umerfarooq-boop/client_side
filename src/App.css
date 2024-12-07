@@ -7,7 +7,17 @@ body{
     padding: 0;
     box-sizing: border-box;
 }
-
+.pro-sidebar {
+    background-color: #2d2f34;
+    color: white;
+  }
+  .pro-menu-item {
+    padding: 10px;
+  }
+  .pro-menu-item:hover {
+    background-color: #1a1b1d;
+  }
+  
 
 
 

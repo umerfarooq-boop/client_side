@@ -24,7 +24,10 @@ export default function Dashboard({ children }) {
       src: User, 
       path: "", 
       submenu: [
-        { title: "Slidder", src: Chat, path: "/home_slidder" }
+        { title: "Slidder", src: Chat, path: "/home_slidder" },
+        { title: "HomeService", src: Chat, path: "/home_services" },
+        { title: "AboutService", src: Chat, path: "/about_services" },
+        { title: "AboutQuestion", src: Chat, path: "/about_question" },
       ]
     },
     {
@@ -120,8 +123,6 @@ export default function Dashboard({ children }) {
 
       {/* Main Content */}
       <div className="flex-1 p-10">
-        <h2>Dashboard Content</h2>
-        
         {/* Conditionally render the DashboardGraph only on the Dashboard page */}
         {location.pathname === "/dashboard" && <DashboardGraph />}
 
