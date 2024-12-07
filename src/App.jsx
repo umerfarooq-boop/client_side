@@ -23,6 +23,7 @@ import AllPost from './sidebar/News/AllPost';
 import SinglePost from './sidebar/News/SinglePost';
 import Updatenews from './sidebar/News/UpdateNews';
 import Contact from './website/Contact';
+import HomeSlidder from './sidebar/Menagewebsite/HomeSlidder';
 // import AddPost from './sidebar/News/AddPost';
 
 function App() {
@@ -50,6 +51,25 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        /**
+        * ! Working of Menage Website
+        */
+
+        <Route
+          path='/home_slidder'
+          element={
+            <ProtectedRoute>
+              <HomeSlidder />
+            </ProtectedRoute>
+          }
+        />
+          
+
+        /**
+        * ! Working of Menage Website
+        */
+
 
         /**
           * ? Start User Profile Route
