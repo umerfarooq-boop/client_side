@@ -7,7 +7,7 @@ import axios from '../../../axios';
 import { use } from 'react';
 import { ToastContainer ,toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-function Add_about_service() {
+function Add_about_question() {
 
   const {handleSubmit,register,reset,watch} = useForm();
   const [slidder,setSlidder] = useState();
@@ -16,10 +16,11 @@ function Add_about_service() {
   const AddService = async (data) =>{
     const formData = new FormData();
     formData.append('title',data.title);
+    formData.append('question',data.question);
     formData.append('description',data.description);
     formData.append('image',data.image[0]);
     try{
-      const response = await axios.post('/featureservice',formData,{
+      const response = await axios.post('/frequentlyquestion',formData,{
         headers:{
           'Content-Type' : 'multipart/form-data',
         },
@@ -27,7 +28,7 @@ function Add_about_service() {
       reset();
       toast.success('Record Saved Successfully');
       setTimeout(() =>{
-        navigation('/index_about_services');
+        navigation('/index_about_question');
       },1500)
     }catch(error){
       toast.error("Record Not Saved");
@@ -46,13 +47,19 @@ function Add_about_service() {
                       <input
                           type="text"
                           {...register('title')}
-                          placeholder="Enter Service Text"
+                          placeholder="Title"
+                          className="block w-full p-3 mb-2 bg-gray-100 rounded-lg border border-gray-200 focus:outline-none focus:bg-white"
+                      />
+                      <input
+                          type="text"
+                          {...register('question')}
+                          placeholder="Question.......?"
                           className="block w-full p-3 mb-2 bg-gray-100 rounded-lg border border-gray-200 focus:outline-none focus:bg-white"
                       />
                       <input
                           type="text"
                           {...register('description')}
-                          placeholder="Enter Description Text"
+                          placeholder="Description"
                           className="block w-full p-3 mb-2 bg-gray-100 rounded-lg border border-gray-200 focus:outline-none focus:bg-white"
                       />
                       
@@ -77,4 +84,4 @@ function Add_about_service() {
   )
 }
 
-export default Add_about_service
+export default Add_about_question

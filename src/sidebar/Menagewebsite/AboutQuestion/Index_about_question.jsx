@@ -6,7 +6,7 @@ import { MaterialReactTable } from 'material-react-table';
 import React, { useMemo, useState, useEffect } from 'react';
 import axios from '../../../axios';
 import { Button } from '@mui/material';
-function Index_about_service() {
+function Index_about_question() {
 
     const [data, setData] = useState([]); 
     const [loading, setLoading] = useState(true);
@@ -14,9 +14,9 @@ function Index_about_service() {
 
     const fetchData = async () => {
         try {
-        const response = await axios.get("/featureservice");
-        if (response.data && response.data.feature_service) {
-            setData(response.data.feature_service); // Assuming `coach` contains an array of data
+        const response = await axios.get("/frequentlyquestion");
+        if (response.data && response.data.question) {
+            setData(response.data.question); // Assuming `coach` contains an array of data
             setLoading(false)
         } else {
             console.error("Unexpected API response format:", response.data);
@@ -83,7 +83,7 @@ function Index_about_service() {
             header: 'Image',
             Cell: ({ cell }) => (
               <img
-                src={`http://127.0.0.1:8000/uploads/feature_service/${cell.getValue()}`}
+                src={`http://127.0.0.1:8000/uploads/frequently_question/${cell.getValue()}`}
                 alt="Coach"
                 style={{ width: '50px', height: '50px', borderRadius: '5px' }}
               />
@@ -99,10 +99,10 @@ function Index_about_service() {
                 {/* <Link to={`/add/${row.original.id}`} className="action-button add">
                   Add
                 </Link> */}
-                <Link to={`/update_about_services/${row.original.id}`} className="relative z-50 block rounded-lg border border-yellow-900 bg-yellow-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-yellow-800">
+                <Link to={`/edit_about_question/${row.original.id}`} className="relative z-50 block rounded-lg border border-yellow-900 bg-yellow-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-yellow-800">
                   Edit
                 </Link>
-                <Link to={`/single_about_services/${row.original.id}`} className="relative z-50 block rounded-lg border border-slate-800 bg-slate-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-slate-800">
+                <Link to={`/single_about_question/${row.original.id}`} className="relative z-50 block rounded-lg border border-slate-800 bg-slate-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-slate-800">
                   Show
                 </Link>
                 <button
@@ -159,7 +159,7 @@ function Index_about_service() {
                     style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
                 }}
                 renderTopToolbarCustomActions={() => (
-                    <Link to={'/add_about_services'} className='focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900'>Add Feature Service</Link>
+                    <Link to={'/add_about_question'} className='focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900'>Add About Question</Link>
                 )}
             />
             </div>
@@ -169,4 +169,5 @@ function Index_about_service() {
   )
 }
 
-export default Index_about_service
+
+export default Index_about_question

@@ -36,6 +36,13 @@ import Single_service from './sidebar/Menagewebsite/HomeService/Single_service';
 import Add_service from './sidebar/Menagewebsite/HomeService/Add_service';
 import Update_service from './sidebar/Menagewebsite/HomeService/Update_service';
 import Index_about_service from './sidebar/Menagewebsite/AboutService/Index_about_service';
+import Add_about_service from './sidebar/Menagewebsite/AboutService/Add_about_service';
+import Single_about_service from './sidebar/Menagewebsite/AboutService/Single_about_service';
+import Update_about_service from './sidebar/Menagewebsite/AboutService/Update_about_service';
+import Index_about_question from './sidebar/Menagewebsite/AboutQuestion/Index_about_question';
+import Single_about_questioin from './sidebar/Menagewebsite/AboutQuestion/Single_about_questioin';
+import Add_about_question from './sidebar/Menagewebsite/AboutQuestion/Add_about_question';
+import Update_about_question from './sidebar/Menagewebsite/AboutQuestion/Update_about_question';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 
@@ -152,6 +159,77 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path='/add_about_services'
+          element={
+            <ProtectedRoute>
+              <Add_about_service />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/single_about_services/:id'
+          element={
+            <ProtectedRoute>
+              <Single_about_service />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/update_about_services/:id'
+          element={
+            <ProtectedRoute>
+              <Update_about_service />
+            </ProtectedRoute>
+          }
+        />
+
+        /***
+        * ! Frequently Question
+        */
+
+        <Route
+          path='/index_about_question'
+          element={
+            <ProtectedRoute>
+              <Index_about_question />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/single_about_question/:id'
+          element={
+            <ProtectedRoute>
+              <Single_about_questioin />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/add_about_question'
+          element={
+            <ProtectedRoute>
+              <Add_about_question />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/edit_about_question/:id'
+          element={
+            <ProtectedRoute>
+              <Update_about_question />
+            </ProtectedRoute>
+          }
+        />
+
+        /***
+        * ! Frequently Question
+        */
 
         /***
         * ! About Service

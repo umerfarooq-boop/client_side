@@ -42,7 +42,7 @@ export default function Dashboard({ children }) {
         { title: "Slidder", src: Chat, path: "/index_slides" },
         { title: "HomeService", src: Chat, path: "/index_services" },
         { title: "AboutService", src: Chat, path: "/index_about_services" },
-        { title: "AboutQuestion", src: Chat, path: "/about_question" },
+        { title: "AboutQuestion", src: Chat, path: "/index_about_question" },
       ]
     },
     {

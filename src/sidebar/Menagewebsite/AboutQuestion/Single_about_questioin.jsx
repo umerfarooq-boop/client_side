@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
 import Dashboard from "../../Dashboard";
 
-function Single_about_service() {
+function Single_about_questioin() {
   const [data, setData] = useState([]);
   const { id } = useParams();
   const [loading,setLoading] = useState(true);
@@ -12,11 +12,11 @@ function Single_about_service() {
 useEffect(() => {
     const getSlidderRecord = async () => {
         try {
-            const response = await axios.get(`/featureservice/${id}`);
-            if (response.data && Array.isArray(response.data.feature_service)) {
-                setData(response.data.feature_service);
-            } else if(response.data && response.data.feature_service){
-                setData([response.data.feature_service]);
+            const response = await axios.get(`/frequentlyquestion/${id}`);
+            if (response.data && Array.isArray(response.data.frequentlyquestion)) {
+                setData(response.data.frequentlyquestion);
+            } else if(response.data && response.data.frequentlyquestion){
+                setData([response.data.frequentlyquestion]);
             }
             setLoading(false);
         } catch (error) {
@@ -56,6 +56,11 @@ useEffect(() => {
                       </th>
                       <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
                         <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+                            Question
+                        </p>
+                      </th>
+                      <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                        <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
                             Description
                         </p>
                       </th>
@@ -77,6 +82,23 @@ useEffect(() => {
                         <td className="p-4 border-b border-blue-gray-50">
                         <p className="text-start justify-start text-gray-700">
                   {expand
+                    ? index.question
+                    : index.question.substring(0, 15)}
+                </p>
+
+                {index.question.length > 15 && (
+                  <button
+                    onClick={() => setExpand(!expand)}
+                    className="text-indigo-500"
+                  >
+                    {expand ? "Read less ▲" : "Read more ▼"}
+                  </button>
+                )}
+
+                        </td>
+                        <td className="p-4 border-b border-blue-gray-50">
+                        <p className="text-start justify-start text-gray-700">
+                  {expand
                     ? index.description
                     : index.description.substring(0, 15)}
                 </p>
@@ -93,7 +115,7 @@ useEffect(() => {
                         </td>
                         <td className="p-4 border-b border-blue-gray-50">
                           <img
-                            src={`http://127.0.0.1:8000/uploads/feature_service/${index.image}`}
+                            src={`http://127.0.0.1:8000/uploads/frequently_question/${index.image}`}
                             alt={index.image || "Service Image"}
                             className="w-20 h-auto rounded-md"
                           />
@@ -111,6 +133,4 @@ useEffect(() => {
   );
 }
 
-
-
-export default Single_about_service
+export default Single_about_questioin
