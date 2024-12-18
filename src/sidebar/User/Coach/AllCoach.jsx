@@ -4,6 +4,10 @@ import { MaterialReactTable } from 'material-react-table';
 import axios from '../../../axios'; // Remove duplicate imports if necessary
 import { Link } from 'react-router-dom';
 import { RotatingLines } from 'react-loader-spinner';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import CheckCircleSharpIcon from '@mui/icons-material/CheckCircleSharp';
+import CancelSharpIcon from '@mui/icons-material/CancelSharp';
 
 function AllCoach() {
   const [data, setData] = useState([]); // State for storing API data
@@ -62,11 +66,11 @@ function AllCoach() {
         header: 'Name',
         size: 150,
       },
-      {
-        accessorKey: 'experience',
-        header: 'Experience',
-        size: 150,
-      },
+      // {
+      //   accessorKey: 'experience',
+      //   header: 'Experience',
+      //   size: 150,
+      // },
       {
         accessorKey: 'level',
         header: 'Level',
@@ -105,38 +109,38 @@ function AllCoach() {
           ),
           size: 100,
       },
-      {
-        accessorKey: 'image',
-        header: 'Image',
-        Cell: ({ cell }) => (
-          <img
-            src={`http://127.0.0.1:8000/uploads/coach_image/${cell.getValue()}`}
-            alt="Coach"
-            style={{ width: '50px', height: '50px', borderRadius: '5px' }}
-          />
-        ),
-        size: 100,
-      },
+      // {
+      //   accessorKey: 'image',
+      //   header: 'Image',
+      //   Cell: ({ cell }) => (
+      //     <img
+      //       src={`http://127.0.0.1:8000/uploads/coach_image/${cell.getValue()}`}
+      //       alt="Coach"
+      //       style={{ width: '50px', height: '50px', borderRadius: '5px' }}
+      //     />
+      //   ),
+      //   size: 100,
+      // },
       
-      {
-        accessorKey: 'coach_location',
-        header: 'Location',
-        size: 150,
-      },
+      // {
+      //   accessorKey: 'coach_location',
+      //   header: 'Location',
+      //   size: 150,
+      // },
       {
         accessorKey: 'status',
         header: 'Actions',
-        size: 270,
+        size: 5,
         Cell: ({ row }) => (
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ display: 'flex', gap: '7px' }}>
             {/* <Link to={`/add/${row.original.id}`} className="action-button add">
               Add
             </Link> */}
             <Link to={`/editcoach/${row.original.id}`} className="relative z-50 block rounded-lg border border-yellow-900 bg-yellow-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-yellow-800">
-              Edit
+            <EditNoteIcon/>
             </Link>
             <Link to={`/showcoach/${row.original.id}`} className="relative z-50 block rounded-lg border border-slate-800 bg-slate-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-slate-800">
-              Show
+              <VisibilityOffOutlinedIcon/>
             </Link>
             <button
             className="action-button status"
@@ -150,7 +154,7 @@ function AllCoach() {
             }}
               onClick={() => handleStatusChange(row.original.id)}
             >
-              {row.original.status === "active" ? "Active" : "block"}
+              {row.original.status === "active" ? <CheckCircleSharpIcon/> : <CancelSharpIcon/>}
             </button>
 
           </div>

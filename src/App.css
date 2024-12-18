@@ -8,15 +8,17 @@ body{
     box-sizing: border-box;
 }
 .pro-sidebar {
-    background-color: #2d2f34;
-    color: white;
+  background-color: whitesmoke;
+  color: white;
+  position: fixed;
   }
-  .pro-menu-item {
-    padding: 10px;
-  }
-  .pro-menu-item:hover {
-    background-color: #1a1b1d;
-  }
+.pro-menu-item {
+  padding: 10px;
+}
+.pro-menu-item:hover {
+  background-color: rgb(67 56 202 / var(--tw-bg-opacity))
+}
+
   
 
 

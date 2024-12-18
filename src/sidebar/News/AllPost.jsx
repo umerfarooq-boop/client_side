@@ -75,15 +75,15 @@ function AllPost() {
         },
       },
       
+      // {
+      //   accessorKey: 'post_status',
+      //   header: 'Post Status',
+      //   size: 100,
+      // },
       {
-        accessorKey: 'post_status',
-        header: 'Post Status',
-        size: 100,
-      },
-      {
-        accessorKey: 'coach_id',
+        accessorKey: 'coach.name',
         header: 'Coach Name',
-        size: 150,
+        size: 100,
       },
       {
         accessorKey: 'post_image',
@@ -100,7 +100,7 @@ function AllPost() {
       {
         accessorKey: 'post_status',
         header: 'Actions',
-        size: 270,
+        size: 250,
         Cell: ({ row }) => (
           <div style={{ display: 'flex', gap: '10px' }}>
             {/* <Link to={`/add/${row.original.id}`} className="action-button add">

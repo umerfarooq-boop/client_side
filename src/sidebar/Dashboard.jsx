@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import control from "../assets/control.png";
 import Chat from '../assets/Chat.png';
@@ -11,22 +11,37 @@ import Folder from '../assets/Folder.png';
 import Setting from '../assets/Setting.png';
 import DashboardGraph from "./DashboardGraph";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
+import EastIcon from "@mui/icons-material/East";
+import WestIcon from "@mui/icons-material/West";
 export default function Dashboard({ children }) {
   const [open, setOpen] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const Menus = [
     { title: "Dashboard", src: Chat, path: "/dashboard" },
+    // {
+    //   title: "Website", 
+    //   src: User, 
+    //   path: "", 
+    //   submenu: [
+    //     // { title: "Slidder", src: Chat, path: "/home_slidder" },
+    //     { title: "Slidder", src: Chat, path: "/allhomeSlides" },
+    //     { title: "HomeService", src: Chat, path: "/home_services" },
+    //     { title: "AboutService", src: Chat, path: "/about_services" },
+    //     { title: "AboutQuestion", src: Chat, path: "/about_question" },
+    //   ]
+    // },
     {
       title: "Website", 
       src: User, 
       path: "", 
       submenu: [
-        { title: "Slidder", src: Chat, path: "/home_slidder" },
-        { title: "HomeService", src: Chat, path: "/home_services" },
-        { title: "AboutService", src: Chat, path: "/about_services" },
+        // { title: "Slidder", src: Chat, path: "/home_slidder" },
+        { title: "Slidder", src: Chat, path: "/index_slides" },
+        { title: "HomeService", src: Chat, path: "/index_services" },
+        { title: "AboutService", src: Chat, path: "/index_about_services" },
         { title: "AboutQuestion", src: Chat, path: "/about_question" },
       ]
     },
@@ -123,6 +138,42 @@ export default function Dashboard({ children }) {
 
       {/* Main Content */}
       <div className="flex-1 p-10">
+
+      <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+      {/* Previous Page Button */}
+      <button
+        onClick={() => navigate(-1)}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          padding: "8px 12px",
+          border: "none",
+          background: "#f5f5f5",
+          borderRadius: "4px",
+          cursor: "pointer",
+        }}
+        title="Go to Previous Page"
+      >
+        <WestIcon style={{ marginRight: "5px" }} /> Previous
+      </button>
+
+      {/* Next Page Button */}
+      <button
+        onClick={() => navigate(+1)}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          padding: "8px 12px",
+          border: "none",
+          background: "#f5f5f5",
+          borderRadius: "4px",
+          cursor: "pointer",
+        }}
+        title="Go to Next Page"
+      >
+        Next <EastIcon style={{ marginLeft: "5px" }} />
+      </button>
+    </div>
         {/* Conditionally render the DashboardGraph only on the Dashboard page */}
         {location.pathname === "/dashboard" && <DashboardGraph />}
 

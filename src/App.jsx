@@ -23,10 +23,20 @@ import AllPost from './sidebar/News/AllPost';
 import SinglePost from './sidebar/News/SinglePost';
 import Updatenews from './sidebar/News/UpdateNews';
 import Contact from './website/Contact';
-import HomeSlidder from './sidebar/Menagewebsite/HomeSlidder';
 import HomeService from './sidebar/Menagewebsite/HomeService';
 import AboutService from './sidebar/Menagewebsite/AboutService';
 import AboutQuestion from './sidebar/Menagewebsite/AboutQuestion';
+// import HomeSlidder from './sidebar/Menagewebsite/Homslidder/HomeSlidder';
+import Index_Slidder from './sidebar/Menagewebsite/Homslidder/index_Slidder';
+import AddHomeSliddder from './sidebar/Menagewebsite/Homslidder/AddHomeSlidder';
+import SingleSlidder from './sidebar/Menagewebsite/Homslidder/SingleSlidder';
+import EditSlidder from './sidebar/Menagewebsite/Homslidder/EditSlidder';
+import Index_service from './sidebar/Menagewebsite/HomeService/Index_service';
+import Single_service from './sidebar/Menagewebsite/HomeService/Single_service';
+import Add_service from './sidebar/Menagewebsite/HomeService/Add_service';
+import Update_service from './sidebar/Menagewebsite/HomeService/Update_service';
+import Index_about_service from './sidebar/Menagewebsite/AboutService/Index_about_service';
+// import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 
 function App() {
@@ -60,21 +70,92 @@ function App() {
         */
 
         <Route
-          path='/home_slidder'
+          path='/addhome_slidder'
           element={
             <ProtectedRoute>
-              <HomeSlidder />
+              <AddHomeSliddder />
             </ProtectedRoute>
           }
         />
         <Route
-          path='/home_services'
+          path='/single_slidder/:id'
           element={
             <ProtectedRoute>
-              <HomeService />
+              <SingleSlidder />
             </ProtectedRoute>
           }
         />
+        <Route
+          path='/edit_slidder/:id'
+          element={
+            <ProtectedRoute>
+              <EditSlidder />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/index_slides'
+          element={
+            <ProtectedRoute>
+              <Index_Slidder />
+            </ProtectedRoute>
+          }
+        />
+        /***
+        * ! Home Service Routes
+        */
+        <Route
+          path='/index_services'
+          element={
+            <ProtectedRoute>
+              <Index_service />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/add_services'
+          element={
+            <ProtectedRoute>
+              <Add_service />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/single_services/:id'
+          element={
+            <ProtectedRoute>
+              <Single_service />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/edit_service/:id'
+          element={
+            <ProtectedRoute>
+              <Update_service/>
+            </ProtectedRoute>
+          }
+        />
+        /***
+          * ! Home Service Routes
+        */
+
+        /***
+        * ! About Service
+        */
+
+        <Route
+          path='/index_about_services'
+          element={
+            <ProtectedRoute>
+              <Index_about_service />
+            </ProtectedRoute>
+          }
+        />
+
+        /***
+        * ! About Service
+        */
         <Route
           path='/about_services'
           element={

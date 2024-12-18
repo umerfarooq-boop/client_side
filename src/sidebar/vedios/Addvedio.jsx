@@ -57,7 +57,7 @@ function Addvedio() {
                     {/* Submit Button */}
                     <button
                         type="submit"
-                        className="w-full p-3 bg-blue-900 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300"
+                        className="w-full p-3 bg-indigo-700 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300"
                     >
                         Submit
                     </button>
