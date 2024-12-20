@@ -30,15 +30,15 @@ function Index_about_question() {
   // Handle status change
   const handleStatusChange = async (id) => {
     try {
-      const response = await axios.get(`AboutServiceStatus/${id}`);
+      const response = await axios.get(`UpdateFeatureStatus/${id}`);
       console.log(response);
   
-      if (response.status === 201 && response.data.about_srvice) {
+      if (response.status === 201 && response.data.question_status) {
         // Update the status in the data
         setData((prevData) =>
           prevData.map((item) =>
             item.id === id
-              ? { ...item, status: response.data.about_srvice.status } // Ensure correct spelling of 'status'
+              ? { ...item, status: response.data.question_status.status } // Ensure correct spelling of 'status'
               : item
           )
         );

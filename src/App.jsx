@@ -43,6 +43,7 @@ import Index_about_question from './sidebar/Menagewebsite/AboutQuestion/Index_ab
 import Single_about_questioin from './sidebar/Menagewebsite/AboutQuestion/Single_about_questioin';
 import Add_about_question from './sidebar/Menagewebsite/AboutQuestion/Add_about_question';
 import Update_about_question from './sidebar/Menagewebsite/AboutQuestion/Update_about_question';
+import Checking from './sidebar/Menagewebsite/Homslidder/Checking';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 
@@ -223,6 +224,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Update_about_question />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/checking'
+          element={
+            <ProtectedRoute>
+              <Checking />
             </ProtectedRoute>
           }
         />

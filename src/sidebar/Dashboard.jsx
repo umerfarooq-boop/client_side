@@ -43,6 +43,7 @@ export default function Dashboard({ children }) {
         { title: "HomeService", src: Chat, path: "/index_services" },
         { title: "AboutService", src: Chat, path: "/index_about_services" },
         { title: "AboutQuestion", src: Chat, path: "/index_about_question" },
+        { title: "Checking", src: Chat, path: "/checking" },
       ]
     },
     {
