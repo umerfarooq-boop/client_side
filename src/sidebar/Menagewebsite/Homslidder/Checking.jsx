@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Collapse, IconButton, Avatar, Box } from '@mui/material';
 import { ExpandLess, ExpandMore, ChevronLeft, ChevronRight, Home, Settings, AccountCircle, MoreVert } from '@mui/icons-material';
+import logo from '../../../../public/logo.png'
 
 function SidebarItem({ icon, text, active = false, expanded = false, subMenu = null }) {
   const [expandSubMenu, setExpandSubMenu] = useState(false);
@@ -89,7 +90,7 @@ export default function Checking() {
           width: expanded ? 220 : 70,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            width: expanded ? 220 : 70,
+            width: expanded ? 180 : 70,
             boxSizing: 'border-box',
             overflow: 'hidden', // Prevent horizontal scroll on the drawer
             transition: 'width 0.3s ease', // Smooth transition for expanding and collapsing
@@ -101,17 +102,35 @@ export default function Checking() {
         }}
       >
         {/* Logo and List Items */}
-        <Box display="flex" alignItems="center" justifyContent="center" p={2}>
           {expanded ? (
-            <Avatar
-              src="https://img.logoipsum.com/243.svg"
-              alt="Logo"
-              sx={{ width: expanded ? 128 : 40, height: 40 }}
-            />
+        <Box display="flex" alignItems="center" justifyContent="center" p={1} mt={-2}>
+            
+              <div>
+              <Avatar
+                src={logo}
+                alt="Logo"
+                sx={{
+                  width: expanded ? 130 : 104, // Increase logo size on expanded
+                  height: expanded ? 130 : 194, // Adjust height accordingly
+                }}
+              />
+              </div>
+          </Box>
           ) : (
-            <h1>None</h1>
+            <Box display="flex" alignItems="center" justifyContent="center" pl={1} mt={-1}>
+  <Avatar
+    src={logo}
+    alt="Logo"
+    sx={{
+      width: expanded ? 150 : 120, // Increase logo size on expanded
+      height: expanded ? 150 : 120, // Adjust height accordingly
+      objectFit: 'streatch', // Ensures image fills the container but might be cut off
+    }}
+  />
+</Box>
+
           )}
-        </Box>
+        
         <List>
           {navBarItems.map((item, index) => (
             <SidebarItem key={index} {...item} expanded={expanded} />
@@ -143,7 +162,7 @@ export default function Checking() {
         sx={{
           position: 'absolute',
           top: '11%',
-          left: expanded ? 220 : 60,
+          left: expanded ? 180 : 60,
           transform: 'translateY(-50%)',
           zIndex: 10,
         }}
