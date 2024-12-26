@@ -10,7 +10,7 @@ import AcademyDetailsForm from './AcademyDetailsForm';
 import Swal from "sweetalert2";
 import { RotatingLines } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
-
+const a = "im,er"
 const steps = ['Basic Information', 'Player/Coach Information', 'Additional Information'];
 
 const Profile = () => {
@@ -68,6 +68,8 @@ const Profile = () => {
           if(role === 'player'){
             // navigate('/dashboard');
             navigate('/coachpost');
+          }else if(role === 'coach'){
+            navigate('/');
           } 
         }
       });
@@ -158,11 +160,12 @@ const Profile = () => {
                     variant="contained"
                     color="primary"
                     onClick={activeStep === steps.length - 1 ? handleSubmit(onSubmit) : handleNext}
-                    disabled={!isSubmitted && !isValid}
+                    disabled={!isValid} // Disable the "Next" button if form is not valid
                     sx={{ width: '80px' }}
                   >
                     {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
                   </Button>
+
                 </Box>
               </form>
             )}

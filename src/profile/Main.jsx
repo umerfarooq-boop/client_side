@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { TextField, MenuItem, Grid, List, ListItem } from '@mui/material';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Swal from "sweetalert2";
+
 
 const Main = ({ nextStep, setRole }) => {
   const {
@@ -10,7 +13,7 @@ const Main = ({ nextStep, setRole }) => {
     watch,
     formState: { errors },
   } = useFormContext();
-
+  const navigate = useNavigate();
   const [citySuggestions, setCitySuggestions] = useState([]);
   const inputValue = watch('profile_location', '');
   const role = localStorage.getItem('role');
@@ -56,41 +59,86 @@ const Main = ({ nextStep, setRole }) => {
     // console.log(location);
   };
 
+  
+
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
       <Grid container spacing={5}>
         {/* Date of Birth Field */}
         <Grid item xs={12} sm={6}>
-          <TextField
-            label="Date of Birth"
-            type="date"
-            {...register('dob', {
-              required: 'Date of Birth is required',
-              validate: (value) => new Date(value) <= new Date() || 'Date cannot be in the future',
-            })}
-            InputLabelProps={{ shrink: true }}
-            error={!!errors.dob}
-            helperText={errors.dob?.message}
-            fullWidth
-            size="small"
-          />
+        <TextField
+  label="Date of Birth"
+  type="date"
+  {...register('dob', {
+    required: 'Date of Birth is required',
+    validate: (value) => {
+      const role = localStorage.getItem('role'); // Retrieve the role
+      const dob = new Date(value);
+      const age = new Date().getFullYear() - dob.getFullYear();
+      const isFutureDate = dob > new Date();
+      
+      // Validate based on role
+      if (isFutureDate) {
+        return 'Date cannot be in the future';
+      }
+
+      if (role === 'player') {
+        if (age < 11) {
+          Swal.fire({
+            title: "Error!",
+            text: `Player age must be at least 11 years`,
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+          setTimeout(() => navigate('/signup'), 1000); // Delayed navigation
+          return 'Player age must be at least 11 years';
+        }
+      } else if (role === 'coach') {
+        if (age <= 20 || age >= 50) {
+          Swal.fire({
+            title: "Error!",
+            text: "Coach age must be greater than 20 years",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+          setTimeout(() => navigate('/signup'), 1000); // Delayed navigation
+          return 'Coach age must be greater than 20 years or less than 50';
+        }
+      }
+      
+
+      return true; // Valid
+    },
+  })}
+  InputLabelProps={{ shrink: true }}
+  error={!!errors.dob}
+  helperText={errors.dob?.message}
+  fullWidth
+  size="small"
+/>
+
         </Grid>
 
-        {/* Gender Field */}
-        <Grid item xs={12} sm={6}>
-          <TextField
-            label="Gender"
-            select
-            {...register('gender', { required: 'Gender is required' })}
-            error={!!errors.gender}
-            helperText={errors.gender?.message}
-            fullWidth
-            size="small"
-          >
-            <MenuItem value="male">Male</MenuItem>
-            <MenuItem value="female">Female</MenuItem>
-          </TextField>
-        </Grid>
+
+
+  {/* Gender Field */}
+  <Grid item xs={12} sm={6}>
+    <TextField
+      label="Gender"
+      select
+      {...register('gender', { required: 'Gender is required' })}
+      error={!!errors.gender}
+      helperText={errors.gender?.message}
+      InputLabelProps={{ shrink: true }}
+      fullWidth
+      size="small"
+    >
+      <MenuItem value="male">Male</MenuItem>
+      <MenuItem value="female">Female</MenuItem>
+    </TextField>
+  </Grid>
+
+
 
         {/* City Search Field */}
       

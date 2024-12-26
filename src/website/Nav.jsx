@@ -8,6 +8,7 @@ import {
   } from "@material-tailwind/react";
   import { Link,Routes,Route } from 'react-router-dom';
   import About from './About' 
+  import logo from '../../public/logo.png'
 
 function Nav() {
     const [openNav, setOpenNav] = React.useState(false);
@@ -122,13 +123,12 @@ function Nav() {
     <>
        <Navbar className="mx-auto max-w-full px-4 py-2 lg:px-8 lg:py-4">
       <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
-        <Typography
-          as="a"
-          href="#"
-          className="mr-4 cursor-pointer py-1.5 font-medium text-black"
-        >
-          Coach Selector
-        </Typography>
+      <div className="text-center">
+            <h3 className="text-3xl sm:text-2xl leading-normal font-extrabold italic tracking-tight text-gray-900">
+              Coach <span className="text-indigo-600">Selector</span>
+            </h3>
+          </div>
+
         <div className="hidden lg:block">{navList}</div>
         <div className="flex items-center gap-x-1">
           <Button variant="text" size="sm" className="hidden lg:inline-block">

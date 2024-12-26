@@ -8,7 +8,7 @@ import { Drawer, List, ListItem, ListItemIcon, ListItemText, Collapse, IconButto
 import { ExpandLess, ExpandMore, ChevronLeft, ChevronRight, Home, Settings, AccountCircle } from '@mui/icons-material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import WebAssetIcon from '@mui/icons-material/WebAsset';
-import logo from "../assets/logo.png";
+import logo from "../../public/logo.png";
 import ImageIcon from '@mui/icons-material/Image';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
@@ -201,7 +201,9 @@ export default function Dashboard({ children }) {
           {/* Logo */}
           <Box display="flex" alignItems="center" justifyContent="center" p={1} mt={1} >
             {expanded ? (
-              <img src={logo} alt="logo" style={{ width: '60px', height: 'auto' }} />
+              <div>
+                <img src={logo} alt="logo" style={{ width: '70px', height: 'auto' }} />
+              </div>
             ) : (
               <Avatar src={logo} sx={{ width: 40, height: 40 }} />
             )}

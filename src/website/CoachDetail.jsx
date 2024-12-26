@@ -10,7 +10,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { RotatingLines } from "react-loader-spinner";
 import MyCalendar from './MyCalendar';
 import DirectionMap from './DirectionMap';
-
+import Footer from './Footer'
 
 function CoachDetail() {
 
@@ -191,6 +191,11 @@ function CoachDetail() {
 <MyCalendar />
 
                 </div>
+                <div className='mt-20 sm:mt-24 md:mt-28 lg:mt-32'>
+                <div className="text-center mt-10">
+          </div>
+  <Footer />
+</div>
 
 
                 

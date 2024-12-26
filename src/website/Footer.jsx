@@ -42,21 +42,23 @@ function Footer() {
                     </ul>
                 </div>
                 <div class="lg:mx-auto text-left">
-                    <h4 class="text-lg text-gray-900 font-medium mb-7">Resources</h4>
-                    <ul class="text-sm  transition-all duration-500">
-                        <li class="mb-6"><a href="javascript:;"  class="text-gray-600 hover:text-gray-900">FAQs</a></li>
-                        <li class="mb-6"><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">Quick Start</a></li>
-                        <li class="mb-6"><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">Documentation</a></li>
-                        <li><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">User Guide</a></li>
+                <h4 class="text-lg text-gray-900 font-medium mb-7">Explore</h4>
+                    <ul class="text-sm transition-all duration-500">
+                        <li class="mb-6"><a href="javascript:;" class="text-gray-600 hover:text-gray-900">How It Works</a></li>
+                        <li class="mb-6"><a href="javascript:;" class="text-gray-600 hover:text-gray-900">Find a Coach</a></li>
+                        <li class="mb-6"><a href="javascript:;" class="text-gray-600 hover:text-gray-900">Become a Coach</a></li>
+                        <li class="mb-6"><a href="javascript:;" class="text-gray-600 hover:text-gray-900">Contact Support</a></li>
+                        <li><a href="javascript:;" class="text-gray-600 hover:text-gray-900">Terms & Conditions</a></li>
                     </ul>
                 </div>
                 <div class="lg:mx-auto text-left">
-                    <h4 class="text-lg text-gray-900 font-medium mb-7">Blogs</h4>
-                    <ul class="text-sm  transition-all duration-500">
-                        <li class="mb-6"><a href="javascript:;"  class="text-gray-600 hover:text-gray-900">News</a></li>
-                        <li class="mb-6"><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">Tips & Tricks</a></li>
-                        <li class="mb-6"><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">New Updates</a></li>
-                        <li><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">Events</a></li>
+                <h4 class="text-lg text-gray-900 font-medium mb-7">Discover</h4>
+                    <ul class="text-sm transition-all duration-500">
+                        <li class="mb-6"><a href="javascript:;" class="text-gray-600 hover:text-gray-900">Browse Coaches</a></li>
+                        <li class="mb-6"><a href="javascript:;" class="text-gray-600 hover:text-gray-900">Filter by Location</a></li>
+                        <li class="mb-6"><a href="javascript:;" class="text-gray-600 hover:text-gray-900">Check Availability</a></li>
+                        <li class="mb-6"><a href="javascript:;" class="text-gray-600 hover:text-gray-900">Book a Session</a></li>
+                        <li><a href="javascript:;" class="text-gray-600 hover:text-gray-900">View on Map</a></li>
                     </ul>
                 </div>
             </div>

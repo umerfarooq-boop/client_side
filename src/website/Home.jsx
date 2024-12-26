@@ -12,10 +12,10 @@ import coach from '../../public/SlidderWebimage/coach.jpg'
 import football from '../../public/SlidderWebimage/football.jpg'
 import footballkid from '../../public/SlidderWebimage/footballKid.jpg'
 import player from '../../public/SlidderWebimage/players.jpg'
-import stadium from '../../public/SlidderWebimage/stadium.jpg'
+// import stadium from '../../public/SlidderWebimage/stadium.jpg'
 import stadium1 from '../../public/SlidderWebimage/stadium1.jpg'
 
-
+const stadium = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhKyPqI6cJ_Jsh7pVwPo_geO3nhUDkreoQSg&s";
 
 function Home() {
   const [oldSlide, setOldSlide] = useState(0);
@@ -46,9 +46,9 @@ function Home() {
   <Slider {...settings}>
     <div className="relative flex items-start justify-center">
       <img
-        src="https://st.depositphotos.com/1380903/51896/v/450/depositphotos_518965062-stock-illustration-black-abstract-background-composed-squares.jpg"
+        src="https://img.freepik.com/premium-photo/background-wallpaper-related-football-sports_746565-134558.jpg"
         alt="Background Image"
-        className="relative w-[1920px] h-[350px] object-cover"
+        className="relative w-[1920px] h-[450px] object-cover"
       />
       <div className="absolute inset-0 mt-[170px] flex justify-center">
         <TypeAnimation
@@ -71,20 +71,12 @@ function Home() {
     </div>
 
     {/* Other slides */}
+    
     <div>
-      <img src={stadium} alt="Slide 2" className=" relative w-[1920px] h-[350px] object-cover"/>
+      <img src={player} alt="Slide 3" className="relative w-[1920px] h-[450px] object-cover" />
     </div>
     <div>
-      <img src={player} alt="Slide 3" className="relative w-[1920px] h-[350px] object-cover" />
-    </div>
-    <div>
-      <img src={football} alt="Slide 4" className=" relative w-[1920px] h-[350px] object-cover"/>
-    </div>
-    <div>
-      <img src={stadium1} alt="Slide 5" className=" relative w-[1920px] h-[350px] object-cover"/>
-    </div>
-    <div>
-      <img src={stadium1} alt="Slide 6" className="relative w-[1920px] h-[350px] object-cover" />
+      <img src={football} alt="Slide 4" className=" relative w-[1920px] h-[450px] object-cover"/>
     </div>
   </Slider>
 

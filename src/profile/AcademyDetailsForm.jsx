@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { TextField, Grid } from "@mui/material";
+import { TextField, Grid,InputAdornment  } from '@mui/material';
 
 const AcademyDetailsForm = () => {
-  const { register, formState: { errors } } = useFormContext();
+  const { register,watch, formState: { errors } } = useFormContext();
   let location = localStorage.getItem('location'); // Use 'let' for reassignment
     if (location) {
         location = location.replace(/"/g, ''); // Remove all double quotes
@@ -16,18 +16,44 @@ const AcademyDetailsForm = () => {
     } else {
         console.log("No location found in localStorage");
     }
+
+    const [error, setErrors] = useState({ academy_certificate: '' });
+
+const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    const file = files[0];
+    if (!file) return;
+
+    let errorMessage = '';
+    if (name === 'academy_certificate' && file.size > 50 * 1024 * 1024) {
+        errorMessage = 'Image size must be less than 50 MB.';
+    }
+
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
+};
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            label="Academy Name"
-            {...register("academy_name", { required: "Academy name is required" })}
-            fullWidth
-            size="small"
-            error={!!errors.academy_name}
-            helperText={errors.academy_name?.message}
-          />
+          <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+              <TextField
+        label="Academy Name"
+        {...register("academy_name", {
+          required: "Academy Name is required",
+          minLength: {
+            value: 3,
+            message: "Academy must be at least 3 characters",
+          },
+          pattern: {
+            value: /^[A-Za-z\s]+(,\s?[0-9]+)?$/, // Regex for strings with letters, spaces, and optional comma followed by numbers
+            message: "Academy must contain only letters, spaces, and an optional comma with numbers",
+          },
+        })}
+        fullWidth
+        size="small"
+        error={!!errors.academy_name}
+        helperText={errors.academy_name?.message}
+      />
+
         </Grid>
 
         <Grid item xs={12} sm={6}>
@@ -43,43 +69,65 @@ const AcademyDetailsForm = () => {
         </Grid>
 
         <Grid item xs={12}>
-          <TextField
-            label="Address"
-            {...register("address", { required: "Address is required" })}
-            fullWidth
-            size="small"
-            error={!!errors.address}
-            helperText={errors.address?.message}
-          />
+        <TextField
+  label="Address"
+  {...register("address", { 
+    required: "Address is required", 
+  })}
+  fullWidth
+  size="small"
+  error={!!errors.address}
+  helperText={errors.address?.message}
+/>
+
+
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <TextField
-            label="Phone Number"
-            {...register("academy_phonenumber", { 
-              required: "Phone Number is required",
-              pattern: {
-                value: /^[0-9]{10}$/, // Adjust this regex based on your phone number format
-                message: "Invalid phone number format (10 digits required)",
-              },
-            })}
-            fullWidth
-            size="small"
-            error={!!errors.academy_phonenumber}
-            helperText={errors.academy_phonenumber?.message}
-          />
+        <TextField
+    type="text"
+    label="Phone Number"
+    {...register('academy_phonenumber', {
+        required: 'Phone number is required',
+        pattern: {
+            value: /^\d{9}$/, // Matches exactly 9 digits
+            message: 'Phone number must be 9 digits',
+        },
+    })}
+    inputProps={{
+        maxLength: 9,  // Set max length to 9
+        inputMode: 'numeric',  // Helps on mobile devices
+    }}
+    fullWidth
+    size="small"
+    InputLabelProps={{ shrink: true }}
+    InputProps={{
+        startAdornment: <InputAdornment position="start">+92</InputAdornment>,
+    }}
+    error={!!errors.academy_phonenumber}
+    helperText={errors.academy_phonenumber?.message}
+    onInput={(e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, ''); // Replace non-numeric characters
+    }}
+/>
+
+
+
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <TextField
-            {...register('academy_certificate')}
-            label="Academy Certificate"
-            type="file"
-            fullWidth
-            size="small"
-            InputLabelProps={{ shrink: true }}
-            // helperText="Upload Academy Certificate"
-          />
+        <TextField
+    label="Upload Image"
+    type="file"
+    fullWidth
+    size="small"
+    InputLabelProps={{ shrink: true }}
+    onChange={handleFileChange}
+    inputProps={{ name: 'academy_certificate' }} // Make sure this matches the state field name
+    error={!!error.academy_certificate}  // Use the correct error key here
+    helperText={error.academy_certificate} // Use the correct error key here
+    {...register('academy_certificate')}
+/>
         </Grid>
       </Grid>
     </div>

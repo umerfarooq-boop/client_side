@@ -10,8 +10,8 @@ function Signup() {
   const {
     register,
     handleSubmit,
-    watch,
-    reset,
+    reset,watch,
+    setError,
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
@@ -45,7 +45,26 @@ function Signup() {
         navigate("/otp");
       })
       .catch((error) => {
-        console.log("The Error is " + error);
+        if (error.response && error.response.data.errors) {
+          const serverErrors = error.response.data.errors;
+    
+          // Map server errors to form fields
+          Object.keys(serverErrors).forEach((field) => {
+            setError(field, {
+              type: "server",
+              message: serverErrors[field],
+            });
+          });
+        } else {
+          // Handle general network or unexpected errors
+          Swal.fire({
+            title: "Error!",
+            text: "Something went wrong. Please try again later.",
+            icon: "error",
+            button: "OK",
+          });
+        }
+        setLoading(false);
       });
   };
 
@@ -89,39 +108,49 @@ function Signup() {
                 <div className="w-full flex-1 mt-8">
                   <form onSubmit={handleSubmit(Signupuser)}>
                     <div className="mx-auto max-w-xs flex flex-col gap-4">
-                      <input
-                        className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border ${
-                          errors.name ? "border-red-500" : "border-gray-200"
-                        } placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white`}
-                        type="text"
-                        placeholder="Enter your name"
-                        {...register("name", { required: "Name is required" })}
-                      />
-                      {errors.name && (
-                        <p className="text-red-500 text-sm">
-                          {errors.name.message}
-                        </p>
-                      )}
+                    <input
+                      className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border ${
+                        errors.name ? "border-red-500" : "border-gray-200"
+                      } placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white`}
+                      type="text"
+                      placeholder="Enter your name"
+                      {...register("name", {
+                        required: "Name is required",
+                        minLength: {
+                          value: 3,
+                          message: "Name must be at least 3 characters",
+                        },
+                        pattern: {
+                          value: /^[A-Za-z\s]+$/, // Regex for strings with only letters and spaces
+                          message: "Name must contain only letters",
+                        },
+                      })}
+                      
+                    />
+                    {errors.name && (
+                      <p className="text-red-500 text-sm">{errors.name.message}</p>
+                    )}
 
-                      <input
-                        className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border ${
-                          errors.email ? "border-red-500" : "border-gray-200"
-                        } placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white`}
-                        type="email"
-                        placeholder="Enter your email"
-                        {...register("email", {
-                          required: "Email is required",
-                          pattern: {
-                            value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
-                            message: "Email is not valid",
-                          },
-                        })}
-                      />
-                      {errors.email && (
-                        <p className="text-red-500 text-sm">
-                          {errors.email.message}
-                        </p>
-                      )}
+
+                    <input
+                      className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border ${
+                        errors.email ? "border-red-500" : "border-gray-200"
+                      } placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white`}
+                      type="email"
+                      placeholder="Enter your email"
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
+                          message: "Email is not valid",
+                        },
+                      })}
+                    />
+                    {errors.email && (
+                      <p className="text-red-500 text-sm">{errors.email.message}</p>
+                    )}
+
+
 
                       <input
                         className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border ${
@@ -192,6 +221,11 @@ function Signup() {
                         <a href="/login">
                           <span className="text-blue-900 font-semibold">
                             Login
+                          </span>
+                        </a> &nbsp;
+                        <a href="/">
+                          <span className="text-blue-900 font-semibold">
+                            Guest
                           </span>
                         </a>
                       </p>

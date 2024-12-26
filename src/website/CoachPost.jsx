@@ -4,6 +4,8 @@ import axios from "../axios";
 import { RotatingLines } from "react-loader-spinner";
 import { Link } from "react-router-dom";
 import { FilterList } from "@mui/icons-material";
+import back from '../../public/back.jpg'
+import Footer from './Footer'
 
 function CoachPost() {
   const [loader, setLoader] = useState(true);
@@ -182,18 +184,16 @@ function CoachPost() {
   </div>
 </div>
 
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-4 lg:gap-20 p-4">
             {filteredPosts.map((item) => (
               <div
                 key={item.id}
-                className="max-w-sm mx-auto mt-16 bg-white shadow-xl rounded-lg text-gray-900 duration-500 hover:scale-105 hover:shadow-xl"
+                className="w-56 max-h-auto mx-auto mt-16 bg-white shadow-xl rounded-lg text-gray-900 duration-500 hover:scale-105 hover:shadow-xl"
               >
                 <div className="relative rounded-t-lg h-32 overflow-hidden shadow-lg group">
                   <img
                     className="object-cover w-full h-full"
-                    src="https://images.pexels.com/photos/29018957/pexels-photo-29018957/free-photo-of-aerial-view-of-illuminated-football-stadium-at-night.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                    alt="Coach"
+                    src={back}
                   />
                   <span
                     className={`absolute top-0 left-0 text-xs font-semibold px-3 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out ${
@@ -234,7 +234,13 @@ function CoachPost() {
 
           <div className="m-4 flex justify-end">{renderPaginationLinks()}</div>
           </div>
+
+        
+
       )}
+      <div>
+        <Footer />
+      </div>
     </>
   );
 }

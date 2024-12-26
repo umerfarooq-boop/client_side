@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form';
-import { TextField, Grid, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { TextField, Grid, FormControl, InputLabel, MenuItem, Select,InputAdornment  } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from '../axios';
 
@@ -31,7 +31,21 @@ const CoachProfile = () => {
     /**
      * !Drop Down api setting
      */
+    const [error, setErrors] = useState({ image: '', certificate: '' });
+    const handleFileChange = (e) => {
+        const { name, files } = e.target;
+        const file = files[0];
+        if (!file) return;
 
+        let errorMessage = '';
+        if (name === 'image' && file.size > 180 * 1024) {
+            errorMessage = 'Image size must be less than 180 KB.';
+        } else if (name === 'certificate' && file.size > 50 * 1024 * 1024) {
+            errorMessage = 'PDF size must be less than 50 MB.';
+        }
+
+        setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
+    };
 
     // Start here again store locaiton in 
 
@@ -55,17 +69,28 @@ const CoachProfile = () => {
                 <Grid item xs={12} sm={6}>
                     <TextField
                         label="Coach Name"
-                        {...register('name', { required: 'Name is required' })}
                         fullWidth
                         size="small"
                         error={!!errors.name}
                         helperText={errors.name?.message}
+                        {...register("name", {
+                            required: "Name is required",
+                            minLength: {
+                              value: 3,
+                              message: "Name must be at least 3 characters",
+                            },
+                            pattern: {
+                              value: /^[A-Za-z\s]+$/, // Regex for strings with only letters and spaces
+                              message: "Name must contain only letters",
+                            },
+                          })}
+                          
                     />
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
                     <FormControl fullWidth size="small" error={!!errors.experience}>
-                        <InputLabel id="experience-label">Experience</InputLabel>
+                        <InputLabel >Experience</InputLabel>
                         <Select
                             labelId="experience-label"
                             {...register('experience', { required: 'Experience is required' })}
@@ -99,21 +124,34 @@ const CoachProfile = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Phone Number"
-                        {...register('phone_number', { 
-                            required: 'Phone number is required',
-                            pattern: {
-                                value:/^((\+92)|(0092))[-\s]?(\d{3})[-\s]?(\d{7})$|^\d{11}$|^\d{4}-\d{7}$/, // Adjust according to your phone number format
-                                message: 'Phone number must be 10 digits'
-                            }
-                        })}
-                        fullWidth
-                        size="small"
-                        error={!!errors.phone_number}
-                        helperText={errors.phone_number?.message}
-                    />
-                </Grid>
+                <TextField
+                    type="text"  // Change to 'text' to control input length better
+                    label="Phone Number"
+                    {...register('phone_number', {
+                        required: 'Phone number is required',
+        pattern: {
+            value: /^\d{9}$/, // Matches exactly 9 digits
+            message: 'Phone number must be 9 digits',
+        },
+    })}
+    inputProps={{
+        maxLength: 9,  // Set max length to 9
+        inputMode: 'numeric',  // Helps on mobile devices
+    }}
+    fullWidth
+    size="small"
+    InputLabelProps={{ shrink: true }}
+    InputProps={{
+        startAdornment: <InputAdornment position="start">+92</InputAdornment>,
+    }}
+                    error={!!errors.phone_number}
+                    helperText={errors.phone_number?.message}
+                    onInput={(e) => {
+                        e.target.value = e.target.value.replace(/[^0-9]/g, ''); // Replace non-numeric characters
+                    }}
+                />
+
+        </Grid>
 
                 <Grid item xs={12} sm={6}>
                     <FormControl fullWidth size="small" error={!!errors.category_id}>
@@ -173,26 +211,34 @@ const CoachProfile = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Upload Image"
-                        {...register('image')}
-                        type="file"
-                        fullWidth
-                        size="small"
-                        InputLabelProps={{ shrink: true }}
-                    />
-                </Grid>
+                <TextField
+                    label="Upload Image"
+                    type="file"
+                    fullWidth
+                    size="small"
+                    InputLabelProps={{ shrink: true }}
+                    onChange={handleFileChange}
+                    inputProps={{ name: 'image' }}
+                    error={!!error.image}
+                    helperText={error.image}
+                    {...register('image')}
+                />
+            </Grid>
 
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Upload Certificate"
-                        {...register('certificate')}
-                        type="file"
-                        fullWidth
-                        size="small"
-                        InputLabelProps={{ shrink: true }}
-                    />
-                </Grid>
+            <Grid item xs={12} sm={6}>
+                <TextField
+                    label="Upload Certificate"
+                    type="file"
+                    fullWidth
+                    size="small"
+                    InputLabelProps={{ shrink: true }}
+                    onChange={handleFileChange}
+                    inputProps={{ name: 'certificate' }}
+                    error={!!error.certificate}
+                    helperText={error.certificate}
+                    {...register('certificate')}
+                />
+            </Grid>
             </Grid>
         </div>
     );

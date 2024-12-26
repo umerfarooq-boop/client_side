@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css';
 import { RotatingLines } from "react-loader-spinner";
-
+import Footer from './Footer'
 const localizer = momentLocalizer(moment);
 
 function MyCalendar() {
@@ -106,7 +106,15 @@ function MyCalendar() {
         </div>
       ) : (
         <div>
-          <ToastContainer />
+          <ToastContainer /><br /><br />
+
+          <div className="text-center mt-16 mb-5">
+            <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
+              Schedule 
+              <span className="text-indigo-600">&nbsp;Booking</span>
+            </h3>
+        </div>
+
           <div className="flex items-center justify-center p-12">
             <div className="mx-auto w-full max-w-[550px] bg-white">
               <form onSubmit={handleSubmit(Addevent)}>
@@ -217,7 +225,7 @@ function MyCalendar() {
 
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-              <p className="font-medium text-sm text-yellow-500">Free</p>
+              <p className="font-medium text-sm text-yellow-500">Processing</p>
             </div>
 
             <div className="flex items-center space-x-2">
@@ -253,6 +261,8 @@ function MyCalendar() {
             />
           </div>
         </div>
+
+        
       )}
     </>
   );
