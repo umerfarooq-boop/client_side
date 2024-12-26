@@ -1,188 +1,314 @@
-import React, { useState } from "react";
+
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
-import control from "../assets/control.png";
-import Chat from '../assets/Chat.png';
-import User from '../assets/User.png';
-import Calendar from '../assets/Calendar.png';
-import Search from '../assets/Search.png';
-import Chart from '../assets/Chart.png';
-import Folder from '../assets/Folder.png';
-import Setting from '../assets/Setting.png';
 import DashboardGraph from "./DashboardGraph";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EastIcon from "@mui/icons-material/East";
 import WestIcon from "@mui/icons-material/West";
+import React, { useEffect, useState } from 'react';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Collapse, IconButton, Avatar, Box } from '@mui/material';
+import { ExpandLess, ExpandMore, ChevronLeft, ChevronRight, Home, Settings, AccountCircle } from '@mui/icons-material';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import WebAssetIcon from '@mui/icons-material/WebAsset';
+import logo from "../assets/logo.png";
+import ImageIcon from '@mui/icons-material/Image';
+import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import HelpIcon from '@mui/icons-material/Help';
+import FeedbackIcon from '@mui/icons-material/Feedback';
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
+
+function SidebarItem({ 
+  icon, 
+  text, 
+  active = false, 
+  expanded = false, 
+  subMenu = null, 
+  path, 
+  isActive, 
+  onToggle 
+}) {
+  useEffect(() => {
+    if (!expanded) {
+      onToggle(false); // Close submenu when sidebar collapses
+    }
+  }, [expanded, onToggle]);
+
+  return (
+    <>
+      <ListItem
+        button
+        component={path ? Link : "div"}
+        to={path || undefined} // Ensure `to` is passed only if `path` exists
+        onClick={() => subMenu && onToggle(!isActive)}
+        selected={active}
+        sx={{
+          transition: "transform 0.3s ease",
+          "&:hover": {
+            transform: "scale(1.05)",
+          },
+        }}
+      >
+        <ListItemIcon
+          sx={{
+            transition: "transform 0.3s ease",
+            "&:hover": {
+              transform: "rotate(10deg)",
+            },
+          }}
+        >
+          {icon}
+        </ListItemIcon>
+        {expanded && <ListItemText primary={text} />}
+        {subMenu && (expanded ? (isActive ? <ExpandLess /> : <ExpandMore />) : null)}
+      </ListItem>
+      {subMenu && (
+        <Collapse in={isActive} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {subMenu.map((item, index) => (
+              <SidebarItem key={index} {...item} expanded={expanded} />
+            ))}
+          </List>
+        </Collapse>
+      )}
+    </>
+  );
+}
+
+
+
 export default function Dashboard({ children }) {
-  const [open, setOpen] = useState(true);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
 
-  const Menus = [
-    { title: "Dashboard", src: Chat, path: "/dashboard" },
-    // {
-    //   title: "Website", 
-    //   src: User, 
-    //   path: "", 
-    //   submenu: [
-    //     // { title: "Slidder", src: Chat, path: "/home_slidder" },
-    //     { title: "Slidder", src: Chat, path: "/allhomeSlides" },
-    //     { title: "HomeService", src: Chat, path: "/home_services" },
-    //     { title: "AboutService", src: Chat, path: "/about_services" },
-    //     { title: "AboutQuestion", src: Chat, path: "/about_question" },
-    //   ]
-    // },
+  const navBarItems = [
     {
-      title: "Website", 
-      src: User, 
-      path: "", 
-      submenu: [
-        // { title: "Slidder", src: Chat, path: "/home_slidder" },
-        { title: "Slidder", src: Chat, path: "/index_slides" },
-        { title: "HomeService", src: Chat, path: "/index_services" },
-        { title: "AboutService", src: Chat, path: "/index_about_services" },
-        { title: "AboutQuestion", src: Chat, path: "/index_about_question" },
-        { title: "Checking", src: Chat, path: "/checking" },
-      ]
+      icon: <Home />,
+      text: 'Dashboard',
+      path: '/dashboard',
+      active: true,
     },
     {
-      title: "User", 
-      src: User, 
-      path: "", 
-      submenu: [
-        { title: "Coaches", src: Chat, path: "/allcoach" }
-      ]
+      icon: <WebAssetIcon />,
+      text: 'Website',
+      subMenu: [
+        {
+          icon: <ImageIcon />,
+          text: 'Slidder',
+          path: '/index_slides',
+        },
+        {
+          icon: <MiscellaneousServicesIcon />,
+          text: 'HomeService',
+          path: '/index_services',
+        },
+        {
+          icon: <MedicalServicesIcon />,
+          text: 'AboutService',
+          path: '/index_about_services',
+        },
+        {
+          icon: <HelpIcon />,
+          text: 'AboutQuestion',
+          path: '/index_about_question',
+        },
+        {
+          icon: <FeedbackIcon />,
+          text: 'Contact Feedback',
+          path: '/contact_feedback',
+        },
+      ],
     },
     {
-      title: "Post", 
-      src: User, 
-      path: "", 
-      submenu: [
-        { title: "AddPost", src: Chat, path: "/AddPost" },
-        { title: "allPost", src: Chat, path: "/allpost" },
-        { title: "EditPost", path: "/Editpost" }
-      ]
+      icon: <AccountCircle />,
+      text: 'User',
+      subMenu: [
+        {
+          icon: <AccountCircle />,
+          text: 'Coaches',
+          path: '/allcoach',
+        },
+        {
+          icon: <AccountCircle />,
+          text: 'Players',
+          path: '/index_player',
+        },
+      ],
     },
-    { title: "Video", src: User, gap: true, path: "/vedio" },
-    { title: "Schedule", src: Calendar, path: "/schedule" },
-    { title: "Search", src: Search, path: "/search" },
-    { title: "Analytics", src: Chart, path: "/analytics" },
-    { title: "Files", src: Folder, gap: true, path: "/files" },
-    { title: "Setting", src: Setting, path: "/setting" },
+    
+    {
+      icon: <PostAddIcon />,
+      text: 'Post',
+      path: '/AddPost',
+      gap: true,
+    },
+    {
+      icon: <OndemandVideoIcon />,
+      text: 'Video',
+      path: '/vedio',
+      gap: true,
+    },
+    {
+      icon: <AccountCircle />,
+      text: 'Schedule',
+      path: '/schedule',
+    },
+    {
+      icon: <AccountCircle />,
+      text: 'Search',
+      path: '/search',
+    },
+    {
+      icon: <AccountCircle />,
+      text: 'Analytics',
+      path: '/analytics',
+    },
+    {
+      icon: <AccountCircle />,
+      text: 'Files',
+      path: '/files',
+      gap: true,
+    },
+    {
+      icon: <AccountCircle />,
+      text: 'Setting',
+      path: '/setting',
+    },
   ];
+  const [activeSubMenu, setActiveSubMenu] = useState(null);
 
-  const handleDropdownToggle = (hasSubmenu) => {
-    if (hasSubmenu) {
-      setDropdownOpen(!dropdownOpen);
-    }
+  const handleToggle = (index, isActive) => {
+    setActiveSubMenu(isActive ? index : null);
   };
 
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <div className={` ${open ? "w-72" : "w-20"} bg-dark-purple h-full p-5 pt-8 relative duration-300 `}>
-        <img
-          src={control}
-          className={`absolute cursor-pointer -right-3 top-9 w-7 border-dark-purple border-2 rounded-full ${!open && "rotate-180"}`}
-          onClick={() => setOpen(!open)}
-          alt="toggle"
+      <Box display="flex" sx={{ overflowX: 'hidden' }} >
+        {/* Drawer Component */}
+        <Drawer
+          variant="permanent"
+          open={expanded}
+          sx={{
+            width: expanded ? 260 : 70,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: expanded ? 260 : 70,
+              boxSizing: 'border-box',
+              transition: 'width 0.3s ease'
+            },
+          }}
+        >
+          {/* Logo */}
+          <Box display="flex" alignItems="center" justifyContent="center" p={1} mt={1} >
+            {expanded ? (
+              <img src={logo} alt="logo" style={{ width: '60px', height: 'auto' }} />
+            ) : (
+              <Avatar src={logo} sx={{ width: 40, height: 40 }} />
+            )}
+          </Box>
+
+          {/* Navigation Items */}
+          <List>
+      {navBarItems.map((item, index) => (
+        <SidebarItem
+          key={index}
+          {...item}
+          expanded={expanded}
+          isActive={activeSubMenu === index}
+          onToggle={(isActive) => handleToggle(index, isActive)}
         />
-        <div className="flex gap-x-4 items-center">
-          <img src={logo} className={`cursor-pointer duration-500 ${open && "rotate-[360deg]"}`} alt="logo" />
-          <h1 className={`text-white origin-left font-medium text-xl duration-200 ${!open && "scale-0"}`}>Designer</h1>
-        </div>
-        <ul className="pt-6">
-          {Menus.map((Menu, index) => (
-            <li key={index} className={`${Menu.gap ? "mt-9" : "mt-2"}`}>
-              {/* Main Menu Item */}
-              {Menu.submenu ? (
-                <div
-                  onClick={() => handleDropdownToggle(Menu.submenu)}
-                  className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4"
-                >
-                  <img src={Menu.src} alt={Menu.title} />
-                  <span className={`${!open && "hidden"} origin-left duration-200`}>
-                    {Menu.title}
-                  </span>
-                  {/* Dropdown icon for items with a submenu */}
-                  {Menu.submenu && (
-                    <ExpandMoreIcon
-                      className={`ml-auto transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
-                      style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
-                    />
-                  )}
-                </div>
-              ) : (
-                <Link to={Menu.path} className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-black text-sm items-center gap-x-4">
-                  <img src={Menu.src} alt={Menu.title} />
-                  <span className={`${!open && "hidden"} origin-left duration-200`}>
-                    {Menu.title}
-                  </span>
-                </Link>
-              )}
-              
-              {/* Dropdown Items */}
-              {Menu.submenu && dropdownOpen && (
-                <ul className={`${open ? "block" : "hidden"} pl-8 pt-2`}>
-                  {Menu.submenu.map((subMenu, subIndex) => (
-                    <li key={subIndex} className="p-2 text-gray-300 text-sm hover:bg-light-white rounded-md">
-                      <Link to={subMenu.path}>{subMenu.title}</Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
+      ))}
+    </List>
+          {expanded ? (
+          <Box mt="auto" p={2} display="flex" alignItems="center">
+            <Avatar src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=Mark+Ruffalo" />
+            {expanded && (
+              <Box ml={2}>
+                <Box fontWeight="bold">Mark Ruffalo</Box>
+                <Box fontSize="small" color="gray">mark@gmail.com</Box>
+              </Box>
+            )}
+            {/* <IconButton>
+              <MoreVert />
+            </IconButton> */}
+          </Box>
+        ) : (
+          <Box mt="auto" p={1} display="flex" alignItems="center">
+            <Avatar src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=Mark+Ruffalo" />
+          </Box>
+        )}
+
+
+        </Drawer>
+
+        {/* Expand Button */}
+        <Box
+          sx={{
+            position: 'fixed',
+            top: '11%',
+            left: expanded ? 260 : 70,
+            transform: 'translateY(-50%)',
+            zIndex: 10,
+          }}
+        >
+          <IconButton onClick={() => setExpanded(!expanded)} >
+            {expanded ? <ChevronLeft /> : <ChevronRight />}
+          </IconButton>
+        </Box>
+      </Box>
 
       {/* Main Content */}
-      <div className="flex-1 p-10">
-
-      <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-      {/* Previous Page Button */}
-      <button
-        onClick={() => navigate(-1)}
+      <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          padding: "8px 12px",
-          border: "none",
-          background: "#f5f5f5",
-          borderRadius: "4px",
-          cursor: "pointer",
+          flex: 1,
+          marginLeft: expanded ? '50px' : '70px', // Adjust main content position dynamically
+          transition: 'margin-left 0.3s ease', // Smooth transition
+          padding: '10px',
         }}
-        title="Go to Previous Page"
       >
-        <WestIcon style={{ marginRight: "5px" }} /> Previous
-      </button>
+        {/* Navigation Buttons */}
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-indigo-700 font-medium italic"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '8px 12px',
+              border: 'none',
+              // background: '#283593',
+              
+              borderRadius: '4px',
+              cursor: 'pointer',
+              color:'white'
+            }}
+            title="Go to Previous Page"
+          >
+            <WestIcon style={{ marginRight: '5px' }} /> Previous
+          </button>
 
-      {/* Next Page Button */}
-      <button
-        onClick={() => navigate(+1)}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          padding: "8px 12px",
-          border: "none",
-          background: "#f5f5f5",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
-        title="Go to Next Page"
-      >
-        Next <EastIcon style={{ marginLeft: "5px" }} />
-      </button>
-    </div>
-        {/* Conditionally render the DashboardGraph only on the Dashboard page */}
-        {location.pathname === "/dashboard" && <DashboardGraph />}
+          <button
+            onClick={() => navigate(+1)}
+            className="bg-indigo-700 font-medium italic"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '8px 12px',
+              border: 'none',
+              color:'white',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+            title="Go to Next Page"
+          >
+            Next <EastIcon style={{ marginLeft: '5px' }} />
+          </button>
+        </div>
 
+        {/* Render DashboardGraph only on Dashboard page */}
+        {location.pathname === '/dashboard' && <DashboardGraph />}
         {children}
       </div>
     </div>
-    
-    
-
   );
 }

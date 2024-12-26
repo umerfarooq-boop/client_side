@@ -1,13 +1,41 @@
 import React from 'react'
 import Nav from './Nav'
 import Footer from './Footer'
-
-/**
- * 
- * 
- */
+import { useForm } from 'react-hook-form'
+import axios from '../axios'
+import Swal from "sweetalert2"
 
 function Contact() {
+
+    const {reset,register,handleSubmit} = useForm();
+    const addContactinfo = async (data) => {
+        try {
+            const response = await axios.post('/feedbackform',data);
+            Swal.fire({
+                title: "Success!",
+                text: "Messege Send Successfully",
+                icon: "success",
+                button: "OK",
+              });
+              reset();
+        } catch (error) {   
+            console.log(error);
+        }
+    }
+    let player_id = localStorage.getItem('player_id' || '');
+
+    let coach_id = localStorage.getItem('coach_id' || '');
+
+    let realId = null;
+    if (player_id === null || player_id === "undefined") {
+        realId = coach_id;
+    } else if (coach_id === null || coach_id === "undefined") {
+        realId = player_id;
+    }
+
+
+
+
   return (
     <>
     <Nav/>
@@ -28,10 +56,11 @@ function Contact() {
                 className="block rounded-lg bg-[hsla(0,0%,100%,0.8)] px-6 py-12 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]  md:py-16 md:px-12 -mt-[100px] backdrop-blur-[30px] border border-gray-300">
                 <div className="flex flex-wrap">
                     <div className="mb-12 w-full shrink-0 grow-0 basis-auto md:px-3 lg:mb-0 lg:w-5/12 lg:px-6">
-                    <form>
+                    <form onSubmit={handleSubmit(addContactinfo)}>
                         <div className="relative mb-6" data-te-input-wrapper-init>
                         <input type="text"
                             className="peer block min-h-[auto] w-full rounded border-2 bg-transparent py-[0.32rem] px-3 leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
+                            {...register('name')}
                             id="exampleInput90" />
                         <label
                             className="pointer-events-none absolute top-0 left-3 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
@@ -41,6 +70,7 @@ function Contact() {
                         <div className="relative mb-6" data-te-input-wrapper-init>
                         <input type="email"
                             className="peer block min-h-[auto] w-full rounded border-2 bg-transparent py-[0.32rem] px-3 leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
+                            {...register('email')}
                             id="exampleInput91" />
                         <label
                             className="pointer-events-none absolute top-0 left-3 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
@@ -50,11 +80,14 @@ function Contact() {
                         <div className="relative mb-6" data-te-input-wrapper-init>
                         <textarea
                             className="peer block min-h-[auto] w-full rounded border-2 bg-transparent py-[0.32rem] px-3 leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
-                            id="exampleFormControlTextarea1" rows="3"></textarea>
+                            id="exampleFormControlTextarea1" rows="3"
+                            {...register('message')}
+                            ></textarea>
                         <label htmlFor="exampleFormControlTextarea1"
                             className="pointer-events-none absolute top-0 left-3 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none ">Message</label>
                         </div>
-                        <button type="button"
+                        <input type="hidden" value={realId} {...register('user_id')} />
+                        <button type="submit"
                             className="mb-6 w-full rounded bg-sky-500 text-white px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal   lg:mb-0">
                             Send
                         </button>

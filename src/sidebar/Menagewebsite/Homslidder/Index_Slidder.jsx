@@ -6,6 +6,10 @@ import { MaterialReactTable } from 'material-react-table';
 import React, { useMemo, useState, useEffect } from 'react';
 import axios from '../../../axios';
 import { Button } from '@mui/material';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import CheckCircleSharpIcon from '@mui/icons-material/CheckCircleSharp';
+import CancelSharpIcon from '@mui/icons-material/CancelSharp';
 function Index_Slidder() {
 
     const [data, setData] = useState([]); 
@@ -77,22 +81,22 @@ function Index_Slidder() {
                 style={{ width: '50px', height: '50px', borderRadius: '5px' }}
               />
             ),
-            size: 100,
+            size: 200,
           },
           {
             accessorKey: 'status',
             header: 'Actions',
-            size: 10,
+            size: 210,
             Cell: ({ row }) => (
               <div style={{ display: 'flex', gap: '10px' }}>
                 {/* <Link to={`/add/${row.original.id}`} className="action-button add">
                   Add
                 </Link> */}
-                <Link to={`/edit_slidder/${row.original.id}`} className="relative z-50 block rounded-lg border border-yellow-900 bg-yellow-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-yellow-800">
-                  Edit
+                <Link to={`/edit_slidder/${row.original.id}`} className="relative z-50 block rounded-lg border border-yellow-900 bg-yellow-900 px-3 py-1 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-yellow-800">
+                <EditNoteIcon className='m-1' />
                 </Link>
-                <Link to={`/single_slidder/${row.original.id}`} className="relative z-50 block rounded-lg border border-slate-800 bg-slate-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-slate-800">
-                  Show
+                <Link to={`/single_slidder/${row.original.id}`} className="relative z-50 block rounded-lg border border-slate-800 bg-slate-900 px-3 py-1 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-slate-800">
+                <VisibilityOffOutlinedIcon className='m-1'/>
                 </Link>
                 <button
                 className="action-button status"
@@ -100,13 +104,15 @@ function Index_Slidder() {
                   backgroundColor: row.original.status === "active" ? "green" : "red",
                   color: "white", // Ensure text is visible
                   border: "none", // Optional for a clean look
-                  padding: "10px 15px", // Adjust padding as needed
+                  padding: "1px 16px", // Adjust padding as needed
                   borderRadius: "5px", // Optional for rounded corners
-                  cursor: "pointer", // Pointer cursor for better UX
+                  cursor: "pointer",
+                  margin:"1px"
+                  // Pointer cursor for better UX
                 }}
                   onClick={() => handleStatusChange(row.original.id)}
                 >
-                  {row.original.status === "active" ? "Active" : "Block"}
+                  {row.original.status === "active" ? <CheckCircleSharpIcon/> : <CancelSharpIcon/>}
                 </button>
     
               </div>
@@ -137,18 +143,18 @@ function Index_Slidder() {
             ) :
             (
             <div>
-              
+              <br />
               <MaterialReactTable
                 columns={columns}
                 data={data}
                 muiTableBodyCellProps={{
-                    style: { wordWrap: 'break-word', maxWidth: '50px' },
+                    style: { wordWrap: 'break-word', maxWidth: '0px' },
                 }}
                 muiTableContainerProps={{
-                    style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
+                    style: { overflowX: '' }, // Horizontal scrolling for smaller screens
                 }}
                 renderTopToolbarCustomActions={() => (
-                    <Link to={'/addhome_slidder'} className='focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900'>Add Slidder</Link>
+                    <Link to={'/addhome_slidder'} className='focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 italic'>Add Slidder</Link>
                 )}
             />
             </div>

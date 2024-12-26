@@ -6,6 +6,10 @@ import { MaterialReactTable } from 'material-react-table';
 import React, { useMemo, useState, useEffect } from 'react';
 import axios from '../../../axios';
 import { Button } from '@mui/material';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import CheckCircleSharpIcon from '@mui/icons-material/CheckCircleSharp';
+import CancelSharpIcon from '@mui/icons-material/CancelSharp';
 function Index_about_service() {
 
     const [data, setData] = useState([]); 
@@ -99,11 +103,11 @@ function Index_about_service() {
                 {/* <Link to={`/add/${row.original.id}`} className="action-button add">
                   Add
                 </Link> */}
-                <Link to={`/update_about_services/${row.original.id}`} className="relative z-50 block rounded-lg border border-yellow-900 bg-yellow-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-yellow-800">
-                  Edit
+                <Link to={`/update_about_services/${row.original.id}`} className="relative z-50 block rounded-lg border border-yellow-900 bg-yellow-900 px-3 py-1 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-yellow-800">
+                <EditNoteIcon className='m-1' />
                 </Link>
-                <Link to={`/single_about_services/${row.original.id}`} className="relative z-50 block rounded-lg border border-slate-800 bg-slate-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-slate-800">
-                  Show
+                <Link to={`/single_about_services/${row.original.id}`} className="relative z-50 block rounded-lg border border-slate-800 bg-slate-900 px-3 py-1 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-slate-800">
+                <VisibilityOffOutlinedIcon className='m-1'/>
                 </Link>
                 <button
                   className="action-button status"
@@ -111,13 +115,14 @@ function Index_about_service() {
                     backgroundColor: row.original.status === "active" ? "green" : "red", // Check 'status' instead of 'stauts'
                     color: "white", // Text color
                     border: "none", // Clean look
-                    padding: "10px 15px", // Padding
-                    borderRadius: "5px", // Rounded corners
-                    cursor: "pointer", // Pointer cursor for UX
+                    padding: "1px 16px", // Adjust padding as needed
+                  borderRadius: "5px", // Optional for rounded corners
+                  cursor: "pointer",
+                  margin:"1px" // Pointer cursor for UX
                   }}
                   onClick={() => handleStatusChange(row.original.id)}
                 >
-                  {row.original.status === "active" ? "Active" : "Block"} {/* Check 'status' instead of 'stauts' */}
+                  {row.original.status === "active" ? <CheckCircleSharpIcon/> : <CancelSharpIcon/>} {/* Check 'status' instead of 'stauts' */}
                 </button>
 
               </div>

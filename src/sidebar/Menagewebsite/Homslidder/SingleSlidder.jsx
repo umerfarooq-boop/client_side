@@ -43,44 +43,34 @@ useEffect(() => {
               </div>
         ) : (
 
-            <div className="p-4 col-12 gap-12">
-              <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-xl bg-clip-border">
-                <table class="w-full text-left table-auto min-w-max">
-                  <thead>
-                    <tr>
-                      <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-                        <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
-                          Slidder Text
-                        </p>
-                      </th>
-                      <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-                        <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
-                          Image
-                        </p>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.map((index, key) => (
-                      <tr key={index.id || index}>
-                        <td className="p-4 border-b border-blue-gray-50">
-                          <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                            {index.slidder_text}
-                          </p>
-                        </td>
-                        <td className="p-4 border-b border-blue-gray-50">
-                          <img
-                            src={`http://127.0.0.1:8000/uploads/slidder_image/${index.slidder_image}`}
-                            alt={index.slidder_text || "Slidder Image"}
-                            className="w-20 h-auto rounded-md"
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <div className="flex justify-center items-center mt-5">
+          {
+            data.map((index,key) =>(
+              <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 p-5 shadow-xl border border-gray-200 rounded-lg bg-white w-full max-w-4xl transform transition-all duration-300 hover:shadow-2xl">
+    <div className="flex flex-col items-center text-center">
+      <p className="text-xl font-semibold text-gray-700">Image</p>
+      <img
+        src={`http://127.0.0.1:8000/uploads/slidder_image/${index.slidder_image}`}
+        alt="Sample"
+        className="w-48 h-40 mt-4 rounded-lg border border-gray-300 shadow-md"
+      />
+    </div>
+    <div className="flex flex-col justify-center items-center md:items-start">
+      <p className="text-xl font-semibold text-gray-700">Text</p>
+      <h1 className="mt-4 text-2xl font-bold text-gray-900">Coach Selector</h1>
+      <p className="mt-2 text-gray-600 text-sm">
+      {index.slidder_text}
+      </p>
+    </div>
+  </div>
+            ))
+          }
+        </div>
+
+
+
+
+        
         )
      }
      </Dashboard>

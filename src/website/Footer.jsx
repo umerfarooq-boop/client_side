@@ -1,10 +1,65 @@
 import React from 'react'
-
+import logo from '../../public/logo.png'
 function Footer() {
   return (
     <>
-        <footer class="w-full">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 shadow-2xl shadow-red-900">
+                                                        <footer class="w-full shadow-2xl">
+        <div class="mx-auto max-w-full px-4 sm:px-6 lg:px-8 shadow-2xl">
+       
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-8 py-10 max-sm:max-w-sm max-sm:mx-auto gap-y-8">
+                <div class="col-span-full mb-10 lg:col-span-2 lg:mb-0">
+                    <div className='flex'>
+                    <div className='relative'>
+                    <a href="/"  class="flex justify-center  lg:justify-start">
+                        <img src={logo} alt="" className='w-40' />
+                    </a>
+                    </div>
+                    <div className='relative '>
+                    <p className='text-red-600 text-2xl italic font-medium mt-14'>Coach Selector</p>
+                    </div>
+                    </div>
+                    <p class="py-8 text-sm text-gray-500 lg:max-w-xs text-center lg:text-left">Trusted in more than 100 countries & 5 million customers. Have any query ?</p>
+                    <a href="/contact"  class="py-2.5 px-5 h-9 block w-fit bg-indigo-600 rounded-full shadow-sm text-xs text-white mx-auto transition-all  duration-500 hover:bg-indigo-700 lg:mx-0">
+                        Contact us
+                    </a>
+                </div>
+                <div class="lg:mx-auto text-left ">
+                    <h4 class="text-lg text-gray-900 font-medium mb-7">Coach Selector</h4>
+                    <ul class="text-sm  transition-all duration-500">
+                        <li class="mb-6"><a href="javascript:;"  class="text-gray-600 hover:text-gray-900">Home</a></li>
+                        <li class="mb-6"><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">About</a></li>
+                        <li class="mb-6"><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">Coaches</a></li>
+                        <li><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="lg:mx-auto text-left ">
+                    <h4 class="text-lg text-gray-900 font-medium mb-7">Services</h4>
+                    <ul class="text-sm  transition-all duration-500">
+                        <li class="mb-6"><a href="javascript:;"  class="text-gray-600 hover:text-gray-900">Coach Menagement</a></li>
+                        <li class="mb-6"><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">Team Menagement</a></li>
+                        <li class="mb-6"><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">Schedule & Booking</a></li>
+                        <li><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">Progress Tracking</a></li>
+                    </ul>
+                </div>
+                <div class="lg:mx-auto text-left">
+                    <h4 class="text-lg text-gray-900 font-medium mb-7">Resources</h4>
+                    <ul class="text-sm  transition-all duration-500">
+                        <li class="mb-6"><a href="javascript:;"  class="text-gray-600 hover:text-gray-900">FAQs</a></li>
+                        <li class="mb-6"><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">Quick Start</a></li>
+                        <li class="mb-6"><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">Documentation</a></li>
+                        <li><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">User Guide</a></li>
+                    </ul>
+                </div>
+                <div class="lg:mx-auto text-left">
+                    <h4 class="text-lg text-gray-900 font-medium mb-7">Blogs</h4>
+                    <ul class="text-sm  transition-all duration-500">
+                        <li class="mb-6"><a href="javascript:;"  class="text-gray-600 hover:text-gray-900">News</a></li>
+                        <li class="mb-6"><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">Tips & Tricks</a></li>
+                        <li class="mb-6"><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">New Updates</a></li>
+                        <li><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">Events</a></li>
+                    </ul>
+                </div>
+            </div>
             <div class="py-7 border-t border-gray-200">
                 <div class="flex items-center justify-center flex-col lg:justify-between lg:flex-row">
                     <span class="text-sm text-gray-500 ">©<a href="https://pagedone.io/">pagedone</a> 2024, All rights reserved.</span>
@@ -39,6 +94,7 @@ function Footer() {
             </div>
         </div>
     </footer>
+                                            
     </>
   )
 }

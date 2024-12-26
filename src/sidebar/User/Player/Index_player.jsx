@@ -10,17 +10,17 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import CheckCircleSharpIcon from '@mui/icons-material/CheckCircleSharp';
 import CancelSharpIcon from '@mui/icons-material/CancelSharp';
-function Index_service() {
+function Index_player() {
 
-  const [data, setData] = useState([]); 
+    const [data, setData] = useState([]); 
     const [loading, setLoading] = useState(true);
     const [toggle,setToggle] = useState(true);
 
     const fetchData = async () => {
         try {
-        const response = await axios.get("/homeservice");
-        if (response.data && response.data.service) {
-            setData(response.data.service); // Assuming `coach` contains an array of data
+        const response = await axios.get("/player");
+        if (response.data && response.data.player) {
+            setData(response.data.player); // Assuming `coach` contains an array of data
             setLoading(false)
         } else {
             console.error("Unexpected API response format:", response.data);
@@ -32,30 +32,6 @@ function Index_service() {
     
 
   // Handle status change
-  const handleStatusChange = async (id) => {
-    try {
-      const response = await axios.get(`ServiceStatus/${id}`);
-      console.log(response);
-  
-      if (response.status === 201 && response.data.service_status) {
-        // Update the status in the data
-        setData((prevData) =>
-          prevData.map((item) =>
-            item.id === id
-              ? { ...item, status: response.data.service_status.status } // Ensure correct spelling of 'status'
-              : item
-          )
-        );
-        toast.success("Status Updated Successfully");
-      } else {
-        console.error("Failed to update status:", response.data);
-        toast.error("Failed to update status.");
-      }
-    } catch (error) {
-      console.error("Error updating status:", error);
-      toast.error("Something went wrong while updating the status.");
-    }
-  };
   
   
 
@@ -72,54 +48,59 @@ function Index_service() {
         //     size: 150,
         //   },
           {
-            accessorKey: 'service_text',
-            header: 'Text',
+            accessorKey: 'player_name',
+            header: 'Name',
             size: 150,
           },
-          
           {
-            accessorKey: 'service_image',
+            accessorKey: 'sport_category.name',
+            header: 'Sport',
+            size: 150,
+          },
+          {
+            accessorKey: 'image',
             header: 'Image',
             Cell: ({ cell }) => (
               <img
-                src={`http://127.0.0.1:8000/uploads/service_image/${cell.getValue()}`}
+                src={`http://127.0.0.1:8000/uploads/player_image/${cell.getValue()}`}
                 alt="Coach"
                 style={{ width: '50px', height: '50px', borderRadius: '5px' }}
               />
             ),
             size: 100,
           },
+          
           {
             accessorKey: 'status',
             header: 'Actions',
-            size: 10,
+            size: 200,
             Cell: ({ row }) => (
               <div style={{ display: 'flex', gap: '10px' }}>
                 {/* <Link to={`/add/${row.original.id}`} className="action-button add">
                   Add
                 </Link> */}
-                <Link to={`/edit_service/${row.original.id}`} className="relative z-50 block rounded-lg border border-yellow-900 bg-yellow-900 px-3 py-1 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-yellow-800">
+                <Link to={`/edit_player/${row.original.id}`} className="relative z-50 block rounded-lg border border-yellow-900 bg-yellow-900 px-3 py-1 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-yellow-800">
                 <EditNoteIcon className='m-1' />
                 </Link>
-                <Link to={`/single_services/${row.original.id}`} className="relative z-50 block rounded-lg border border-slate-800 bg-slate-900 px-3 py-1 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-slate-800">
+                <Link to={`/show_player/${row.original.id}`} className="relative z-50 block rounded-lg border border-slate-800 bg-slate-900 px-3 py-1 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-slate-800">
                 <VisibilityOffOutlinedIcon className='m-1'/>
                 </Link>
                 <button
-                  className="action-button status"
-                  style={{
-                    backgroundColor: row.original.status === "active" ? "green" : "red", // Check 'status' instead of 'stauts'
-                    color: "white", // Text color
-                    border: "none", // Clean look
-                    padding: "1px 16px", // Adjust padding as needed
+                className="action-button status"
+                style={{
+                  backgroundColor: row.original.status === "active" ? "green" : "red",
+                  color: "white", // Ensure text is visible
+                  border: "none", // Optional for a clean look
+                  padding: "1px 16px", // Adjust padding as needed
                   borderRadius: "5px", // Optional for rounded corners
                   cursor: "pointer",
-                  margin:"1px" // Pointer cursor for UX
-                  }}
+                  margin:"1px" // Pointer cursor for better UX
+                }}
                   onClick={() => handleStatusChange(row.original.id)}
                 >
-                  {row.original.status === "active" ? <CheckCircleSharpIcon/> : <CancelSharpIcon/>} {/* Check 'status' instead of 'stauts' */}
+                  {row.original.status === "active" ? <CheckCircleSharpIcon/> : <CancelSharpIcon/>}
                 </button>
-
+    
               </div>
             ),
           },
@@ -159,7 +140,7 @@ function Index_service() {
                     style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
                 }}
                 renderTopToolbarCustomActions={() => (
-                    <Link to={'/add_services'} className='focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900'>Add Service</Link>
+                    <Link to={'/addhome_slidder'} className='focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900'>Add Slidder</Link>
                 )}
             />
             </div>
@@ -169,4 +150,4 @@ function Index_service() {
   )
 }
 
-export default Index_service
+export default Index_player

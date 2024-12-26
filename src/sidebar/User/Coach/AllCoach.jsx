@@ -136,11 +136,12 @@ function AllCoach() {
             {/* <Link to={`/add/${row.original.id}`} className="action-button add">
               Add
             </Link> */}
-            <Link to={`/editcoach/${row.original.id}`} className="relative z-50 block rounded-lg border border-yellow-900 bg-yellow-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-yellow-800">
-            <EditNoteIcon/>
+            <Link to={`/editcoach/${row.original.id}`} className="relative z-50 block rounded-lg border border-yellow-900 bg-yellow-900 px-3 py-1 text-center text-xs text-white shadow-2xl transition duration-200 hover:bg-yellow-800">
+              <EditNoteIcon  className='m-1'/>
             </Link>
-            <Link to={`/showcoach/${row.original.id}`} className="relative z-50 block rounded-lg border border-slate-800 bg-slate-900 px-5 py-3 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-slate-800">
-              <VisibilityOffOutlinedIcon/>
+
+            <Link to={`/showcoach/${row.original.id}`} className="relative z-50 block rounded-lg border border-slate-800 bg-slate-900 px-3 py-1 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-slate-800">
+              <VisibilityOffOutlinedIcon className='m-1'/>
             </Link>
             <button
             className="action-button status"
@@ -148,9 +149,10 @@ function AllCoach() {
               backgroundColor: row.original.status === "active" ? "green" : "red",
               color: "white", // Ensure text is visible
               border: "none", // Optional for a clean look
-              padding: "10px 15px", // Adjust padding as needed
+              padding: "1px 16px", // Adjust padding as needed
               borderRadius: "5px", // Optional for rounded corners
-              cursor: "pointer", // Pointer cursor for better UX
+              cursor: "pointer",
+              margin:"1px" // Pointer cursor for better UX
             }}
               onClick={() => handleStatusChange(row.original.id)}
             >
@@ -183,6 +185,8 @@ function AllCoach() {
           </div>
             ) :
             (
+              <div>
+                <br />
               <MaterialReactTable
           columns={columns}
           data={data}
@@ -196,6 +200,7 @@ function AllCoach() {
             style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
           }}
         />
+              </div>
             )
           }
     </Dashboard>

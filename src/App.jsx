@@ -44,6 +44,11 @@ import Single_about_questioin from './sidebar/Menagewebsite/AboutQuestion/Single
 import Add_about_question from './sidebar/Menagewebsite/AboutQuestion/Add_about_question';
 import Update_about_question from './sidebar/Menagewebsite/AboutQuestion/Update_about_question';
 import Checking from './sidebar/Menagewebsite/Homslidder/Checking';
+import IndexFeedback from './sidebar/Menagewebsite/ContactFeedback/IndexFeedback';
+import ShowFeedback from './sidebar/Menagewebsite/ContactFeedback/ShowFeedback';
+import Index_player from './sidebar/User/Player/Index_player';
+import Show_player from './sidebar/User/Player/Show_player';
+import Edit_player from './sidebar/User/Player/Edit_player';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 
@@ -231,14 +236,38 @@ function App() {
         <Route
           path='/checking'
           element={
-            <ProtectedRoute>
+            
               <Checking />
-            </ProtectedRoute>
           }
         />
 
         /***
         * ! Frequently Question
+        */
+
+        /***
+        * ! Contact Infromation
+        */
+        <Route
+          path='/contact_feedback'
+          element={
+            <ProtectedRoute>
+              <IndexFeedback />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/single_feedback/:id'
+          element={
+            <ProtectedRoute>
+              <ShowFeedback />
+            </ProtectedRoute>
+          }
+        />
+
+        /***
+        * ! Contact Infromation
         */
 
         /***
@@ -268,7 +297,7 @@ function App() {
 
 
         /**
-          * ? Start User Profile Route
+          * ? Start coach Profile Route
         */
         <Route
           path='/showcoach/:id'
@@ -299,8 +328,45 @@ function App() {
         />
 
         /**
-          * ? End User Profile Route
+          * ? End Coach Profile Route
         */
+
+          /***
+          * ! Player Record
+          */
+          
+          <Route
+          path='/index_player'
+          element={
+            <ProtectedRoute>
+              <Index_player />
+            </ProtectedRoute>
+          }
+          />
+
+          <Route
+          path='/show_player/:id'
+          element={
+            <ProtectedRoute>
+              <Show_player />
+            </ProtectedRoute>
+          }
+          />
+
+          <Route
+          path='/edit_player/:id'
+          element={
+            <ProtectedRoute>
+              <Edit_player />
+            </ProtectedRoute>
+          }
+          />
+
+          /***
+          * ! Player Record
+          */
+
+
 
         /**
           * ? START POST RECORD
