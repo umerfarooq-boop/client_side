@@ -17,7 +17,7 @@ function DirectionMap({ id }) {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(`/showBlogPost/${id}`);
+        const response = await axios.get(`/getLocation/${id}`);
         const postData = response.data?.post;
 
         if (Array.isArray(postData) && postData.length > 0) {
@@ -96,7 +96,7 @@ function DirectionMap({ id }) {
   }, [userLocation, destinationCoords]);
 
   return (
-    <div className="w-full h-screen">
+    <div className="w-auot h-72 sm:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 xl:grid-cols-1">
       <div className="flex justify-center mb-4 space-x-4">
         <input
           type="text"

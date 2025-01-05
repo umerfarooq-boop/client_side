@@ -1,24 +1,26 @@
 import axios from "../axios";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import mainlogo from '../../public/mainlogo.png'
+import signup from '../../public/Auth_Images/signup.png'
 
 function Signup() {
-  localStorage.clear();
+  // localStorage.clear();
   const {
     register,
     handleSubmit,
     reset,watch,
-    setError,
+    setError,trigger,
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const Signupuser = async (data) => {
     // localStorage.removeItem('email');
-    // localStorage.removeItem('token');
+    localStorage.removeItem('token');
     // localStorage.removeItem('role');
     // localStorage.removeItem('name');
 
@@ -29,6 +31,7 @@ function Signup() {
         // this lie i want use sweetalert
         console.log(response.data);
         if (response.data.User && response.data.User.email) {
+          localStorage.setItem("user_id", response.data.User.id);
           localStorage.setItem("email", response.data.User.email);
           localStorage.setItem("role", response.data.User.role);
           const email = localStorage.getItem("email", response.data.User.email);
@@ -68,6 +71,8 @@ function Signup() {
       });
   };
 
+  const nameValue = watch("name");
+
   return (
     <>
       {loading ? (
@@ -86,51 +91,67 @@ function Signup() {
         </div>
       ) : (
         <div className="h-[100vh] items-center flex justify-center px-5 lg:px-0">
-          <div className="max-w-screen-xl bg-white border shadow sm:rounded-lg flex justify-center flex-1">
+          <div className="max-w-screen-xl max-h-auto bg-white border shadow sm:rounded-lg flex justify-center flex-1">
             <div className="flex-1 bg-blue-900 text-center hidden md:flex">
-              <div
-                className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
-                style={{
-                  backgroundImage: `url(https://www.tailwindtap.com/assets/common/marketing.svg)`,
-                }}
-              ></div>
+            <div
+              className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
+              style={{
+                backgroundImage: `url(${signup})`,
+              }}
+            ></div>
+
             </div>
-            <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
+            <div className="lg:w-1/2 xl:w-5/12 p-4 sm:p-10">
               <div className=" flex flex-col items-center">
                 <div className="text-center">
-                  <h1 className="text-2xl xl:text-4xl font-extrabold text-blue-900">
+                  <div className="flex items-center">
+                  <h1 className="text-2xl font-extrabold text-blue-900">
                     Sign up
-                  </h1>
-                  <p className="text-[12px] text-gray-500">
-                    Hey enter your details to create your account
+                  </h1>&nbsp;&nbsp;
+                  <img src={mainlogo} className="h-10 mt-5 w-10 m-auto" alt="" />
+                  </div>
+                  <p className="text-[12px] text-gray-500 mt-1">
+                    From Pakistan
                   </p>
                 </div>
-                <div className="w-full flex-1 mt-8">
+                <div className="w-full flex-1 mt-10">
                   <form onSubmit={handleSubmit(Signupuser)}>
-                    <div className="mx-auto max-w-xs flex flex-col gap-4">
-                    <input
-                      className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border ${
-                        errors.name ? "border-red-500" : "border-gray-200"
-                      } placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white`}
-                      type="text"
-                      placeholder="Enter your name"
-                      {...register("name", {
-                        required: "Name is required",
-                        minLength: {
-                          value: 3,
-                          message: "Name must be at least 3 characters",
-                        },
-                        pattern: {
-                          value: /^[A-Za-z\s]+$/, // Regex for strings with only letters and spaces
-                          message: "Name must contain only letters",
-                        },
-                      })}
-                      
-                    />
+                    <div className="mx-auto max-w-screen-md flex flex-col gap-2">
                     {errors.name && (
-                      <p className="text-red-500 text-sm">{errors.name.message}</p>
+          <p className="text-red-500 text-sm">{errors.name.message}</p>
+        )}
+                    <input
+          className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border ${
+            errors.name ? "border-red-500" : "border-gray-200"
+          } placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white`}
+          type="text"
+          placeholder="Enter your name"
+          {...register("name", {
+            required: "Name is required",
+            minLength: {
+              value: 3,
+              message: "Name must be at least 3 characters",
+            },
+            pattern: {
+              value: /^[A-Za-z\s]+$/, // Regex for strings with only letters and spaces
+              message: "Name must contain only letters",
+            },
+          })}
+          onKeyUpCapture={() => {
+            setTimeout(()=>{
+              trigger("name");
+            },1000)
+          }}
+          onBlur={() => {
+            setTimeout(()=>{
+              trigger("name");
+            },1000) 
+          }}
+        />
+        
+        {errors.email && (
+                      <p className="text-red-500 text-sm">{errors.email.message}</p>
                     )}
-
 
                     <input
                       className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border ${
@@ -145,13 +166,25 @@ function Signup() {
                           message: "Email is not valid",
                         },
                       })}
+                      onKeyUpCapture={() => {
+                        setTimeout(()=>{
+                          trigger("email");
+                        },1000)
+                      }}
+                      onBlur={() => {
+                        setTimeout(()=>{
+                          trigger("email");
+                        },1000) 
+                      }}
                     />
-                    {errors.email && (
-                      <p className="text-red-500 text-sm">{errors.email.message}</p>
-                    )}
+                    
 
 
-
+{errors.password && (
+                        <p className="text-red-500 text-sm">
+                          {errors.password.message}
+                        </p>
+                      )}
                       <input
                         className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border ${
                           errors.password ? "border-red-500" : "border-gray-200"
@@ -166,14 +199,27 @@ function Signup() {
                               "Password must be at least 6 characters long",
                           },
                         })}
+
+                        onKeyUpCapture={() => {
+                          setTimeout(()=>{
+                            trigger("password");
+                          },1000)
+                        }}
+                        onBlur={() => {
+                          setTimeout(()=>{
+                            trigger("password");
+                          },1000) 
+                        }}
                       />
 
-                      {errors.password && (
+                      
+
+                      
+{errors.password_confirmation && (
                         <p className="text-red-500 text-sm">
-                          {errors.password.message}
+                          {errors.password_confirmation.message}
                         </p>
                       )}
-
                       <input
                         className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border ${
                           errors.password_confirmation
@@ -188,11 +234,7 @@ function Signup() {
                             "Passwords do not match",
                         })}
                       />
-                      {errors.password_confirmation && (
-                        <p className="text-red-500 text-sm">
-                          {errors.password_confirmation.message}
-                        </p>
-                      )}
+                      
 
                       <select
                         {...register("role")}
@@ -218,16 +260,16 @@ function Signup() {
 
                       <p className="mt-6 text-xs text-gray-600 text-center">
                         Already have an account?{" "}
-                        <a href="/login">
+                        <Link to={'/login'}>
                           <span className="text-blue-900 font-semibold">
                             Login
                           </span>
-                        </a> &nbsp;
-                        <a href="/">
+                        </Link> &nbsp;
+                        <Link to={'/'}>
                           <span className="text-blue-900 font-semibold">
                             Guest
                           </span>
-                        </a>
+                        </Link>
                       </p>
                     </div>
                   </form>

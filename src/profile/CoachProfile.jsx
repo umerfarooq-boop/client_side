@@ -31,19 +31,45 @@ const CoachProfile = () => {
     /**
      * !Drop Down api setting
      */
-    const [error, setErrors] = useState({ image: '', certificate: '' });
+
+    const [error, setErrors] = useState({ image: '',certificate:'' });
     const handleFileChange = (e) => {
         const { name, files } = e.target;
         const file = files[0];
         if (!file) return;
-
+    
         let errorMessage = '';
-        if (name === 'image' && file.size > 180 * 1024) {
-            errorMessage = 'Image size must be less than 180 KB.';
-        } else if (name === 'certificate' && file.size > 50 * 1024 * 1024) {
-            errorMessage = 'PDF size must be less than 50 MB.';
+        if(name == 'image'){
+            if(file.type === 'application/image'){
+                return "Please Upload image png jpg file"
+            }else if (name === 'image' && file.size > 180 * 1024) { // 180 KB limit
+                errorMessage = 'Image size must be less than 180 KB.';
+            }
         }
-
+        // }else if (name === 'certificate') {
+        //     if (file.type !== 'application/pdf') {
+        //         errorMessage = 'Please upload a valid PDF file.';
+        //     } else if (file.size > 50 * 1024 * 1024) {
+        //         errorMessage = 'PDF size must be less than 50 MB.';
+        //     }
+        // }
+    
+        setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
+    };
+    const handleCertificate = (e) => {
+        const { name, files } = e.target;
+        const file = files[0];
+        if (!file) return;
+    
+        let errorMessage = '';
+        if (name === 'certificate') {
+            if (file.type !== 'application/pdf') {
+                errorMessage = 'Please upload a valid PDF file.';
+            } else if (file.size > 50 * 1024 * 1024) {
+                errorMessage = 'PDF size must be less than 50 MB.';
+            }
+        }
+    
         setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
     };
 
@@ -63,8 +89,11 @@ const CoachProfile = () => {
         console.log("No location found in localStorage");
     }
 
+    const coach_id = localStorage.getItem('coach_id' || '');
+
     return (
         <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
+            <input type="hidden" value={coach_id} {...register('user_id')} />
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                     <TextField
@@ -212,31 +241,31 @@ const CoachProfile = () => {
 
                 <Grid item xs={12} sm={6}>
                 <TextField
-                    label="Upload Image"
-                    type="file"
-                    fullWidth
-                    size="small"
-                    InputLabelProps={{ shrink: true }}
-                    onChange={handleFileChange}
-                    inputProps={{ name: 'image' }}
-                    error={!!error.image}
-                    helperText={error.image}
-                    {...register('image')}
-                />
+        label="Profile"
+        {...register('image')}
+        type="file"
+        fullWidth
+        size="small"
+        InputLabelProps={{ shrink: true }}
+        onChange={handleFileChange}
+        inputProps={{ name: 'image' }}
+        error={!!error.image}
+        helperText={error.image}
+    />
             </Grid>
 
             <Grid item xs={12} sm={6}>
                 <TextField
+                    {...register('certificate')}
                     label="Upload Certificate"
                     type="file"
                     fullWidth
                     size="small"
                     InputLabelProps={{ shrink: true }}
-                    onChange={handleFileChange}
+                    onChange={handleCertificate}
                     inputProps={{ name: 'certificate' }}
                     error={!!error.certificate}
                     helperText={error.certificate}
-                    {...register('certificate')}
                 />
             </Grid>
             </Grid>

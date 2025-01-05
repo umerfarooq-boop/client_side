@@ -15,6 +15,7 @@ function CoachPost() {
   const [coachLevels, setCoachLevels] = useState([]);
   const [selectedLevel, setSelectedLevel] = useState("");
   const [location, setLocation] = useState("");
+  ``
   const [pagination, setPagination] = useState({});
   const [page, setPage] = useState(1);
   const [toggle, setToggle] = useState(false);
@@ -130,59 +131,61 @@ function CoachPost() {
           </div>
 
           <div>
-  <button
-    onClick={filterEffect}
-    className="flex items-center bg-indigo-600 min-w-auto float-right m-5 text-white font-medium p-2 rounded-lg hover:bg-indigo-500 transition-all duration-1000"
-  >
-    <FilterList className="ml-auto" fontSize="medium" />
-    <span>Filter</span>
-  </button>
+      
+        <div className="grid-cols-1 flex justify-end items-end mr-10">
+          <button
+          onClick={filterEffect}
+          className="flex items-center bg-indigo-600 min-w-auto float-right  text-white font-medium p-2 rounded-lg hover:bg-indigo-500 transition-all duration-1000"
+          >
+          <FilterList className="ml-auto" fontSize="medium" />
+          <span>Filter</span>
+        </button>
+        </div>
+    <div
+      className={`transition-all duration-1000 ease-in-out transform ${
+        toggle ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+      }`}
+      style={{ overflow: "hidden" }}
+    >
+      <div className="flex flex-wrap justify-center gap-4 px-4 lg:px-36 sm:px-10">
+        <input
+          type="text"
+          value={searchTerm}
+          placeholder="Search by name"
+          className="bg-gray-100 border border-green-800 p-2 rounded-lg lg:w-60 sm:w-auto sm:flex-grow focus:outline-none focus:ring-2 focus:ring-green-800"
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
 
-  <div
-    className={`transition-all duration-1000 ease-in-out transform ${
-      toggle ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-    }`}
-    style={{ overflow: "hidden" }}
-  >
-    <div className="flex flex-wrap justify-center gap-4 mt-4 px-4 lg:px-36 sm:px-10">
-      <input
-        type="text"
-        value={searchTerm}
-        placeholder="Search by name"
-        className="bg-gray-100 border border-green-800 p-2 rounded-lg lg:w-60 sm:w-auto sm:flex-grow focus:outline-none focus:ring-2 focus:ring-green-800"
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+        <input
+          type="text"
+          value={location}
+          placeholder="Search by location"
+          className="bg-gray-100 border border-green-800 p-2 rounded-lg lg:w-60 sm:w-auto sm:flex-grow focus:outline-none focus:ring-2 focus:ring-green-800"
+          onChange={(e) => setLocation(e.target.value)}
+        />
 
-      <input
-        type="text"
-        value={location}
-        placeholder="Search by location"
-        className="bg-gray-100 border border-green-800 p-2 rounded-lg lg:w-60 sm:w-auto sm:flex-grow focus:outline-none focus:ring-2 focus:ring-green-800"
-        onChange={(e) => setLocation(e.target.value)}
-      />
+        <select
+          onChange={(e) => setSelectedLevel(e.target.value)}
+          value={selectedLevel}
+          className="bg-gray-100 border border-green-800 p-2 rounded-lg lg:w-60 sm:w-auto sm:flex-grow focus:outline-none focus:ring-2 focus:ring-green-800"
+        >
+          <option value="">All Coaches</option>
+          {coachLevels.map((level, index) => (
+            <option key={index} value={level}>
+              {level}
+            </option>
+          ))}
+        </select>
 
-      <select
-        onChange={(e) => setSelectedLevel(e.target.value)}
-        value={selectedLevel}
-        className="bg-gray-100 border border-green-800 p-2 rounded-lg lg:w-60 sm:w-auto sm:flex-grow focus:outline-none focus:ring-2 focus:ring-green-800"
-      >
-        <option value="">All Coaches</option>
-        {coachLevels.map((level, index) => (
-          <option key={index} value={level}>
-            {level}
-          </option>
-        ))}
-      </select>
-
-      <button
-        onClick={handleSearch}
-        className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-500 lg:w-32 sm:w-auto transition-transform transform hover:scale-105"
-      >
-        Search
-      </button>
+        <button
+          onClick={handleSearch}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-500 lg:w-32 sm:w-auto transition-transform transform hover:scale-105"
+        >
+          Search
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-4 lg:gap-20 p-4">
             {filteredPosts.map((item) => (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { TextField, Grid,InputAdornment  } from '@mui/material';
 
@@ -19,17 +19,24 @@ const AcademyDetailsForm = () => {
 
     const [error, setErrors] = useState({ academy_certificate: '' });
 
-const handleFileChange = (e) => {
+const handleAcademyeChange = (e) => {
     const { name, files } = e.target;
     const file = files[0];
     if (!file) return;
 
     let errorMessage = '';
-    if (name === 'academy_certificate' && file.size > 50 * 1024 * 1024) {
-        errorMessage = 'Image size must be less than 50 MB.';
-    }
+    if (name === 'academy_certificate') {
+      if (file.type !== 'application/pdf') {
+          errorMessage = 'Please upload a valid PDF file.';
+      } else if (file.size > 50 * 1024 * 1024) {
+          errorMessage = 'PDF size must be less than 50 MB.';
+      }
+  }
 
     setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
+
+
+    
 };
   return (
           <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
@@ -117,16 +124,16 @@ const handleFileChange = (e) => {
 
         <Grid item xs={12} sm={6}>
         <TextField
+    {...register('academy_certificate')}
     label="Upload Image"
     type="file"
     fullWidth
     size="small"
     InputLabelProps={{ shrink: true }}
-    onChange={handleFileChange}
+    onChange={handleAcademyeChange}
     inputProps={{ name: 'academy_certificate' }} // Make sure this matches the state field name
     error={!!error.academy_certificate}  // Use the correct error key here
     helperText={error.academy_certificate} // Use the correct error key here
-    {...register('academy_certificate')}
 />
         </Grid>
       </Grid>

@@ -28,7 +28,12 @@ function Otp() {
       toast.success('OTP is Verified');
       // alert("Found");
       reset();
-      navigate('/profile');
+      const localotp = localStorage.getItem('forgetOtp' || '');
+      if(localotp){
+        
+      }else{
+        navigate('/profile');
+      }
       reset();
     } catch (error) {
       toast.error('Invalid OTP or Time Over');

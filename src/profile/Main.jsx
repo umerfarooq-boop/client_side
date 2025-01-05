@@ -90,7 +90,7 @@ const Main = ({ nextStep, setRole }) => {
             icon: "error",
             confirmButtonText: "OK",
           });
-          setTimeout(() => navigate('/signup'), 1000); // Delayed navigation
+          // setTimeout(() => navigate('/signup'), 1000); // Delayed navigation
           return 'Player age must be at least 11 years';
         }
       } else if (role === 'coach') {
@@ -101,7 +101,7 @@ const Main = ({ nextStep, setRole }) => {
             icon: "error",
             confirmButtonText: "OK",
           });
-          setTimeout(() => navigate('/signup'), 1000); // Delayed navigation
+          // setTimeout(() => navigate('/signup'), 1000); // Delayed navigation
           return 'Coach age must be greater than 20 years or less than 50';
         }
       }

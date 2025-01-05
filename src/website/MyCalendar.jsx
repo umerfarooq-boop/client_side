@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css';
 import { RotatingLines } from "react-loader-spinner";
 import Footer from './Footer'
+import Notifications from './Notifications';
 const localizer = momentLocalizer(moment);
 
 function MyCalendar() {
@@ -30,6 +31,7 @@ function MyCalendar() {
         if (response.status === 201) {
           console.log("Record Saved Successfully");
           toast.success("Schedule Created Successfully");
+          
           reset();
 
           const newEvent = {
@@ -188,6 +190,7 @@ function MyCalendar() {
                     </div>
                     <div className="w-full px-3 sm:w-1/2">
                       <div className="mb-5">
+                        {/* it is Category of Sport */}
                         <select
                           type="text" 
                           placeholder="Booking Slot" 

@@ -49,6 +49,9 @@ import ShowFeedback from './sidebar/Menagewebsite/ContactFeedback/ShowFeedback';
 import Index_player from './sidebar/User/Player/Index_player';
 import Show_player from './sidebar/User/Player/Show_player';
 import Edit_player from './sidebar/User/Player/Edit_player';
+import ResetPassword from './Auth/ResetPassword';
+import ForgotOtp from './Auth/ForgotOtp';
+import Schedule from './website/Schedule';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 
@@ -62,15 +65,18 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
         <Route path='/otp' element={<Otp />} />
+        <Route path='/resetpassword/:id' element={<ResetPassword />} />
+        <Route path='/forgotPass/:id' element={<ForgotOtp />} />
         <Route path='/coachpost' element={<CoachPost />} />
         <Route path='/page' element={<Page />} />
         <Route path='/contact' element={<Contact />} />
+        <Route path='/schedule/:id' element={<Schedule />} />
         <Route path='/admin-profile' element={<AdminProfile />} />
         <Route path='/coachdetail/:id' element={<CoachDetail />} />
         
         {/* Wrap the dashboard and other private routes with ProtectedRoute */}
         <Route
-          path='/dashboard/*'
+          path='/dashboard/:id/*'
           element={
             <ProtectedRoute>
               <Dashboard />

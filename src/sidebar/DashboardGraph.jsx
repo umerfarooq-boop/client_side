@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -31,6 +31,9 @@ import "slick-carousel/slick/slick-theme.css";
 import { TypeAnimation } from "react-type-animation";
 import img from '../../public/umer.jpg'
 import hateem from '../../public/h.jpg'
+import axios from '../axios'
+import { useParams } from "react-router-dom";
+import Notifications from '../website/Notifications'
 
 function DashboardGraph() {
   const [activeTab, setActiveTab] = useState("profile");
@@ -164,6 +167,67 @@ function DashboardGraph() {
     },
   };
 
+  const { id } = useParams();
+  const [data, setData] = useState([]);
+  const [pagination, setPagination] = useState({});
+  const [page, setPage] = useState(1);
+
+  // Fetch data on page load or when page or id changes
+  
+
+  // Handle rendering pagination links
+  const renderPaginationLinks = () => {
+    return (
+      <nav aria-label="Page navigation example">
+        <ul className="flex float-right -space-x-px h-8 text-sm">
+          {pagination.links?.map((link, index) => (
+            <li key={index}>
+              <button
+                className={`flex items-center justify-center px-3 h-8 leading-tight border 
+                  ${
+                    link.active
+                      ? "z-10 text-indigo-600 border-indigo-300 bg-indigo-50 hover:bg-indigo-100 hover:text-indigo-700"
+                      : "text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                  }
+                  rounded-${index === 0 ? "s-lg" : index === pagination.links.length - 1 ? "e-lg" : ""}`}
+                onClick={() => {
+                  if (link.url) {
+                    const url = new URL(link.url);
+                    const pageNum = url.searchParams.get("page");
+                    setPage(Number(pageNum)); // Convert to number and update page
+                  }
+                }}
+                dangerouslySetInnerHTML={{ __html: link.label }} // Render label safely
+              />
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
+  };
+
+  // Run the getData function on page load or when page/id changes
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await axios.get(`/PlayerRequests/${id}`);
+        if (response.data?.CoachSchedule) {
+          const scheduleData = Array.isArray(response.data.CoachSchedule)
+            ? response.data.CoachSchedule
+            : [response.data.CoachSchedule];
+          setData(scheduleData);
+          setPagination(response.data.CoachSchedule);
+          console.log(scheduleData);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    getData();
+  }, [id,page]);
+
+
+
   return (
     <>
       <div className="container mx-auto p-4"></div>
@@ -231,7 +295,7 @@ function DashboardGraph() {
                 id="styled-profile"
                 role="tabpanel"
               >
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 ">
                   <div class="bg-blue-500 text-white p-4 text-sm md:text-base lg:text-lg">
                     <img
                       src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
@@ -478,184 +542,57 @@ function DashboardGraph() {
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                        <tr>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm  text-black font-medium ">
-                            John Brown
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            25
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            Cricket
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            6PM-7PM
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
-                            <div class="flex space-x-2">
-                              <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-lime-300 transition duration-300">
-                                Accept
-                              </button>
-                              <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-300 transition duration-300">
-                                Decline
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm  text-black font-medium ">
-                            John Brown
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            25
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            Cricket
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            6PM-7PM
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
-                            <div class="flex space-x-2">
-                              <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-lime-300 transition duration-300">
-                                Accept
-                              </button>
-                              <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-300 transition duration-300">
-                                Decline
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm  text-black font-medium ">
-                            John Brown
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            25
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            Cricket
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            6PM-7PM
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
-                            <div class="flex space-x-2">
-                              <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-lime-300 transition duration-300">
-                                Accept
-                              </button>
-                              <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-300 transition duration-300">
-                                Decline
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm  text-black font-medium ">
-                            John Brown
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            25
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            Cricket
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            6PM-7PM
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
-                            <div class="flex space-x-2">
-                              <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-lime-300 transition duration-300">
-                                Accept
-                              </button>
-                              <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-300 transition duration-300">
-                                Decline
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm  text-black font-medium ">
-                            John Brown
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            25
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            Cricket
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            6PM-7PM
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
-                            <div class="flex space-x-2">
-                              <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-lime-300 transition duration-300">
-                                Accept
-                              </button>
-                              <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-300 transition duration-300">
-                                Decline
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm  text-black font-medium ">
-                            John Brown
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            25
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            Cricket
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            6PM-7PM
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
-                            <div class="flex space-x-2">
-                              <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-lime-300 transition duration-300">
-                                Accept
-                              </button>
-                              <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-300 transition duration-300">
-                                Decline
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm  text-black font-medium ">
-                            John Brown
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            25
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            Cricket
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium ">
-                            6PM-7PM
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
-                            <div class="flex space-x-2">
-                              <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-lime-300 transition duration-300">
-                                Accept
-                              </button>
-                              <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-300 transition duration-300">
-                                Decline
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
+                      {data.map((item, key) => (
+            <tr key={key}>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
+                {item.player?.player_name || "N/A"}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
+                {item.player?.player_dob 
+                ? (() => {
+                    const dob = new Date(item.player.player_dob);
+                    const diff = new Date() - dob;
+                    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)); // Approximate years
+                  })()
+                : "N/A"}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
+                {item.sport_category?.name || "N/A"}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
+              {item.start_time 
+                ? new Date(`1970-01-01T${item.start_time}`).toLocaleTimeString([], { hour: 'numeric', hour12: true }) 
+                : "N/A"} 
+              &nbsp;<b>-</b>&nbsp; 
+              {item.end_time 
+                ? new Date(`1970-01-01T${item.end_time}`).toLocaleTimeString([], { hour: 'numeric', hour12: true }) 
+                : "N/A"}
+
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
+                <div className="flex space-x-2">
+                  <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-lime-300 transition duration-300">
+                    Accept
+                  </button>
+                  <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-300 transition duration-300">
+                    Decline
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+
                       </tbody>
                     </table>
                   </div>
                 </div>
+                    <div className="m-4 flex justify-end">{renderPaginationLinks()}</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
+      <Notifications coachId={id} />
       <div>
         <div className="container mx-auto p-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

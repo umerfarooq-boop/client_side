@@ -53,7 +53,22 @@ function AddPost() {
       };
 
 
-      
+      const [error, setErrors] = useState({ post_image: '' });
+    const handleFileChange = (e) => {
+        const { name, files } = e.target;
+        const file = files[0];
+        if (!file) return;
+    
+        let errorMessage = '';
+        if(name == 'post_image'){
+            if(file.type === 'application/image'){
+                return "Please Upload image png jpg file"
+            }else if (name === 'post_image' && file.size > 180 * 1024) { // 180 KB limit
+                errorMessage = 'Image size must be less than 180 KB.';
+            }
+        }
+        setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
+    };
 
   return (
     <>
@@ -71,16 +86,30 @@ function AddPost() {
           Post Title
         </label>
         <input
-          type="text"
-          id="post_title"
-          placeholder="Post Title"
-          {...register('post_title', { required: "Post Title is required" })}
-          className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
-            errors.post_title ? 'border-red-500' : 'border-grey-lighter'
-          } rounded py-3 px-4 mb-3`}
-        />
-        {errors.post_title && <p className="text-red text-xs italic">Please fill out this field.</p>}
+    type="text"
+  id="post_title"
+  placeholder="Post Title"
+  {...register('post_title', { 
+    required: "Post Title is required", 
+    maxLength: {
+      value: 25,
+      message: "Post Title cannot exceed 10 characters"
+    } 
+  })}
+  className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
+    errors.post_title ? 'border-red-500' : 'border-grey-lighter'
+  } rounded py-3 px-4 mb-3`}
+  maxLength={25}
+/>
+{errors.post_title && (
+  <p className="text-red-500 text-xs italic">
+    {errors.post_title.message}
+  </p>
+)}
+
       </div>
+
+      <input type="hidden" value={location} {...register('post_location')} />
       
       {/* Post Name */}
       <div className="md:w-1/2 px-3">
@@ -88,50 +117,66 @@ function AddPost() {
           Post Name
         </label>
         <input
-          type="text"
-          id="post_name"
-          placeholder="Post Name"
-          {...register('post_name', { required: "Post Name is required" })}
-          className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
-            errors.post_name ? 'border-red-500' : 'border-grey-lighter'
-          } rounded py-3 px-4`}
-        />
+  type="text"
+  id="post_name"
+  placeholder="Post Name"
+  {...register('post_name', {
+    required: "Post Name is required", 
+    // minLength: {
+    //   value: 25,
+    //   message: "Post Name must be exactly 25 characters"
+    // },
+    maxLength: {
+      value: 25,
+      message: "Post Name must be exactly 25 characters"
+    }
+  })}
+  className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${errors.post_name ? 'border-red-500' : 'border-grey-lighter'} rounded py-3 px-4`}
+  maxLength={25}
+/>
+{errors.post_name && (
+  <p className="text-red-500 text-xs italic">
+    {errors.post_name.message}
+  </p>
+)}
+
+
       </div>
     </div>
 
-    <div className="-mx-3 md:flex mb-6">
-      {/* Post Description */}
-      <div className="md:w-1/2 px-3 mb-6 md:mb-0">
-        <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor="post_description">
-          Post Description
-        </label>
-        <textarea
-          id="post_description"
-          placeholder="Post Description"
-          {...register('post_description')}
-          className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
-            errors.post_description ? 'border-red-500' : 'border-grey-lighter'
-          } rounded py-3 px-4 mb-3`}
-        />
-      </div>
+    <div className="-mx-3 mb-6">
+  {/* Post Description */}
+  <div className="w-full px-3 mb-6 md:mb-0">
+    <label 
+      className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" 
+      htmlFor="post_description"
+    >
+      Post Description
+    </label>
+    <textarea
+      id="post_description"
+      placeholder="Post Description"
+      {...register('post_description', { 
+        required: "Post Description is required", 
+        validate: {
+          maxWords: (value) => {
+            const wordCount = value.trim().split(/\s+/).length;
+            return wordCount <= 100 || "Post Description cannot exceed 100 words";
+          }
+        }
+      })}
+      className={`appearance-none h-28 block w-full bg-grey-lighter text-grey-darker border ${
+        errors.post_description ? 'border-red-500' : 'border-grey-lighter'
+      } rounded py-3 px-4 mb-3`}
+    />
+    {errors.post_description && (
+      <p className="text-red-500 text-xs italic">
+        {errors.post_description.message}
+      </p>
+    )}
+  </div>
+</div>
 
-      {/* Post Location */}
-      <div className="md:w-1/2 px-3">
-        {/* <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor="post_location">
-          Post Location
-        </label> */}
-        <input
-          type="hidden"
-          value={location}
-          id="post_location"
-          placeholder="Post Location"
-          {...register('post_location')}
-          className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
-            errors.post_location ? 'border-red-500' : 'border-grey-lighter'
-          } rounded py-3 px-4`}
-        />
-      </div>
-    </div>
 
     <div className="-mx-3 md:flex mb-6">
       {/* Post Image */}
@@ -146,23 +191,24 @@ function AddPost() {
           className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
             errors.post_image ? 'border-red-500' : 'border-grey-lighter'
           } rounded py-3 px-4`}
+                    
         />
       </div>
 
       {/* Post Status */}
-      <div className="md:w-1/2 px-3">
+      <div className="md:w-1/2 px-3 hidden">
         <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor="post_status">
           Post Status
         </label>
         <select
           id="post_status"
           {...register('post_status', { required: "Post Status is required" })}
-          className={`block appearance-none w-full bg-grey-lighter border ${
+          className={`hidden  appearance-none w-full bg-grey-lighter border ${
             errors.post_status ? 'border-red-500' : 'border-grey-lighter'
           } text-grey-darker py-3 px-4 pr-8 rounded`}
         >
           <option selected disabled>Select Status</option>
-          <option value="active">Active</option>
+          <option value="active" selected>Active</option>
           <option value="inactive">Inactive</option>
         </select>
       </div>

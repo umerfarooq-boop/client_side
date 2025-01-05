@@ -15,6 +15,7 @@ import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import HelpIcon from '@mui/icons-material/Help';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
+import WebIcon from '@mui/icons-material/Web';
 
 function SidebarItem({ 
   icon, 
@@ -31,6 +32,8 @@ function SidebarItem({
       onToggle(false); // Close submenu when sidebar collapses
     }
   }, [expanded, onToggle]);
+
+  
 
   return (
     <>
@@ -79,106 +82,64 @@ export default function Dashboard({ children }) {
   const [expanded, setExpanded] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
+  const role = localStorage.getItem('role');
+  
+  let login_id = null;
+
+  if (role === 'player') {
+      login_id = localStorage.getItem('player_id');
+  } else if (role === 'coach') {
+      login_id = localStorage.getItem('coach_id');
+  }
+
+  console.log(`Login id is: ${login_id}`);
+
 
   const navBarItems = [
-    {
-      icon: <Home />,
-      text: 'Dashboard',
-      path: '/dashboard',
-      active: true,
-    },
-    {
-      icon: <WebAssetIcon />,
-      text: 'Website',
-      subMenu: [
-        {
-          icon: <ImageIcon />,
-          text: 'Slidder',
-          path: '/index_slides',
-        },
-        {
-          icon: <MiscellaneousServicesIcon />,
-          text: 'HomeService',
-          path: '/index_services',
-        },
-        {
-          icon: <MedicalServicesIcon />,
-          text: 'AboutService',
-          path: '/index_about_services',
-        },
-        {
-          icon: <HelpIcon />,
-          text: 'AboutQuestion',
-          path: '/index_about_question',
-        },
-        {
-          icon: <FeedbackIcon />,
-          text: 'Contact Feedback',
-          path: '/contact_feedback',
-        },
-      ],
-    },
-    {
-      icon: <AccountCircle />,
-      text: 'User',
-      subMenu: [
-        {
-          icon: <AccountCircle />,
-          text: 'Coaches',
-          path: '/allcoach',
-        },
-        {
-          icon: <AccountCircle />,
-          text: 'Players',
-          path: '/index_player',
-        },
-      ],
-    },
+    { icon: <Home />, text: "Dashboard", path: `/dashboard/${login_id}` },
+    ...(role === "admin"
+      ? [
+          {
+            icon: <WebAssetIcon />,
+            text: "Website",
+            subMenu: [
+              { icon: <ImageIcon />, text: "Slidder", path: "/index_slides" },
+              { icon: <MiscellaneousServicesIcon />, text: "HomeService", path: "/index_services" },
+              { icon: <MedicalServicesIcon />, text: "AboutService", path: "/index_about_services" },
+              { icon: <HelpIcon />, text: "AboutQuestion", path: "/index_about_question" },
+              { icon: <FeedbackIcon />, text: "Contact Feedback", path: "/contact_feedback" },
+            ],
+          },
+          {
+            icon: <AccountCircle />,
+            text: "User",
+            subMenu: [
+              { icon: <AccountCircle />, text: "Coaches", path: "/allcoach" },
+              { icon: <AccountCircle />, text: "Players", path: "/index_player" },
+            ],
+          },
+          { icon: <OndemandVideoIcon />, text: "Video", path: "/vedio" },
+        ]
+      : []),
+
+      ...(role === "coach"
+        ? [
+          { icon: <PostAddIcon />, text: "Post", path: "/allpost" },
+        ] : []
+      ),
     
-    {
-      icon: <PostAddIcon />,
-      text: 'Post',
-      path: '/AddPost',
-      gap: true,
-    },
-    {
-      icon: <OndemandVideoIcon />,
-      text: 'Video',
-      path: '/vedio',
-      gap: true,
-    },
-    {
-      icon: <AccountCircle />,
-      text: 'Schedule',
-      path: '/schedule',
-    },
-    {
-      icon: <AccountCircle />,
-      text: 'Search',
-      path: '/search',
-    },
-    {
-      icon: <AccountCircle />,
-      text: 'Analytics',
-      path: '/analytics',
-    },
-    {
-      icon: <AccountCircle />,
-      text: 'Files',
-      path: '/files',
-      gap: true,
-    },
-    {
-      icon: <AccountCircle />,
-      text: 'Setting',
-      path: '/setting',
-    },
+    // { icon: <AccountCircle />, text: "Schedule", path: "/schedule" },
+    // { icon: <AccountCircle />, text: "Search", path: "/search" },
+    // { icon: <AccountCircle />, text: "Analytics", path: "/analytics" },
+    // { icon: <AccountCircle />, text: "Files", path: "/files" },
+    // { icon: <Settings />, text: "Setting", path: "/setting" },
   ];
   const [activeSubMenu, setActiveSubMenu] = useState(null);
 
   const handleToggle = (index, isActive) => {
     setActiveSubMenu(isActive ? index : null);
   };
+
 
   return (
     <div className="flex h-screen">
@@ -305,10 +266,27 @@ export default function Dashboard({ children }) {
           >
             Next <EastIcon style={{ marginLeft: '5px' }} />
           </button>
+          <Link to={'/'}>
+          <button
+            className="bg-indigo-700 font-medium italic"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '8px 12px',
+              border: 'none',
+              color:'white',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+            title="Go to Next Page"
+          >
+            Website <WebIcon style={{ marginLeft: '5px' }} />
+          </button>
+          </Link>
         </div>
 
         {/* Render DashboardGraph only on Dashboard page */}
-        {location.pathname === '/dashboard' && <DashboardGraph />}
+        {location.pathname === `/dashboard/${login_id}` && <DashboardGraph />}
         {children}
       </div>
     </div>

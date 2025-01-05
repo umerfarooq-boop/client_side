@@ -51,9 +51,11 @@ const handleFileChange = (e) => {
     setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
 };
 
+const player_record = localStorage.getItem('coach_id' || '');
 
     return (
         <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
+            <input type="hidden" value={player_record} {...register('user_id')} />
             <Grid container spacing={5}>
                 <Grid item xs={12} sm={6}>
                     <TextField
@@ -79,7 +81,7 @@ const handleFileChange = (e) => {
                                     icon: "error",
                                     confirmButtonText: "OK",
                                   });
-                                  setTimeout(() => navigate('/signup'), 1000); // Delayed navigation
+                                //   setTimeout(() => navigate('/signup'), 1000); // Delayed navigation
                                   return 'Player age must be at least 11 years';
                                 }
                               } else if (role === 'coach') {
@@ -90,7 +92,7 @@ const handleFileChange = (e) => {
                                     icon: "error",
                                     confirmButtonText: "OK",
                                   });
-                                  setTimeout(() => navigate('/signup'), 1000); // Delayed navigation
+                                //   setTimeout(() => navigate('/signup'), 1000); // Delayed navigation
                                   return 'Coach age must be greater than 20 years or less than 50';
                                 }
                               }
