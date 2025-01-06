@@ -11,7 +11,7 @@ import {
   LineElement,
 } from "chart.js";
 import { Chart, Bar, Line } from "react-chartjs-2";
-
+import ReactPaginate from "react-paginate";
 // Register necessary components and scales
 ChartJS.register(
   CategoryScale,
@@ -169,41 +169,45 @@ function DashboardGraph() {
 
   const { id } = useParams();
   const [data, setData] = useState([]);
-  const [pagination, setPagination] = useState({});
-  const [page, setPage] = useState(1);
+  // const [pagination, setPagination] = useState({});
+  // const [page, setPage] = useState(1);
 
   // Fetch data on page load or when page or id changes
   
 
   // Handle rendering pagination links
-  const renderPaginationLinks = () => {
-    return (
-      <nav aria-label="Page navigation example">
-        <ul className="flex float-right -space-x-px h-8 text-sm">
-          {pagination.links?.map((link, index) => (
-            <li key={index}>
-              <button
-                className={`flex items-center justify-center px-3 h-8 leading-tight border 
-                  ${
-                    link.active
-                      ? "z-10 text-indigo-600 border-indigo-300 bg-indigo-50 hover:bg-indigo-100 hover:text-indigo-700"
-                      : "text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                  }
-                  rounded-${index === 0 ? "s-lg" : index === pagination.links.length - 1 ? "e-lg" : ""}`}
-                onClick={() => {
-                  if (link.url) {
-                    const url = new URL(link.url);
-                    const pageNum = url.searchParams.get("page");
-                    setPage(Number(pageNum)); // Convert to number and update page
-                  }
-                }}
-                dangerouslySetInnerHTML={{ __html: link.label }} // Render label safely
-              />
-            </li>
-          ))}
-        </ul>
-      </nav>
-    );
+  const [currentPage, setCurrentPage] = useState(0);
+  const [itemsPerPage] = useState(5); // Set items per page
+  const [orderBy, setOrderBy] = useState("name");
+  const [order, setOrder] = useState("asc");
+  const [page, setPage] = useState(0);
+
+  const handleSort = (field) => {
+    if (orderBy === field) {
+      setOrder(order === "asc" ? "desc" : "asc");
+    } else {
+      setOrderBy(field);
+      setOrder("asc");
+    }
+  };
+
+  const sortedData = [...data].sort((a, b) => {
+    if (order === "asc") {
+      return a[orderBy] > b[orderBy] ? 1 : -1;
+    } else {
+      return a[orderBy] < b[orderBy] ? 1 : -1;
+    }
+  });
+
+  const displayedData = sortedData.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
+
+  const pageCount = Math.ceil(data.length / itemsPerPage);
+
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
   };
 
   // Run the getData function on page load or when page/id changes
@@ -501,98 +505,175 @@ function DashboardGraph() {
               `}</style>
             </div>
           </div>
-          <div class=" p-6 rounded-md shadow-lg text-black">
-            <div class="flex flex-col">
-              <div class="-m-8 overflow-x-auto">
-                <div class="p-1.5 min-w-full inline-block align-middle">
-                  <div class="border rounded-lg overflow-hidden dark:border-neutral-700">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                      <thead class="bg-gray-50 dark:bg-black text-white">
-                        <tr>
-                          <th
-                            scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-white uppercase"
-                          >
-                            Name
-                          </th>
-                          <th
-                            scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-white uppercase "
-                          >
-                            Age
-                          </th>
-                          <th
-                            scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-white uppercase "
-                          >
-                            Sport
-                          </th>
-                          <th
-                            scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-white uppercase "
-                          >
-                            Time
-                          </th>
-                          <th
-                            scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-white uppercase "
-                          >
-                            Request
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                      {data.map((item, key) => (
-            <tr key={key}>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
-                {item.player?.player_name || "N/A"}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
-                {item.player?.player_dob 
-                ? (() => {
-                    const dob = new Date(item.player.player_dob);
-                    const diff = new Date() - dob;
-                    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)); // Approximate years
-                  })()
-                : "N/A"}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
-                {item.sport_category?.name || "N/A"}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
-              {item.start_time 
-                ? new Date(`1970-01-01T${item.start_time}`).toLocaleTimeString([], { hour: 'numeric', hour12: true }) 
-                : "N/A"} 
-              &nbsp;<b>-</b>&nbsp; 
-              {item.end_time 
-                ? new Date(`1970-01-01T${item.end_time}`).toLocaleTimeString([], { hour: 'numeric', hour12: true }) 
-                : "N/A"}
-
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
-                <div className="flex space-x-2">
-                  <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-lime-300 transition duration-300">
-                    Accept
-                  </button>
-                  <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-300 transition duration-300">
-                    Decline
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                    <div className="m-4 flex justify-end">{renderPaginationLinks()}</div>
-              </div>
+          <div className="p-6 rounded-md shadow-lg bg-white text-black">
+      <h1 className="text-xl font-bold mb-4">Players Requests</h1>
+      <div className="overflow-x-auto">
+  <table className="min-w-full divide-y divide-gray-200 hidden md:table">
+    <thead className="bg-gray-100">
+      <tr>
+        <th
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer"
+          onClick={() => handleSort("name")}
+        >
+          Name {orderBy === "name" ? (order === "asc" ? "↑" : "↓") : ""}
+        </th>
+        <th
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer"
+          onClick={() => handleSort("age")}
+        >
+          Age {orderBy === "age" ? (order === "asc" ? "↑" : "↓") : ""}
+        </th>
+        <th
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer"
+          onClick={() => handleSort("sport")}
+        >
+          Sport {orderBy === "sport" ? (order === "asc" ? "↑" : "↓") : ""}
+        </th>
+        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+          Time
+        </th>
+        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+          Date
+        </th>
+        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+          Request
+        </th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-gray-200">
+      {displayedData.map((item, index) => (
+        <tr key={index}>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+            {item.player?.player_name || "N/A"}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+            {item.player?.player_dob
+              ? (() => {
+                  const dob = new Date(item.player.player_dob);
+                  const diff = new Date() - dob;
+                  return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)); // Approximate years
+                })()
+              : "N/A"}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+            {item.sport_category?.name || "N/A"}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+            {item.start_time
+              ? new Date(`1970-01-01T${item.start_time}`).toLocaleTimeString(
+                  [],
+                  { hour: "numeric", hour12: true }
+                )
+              : "N/A"}
+            &nbsp;<b>-</b>&nbsp;
+            {item.end_time
+              ? new Date(`1970-01-01T${item.end_time}`).toLocaleTimeString(
+                  [],
+                  { hour: "numeric", hour12: true }
+                )
+              : "N/A"}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+            {item.to_date} &nbsp; {item.from_date}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+            <div className="flex space-x-2">
+              <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">
+                Accept
+              </button>
+              <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
+                Decline
+              </button>
             </div>
-          </div>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  {/* Mobile View */}
+  <div className="block md:hidden">
+    {displayedData.map((item, index) => (
+      <div
+        key={index}
+        className="mb-4 p-4 border border-gray-200 rounded shadow-md bg-white"
+      >
+        <p className="text-sm font-medium text-gray-500">
+          <span className="font-semibold">Name:</span> {item.player?.player_name || "N/A"}
+        </p>
+        <p className="text-sm font-medium text-gray-500">
+          <span className="font-semibold">Age:</span>{" "}
+          {item.player?.player_dob
+            ? (() => {
+                const dob = new Date(item.player.player_dob);
+                const diff = new Date() - dob;
+                return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)); // Approximate years
+              })()
+            : "N/A"}
+        </p>
+        <p className="text-sm font-medium text-gray-500">
+          <span className="font-semibold">Sport:</span> {item.sport_category?.name || "N/A"}
+        </p>
+        <p className="text-sm font-medium text-gray-500">
+          <span className="font-semibold">Time:</span>{" "}
+          {item.start_time
+            ? new Date(`1970-01-01T${item.start_time}`).toLocaleTimeString([], {
+                hour: "numeric",
+                hour12: true,
+              })
+            : "N/A"}
+          &nbsp;<b>-</b>&nbsp;
+          {item.end_time
+            ? new Date(`1970-01-01T${item.end_time}`).toLocaleTimeString([], {
+                hour: "numeric",
+                hour12: true,
+              })
+            : "N/A"}
+        </p>
+        <p className="text-sm font-medium text-gray-500">
+          <span className="font-semibold">Date:</span> {item.to_date} &nbsp; {item.from_date}
+        </p>
+        <div className="mt-2">
+          <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300 mr-2">
+            Accept
+          </button>
+          <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
+            Decline
+          </button>
         </div>
       </div>
-      <Notifications coachId={id} />
+    ))}
+  </div>
+</div>
+
+      <ReactPaginate
+  className="flex items-center justify-center mt-4 space-x-3"
+  previousLabel={
+    <button className="">
+      Previous
+    </button>
+  }
+  nextLabel={
+    <button className="">
+      Next
+    </button>
+  }
+  pageCount={pageCount}
+  onPageChange={handlePageClick}
+  containerClassName="flex items-center space-x-3"
+  pageLinkClassName="px-3 py-2 bg-white border rounded shadow-md transition duration-300 ease-in-out hover:bg-indigo-100 hover:text-indigo-700"
+  previousLinkClassName="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded shadow-md"
+  nextLinkClassName="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded shadow-md"
+  disabledClassName="opacity-50 cursor-not-allowed"
+  activeClassName="bg-indigo-500 text-white border-indigo-500 shadow-lg"
+/>
+
+
+
+
+    </div>
+        </div>
+      </div>
+      {/* <Notifications coachId={id} /> */}
       <div>
         <div className="container mx-auto p-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

@@ -1,5 +1,5 @@
 
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import DashboardGraph from "./DashboardGraph";
 import EastIcon from "@mui/icons-material/East";
 import WestIcon from "@mui/icons-material/West";
@@ -16,6 +16,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import WebIcon from '@mui/icons-material/Web';
+import Notifications from "../website/Notifications";
 
 function SidebarItem({ 
   icon, 
@@ -85,7 +86,7 @@ export default function Dashboard({ children }) {
   const role = localStorage.getItem('role');
   
   let login_id = null;
-
+  const { id } = useParams();
   if (role === 'player') {
       login_id = localStorage.getItem('player_id');
   } else if (role === 'coach') {
@@ -94,7 +95,7 @@ export default function Dashboard({ children }) {
 
   console.log(`Login id is: ${login_id}`);
 
-
+  const player_id = localStorage.getItem('player_id');
   const navBarItems = [
     { icon: <Home />, text: "Dashboard", path: `/dashboard/${login_id}` },
     ...(role === "admin"
@@ -194,6 +195,7 @@ export default function Dashboard({ children }) {
             {/* <IconButton>
               <MoreVert />
             </IconButton> */}
+            <Notifications coachId={id} />
           </Box>
         ) : (
           <Box mt="auto" p={1} display="flex" alignItems="center">
