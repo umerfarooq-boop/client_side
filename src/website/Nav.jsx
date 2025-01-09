@@ -14,6 +14,7 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Fade from '@mui/material/Fade';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 
 function Nav() {
     const [openNav, setOpenNav] = React.useState(false);
@@ -108,7 +109,7 @@ function Nav() {
       login_id = localStorage.getItem('coach_id');
   }
 
-  console.log(`Login id is: ${login_id}`);
+  // console.log(`Login id is: ${login_id}`);
   
    
     const navList = (
@@ -160,7 +161,11 @@ function Nav() {
             About
           </Link>
         </Typography>
-        <Typography
+        
+        {
+          role === 'player' ? (
+            <div>
+              <Typography
           as="li"
           variant="small"
           color="blue-gray"
@@ -182,6 +187,9 @@ function Nav() {
             Coaches
           </Link>
         </Typography>
+            </div>
+          ) : null
+        }
 
 
         {
@@ -450,7 +458,16 @@ function Nav() {
         <MenuItem onClick={handleClose} className='font-medium'><AccountCircleIcon />{role}</MenuItem>
         {
           status === 'active' ? (
-            <MenuItem><Link to={`/dashboard/${login_id}`} onClick={handleClose}><SpaceDashboardIcon />Dashboard</Link></MenuItem>
+            <div>
+              <MenuItem><Link to={`/dashboard/${login_id}`} onClick={handleClose}><SpaceDashboardIcon />Dashboard</Link></MenuItem>
+              {
+                role === 'player' ? (
+                  <div>
+                    <MenuItem><Link to={`/PlayerRequest/${player_id}/${role}`} onClick={handleClose}><BookmarkAddedIcon />Booking Request</Link></MenuItem>
+                  </div>
+                ) : null
+              }
+            </div>
             ) : (
             <MenuItem><Link to={''} onClick={handleClose}><RemoveCircleIcon />Not Active</Link></MenuItem>
           )

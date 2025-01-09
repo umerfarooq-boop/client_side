@@ -93,7 +93,7 @@ export default function Dashboard({ children }) {
       login_id = localStorage.getItem('coach_id');
   }
 
-  console.log(`Login id is: ${login_id}`);
+  // console.log(`Login id is: ${login_id}`);
 
   const player_id = localStorage.getItem('player_id');
   const navBarItems = [
@@ -195,7 +195,11 @@ export default function Dashboard({ children }) {
             {/* <IconButton>
               <MoreVert />
             </IconButton> */}
-            <Notifications coachId={id} />
+            {
+              role === 'coach' ? (
+                <Notifications coachId={id} />
+              ) : null
+            }
           </Box>
         ) : (
           <Box mt="auto" p={1} display="flex" alignItems="center">

@@ -4,6 +4,8 @@ import axios from '../../axios'
 import Dashboard from "../Dashboard";
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css'; // Import the CSS for styling
+// import { AddressAutofill } from '@mapbox/search-js-react';
+import { TextField, MenuItem, Grid, List, ListItem } from '@mui/material';
 
 
 function AddPost() {
@@ -11,10 +13,12 @@ function AddPost() {
         handleSubmit,
         register,
         reset,
+        setValue,
         watch,
         formState: { errors },
       } = useForm();
-    
+
+      const inputValue = watch('post_location', '');
       const coach_id = localStorage.getItem('coach_id');
       const location = localStorage.getItem('location');
       const post_image = watch('post_image');
@@ -70,6 +74,50 @@ function AddPost() {
         setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
     };
 
+
+    const [citySuggestions, setCitySuggestions] = useState([]);
+  const fetchCities = async (query) => {
+    if (!query) {
+      setCitySuggestions([]);
+      return;
+    }
+
+    const accessToken = 'pk.eyJ1IjoidW1lcndhbGkiLCJhIjoiY20ycGM0aWRrMGxmYjJtc2N2eWRvZHNpNiJ9._eLwWDk871QbnYrq8lcOkw';
+    try {
+      const response = await axios.get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json`,
+        {
+          params: {
+            access_token: accessToken,
+            country: 'PK', // Restrict to Pakistan
+            types: 'place',
+          },
+        }
+      );
+
+      const cities = response.data.features.map((feature) => feature.place_name);
+      setCitySuggestions(cities);
+    } catch (error) {
+      console.error('Error fetching city suggestions:', error);
+    }
+  };
+
+  const handleCityChange = (event) => {
+    const query = event.target.value;
+    // setInputValue(query);
+    setValue('post_location', query); // Sync with react-hook-form
+    fetchCities(query);
+    
+  };
+
+  const handleCitySelect = (city) => {
+    // setInputValue(city);
+    setValue('post_location', city); // Sync with react-hook-form
+    setCitySuggestions([]);
+    // const location = localStorage.setItem('post_location',JSON.stringify(city));
+    // console.log(location);
+  };
+
   return (
     <>
       <Dashboard>
@@ -86,30 +134,54 @@ function AddPost() {
           Post Title
         </label>
         <input
-    type="text"
-  id="post_title"
-  placeholder="Post Title"
-  {...register('post_title', { 
-    required: "Post Title is required", 
-    maxLength: {
-      value: 25,
-      message: "Post Title cannot exceed 10 characters"
-    } 
-  })}
-  className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
-    errors.post_title ? 'border-red-500' : 'border-grey-lighter'
-  } rounded py-3 px-4 mb-3`}
-  maxLength={25}
-/>
-{errors.post_title && (
-  <p className="text-red-500 text-xs italic">
-    {errors.post_title.message}
-  </p>
-)}
+          type="text"
+        id="post_title"
+        placeholder="Post Title"
+        {...register('post_title', { 
+          required: "Post Title is required", 
+          maxLength: {
+            value: 25,
+            message: "Post Title cannot exceed 10 characters"
+          } 
+        })}
+        className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
+          errors.post_title ? 'border-red-500' : 'border-grey-lighter'
+        } rounded py-3 px-4 mb-3`}
+        maxLength={25}
+      />
+      {errors.post_title && (
+        <p className="text-red-500 text-xs italic">
+          {errors.post_title.message}
+        </p>
+      )}
 
       </div>
 
-      <input type="hidden" value={location} {...register('post_location')} />
+      
+      <Grid item xs={12}>
+          <TextField
+            label="City"
+            placeholder="Enter city name"
+            value={inputValue}
+            onChange={handleCityChange}
+            fullWidth
+            size="small"
+            error={!!errors.profile_location}
+            helperText={errors.profile_location?.message}
+            // {...register('profile_location', { required: 'Location is required' })}
+          />
+          {citySuggestions.length > 0 && (
+            <List style={{ border: '1px solid #ccc', maxHeight: '150px', overflowY: 'auto' }}>
+              {citySuggestions.map((city, index) => (
+                <ListItem button key={index} onClick={() => handleCitySelect(city)}>
+                  {city}
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </Grid>
+
+      {/* <input type="hidden" value={location} {...register('post_location')} /> */}
       
       {/* Post Name */}
       <div className="md:w-1/2 px-3">
@@ -117,30 +189,28 @@ function AddPost() {
           Post Name
         </label>
         <input
-  type="text"
-  id="post_name"
-  placeholder="Post Name"
-  {...register('post_name', {
-    required: "Post Name is required", 
-    // minLength: {
-    //   value: 25,
-    //   message: "Post Name must be exactly 25 characters"
-    // },
-    maxLength: {
-      value: 25,
-      message: "Post Name must be exactly 25 characters"
-    }
-  })}
-  className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${errors.post_name ? 'border-red-500' : 'border-grey-lighter'} rounded py-3 px-4`}
-  maxLength={25}
-/>
-{errors.post_name && (
-  <p className="text-red-500 text-xs italic">
-    {errors.post_name.message}
-  </p>
-)}
-
-
+          type="text"
+          id="post_name"
+          placeholder="Post Name"
+          {...register('post_name', {
+            required: "Post Name is required", 
+            // minLength: {
+            //   value: 25,
+            //   message: "Post Name must be exactly 25 characters"
+            // },
+            maxLength: {
+              value: 25,
+              message: "Post Name must be exactly 25 characters"
+            }
+          })}
+          className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${errors.post_name ? 'border-red-500' : 'border-grey-lighter'} rounded py-3 px-4`}
+          maxLength={25}
+        />
+        {errors.post_name && (
+          <p className="text-red-500 text-xs italic">
+            {errors.post_name.message}
+          </p>
+        )}
       </div>
     </div>
 

@@ -96,8 +96,8 @@ function DirectionMap({ id }) {
   }, [userLocation, destinationCoords]);
 
   return (
-    <div className="w-auot h-72 sm:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 xl:grid-cols-1">
-      <div className="flex justify-center mb-4 space-x-4">
+    <div className="w-auto mt-12 h-96 sm:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 xl:grid-cols-1">
+      {/* <div className="flex justify-center mb-4 space-x-4">
         <input
           type="text"
           value={startLocationName}
@@ -112,7 +112,7 @@ function DirectionMap({ id }) {
           placeholder="Destination"
           className="border p-2 w-1/3"
         />
-      </div>
+      </div> */}
       {userLocation && destinationCoords && (
         <div id="map" className="w-full h-full"></div>
       )}

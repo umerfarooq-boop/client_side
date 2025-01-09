@@ -116,7 +116,7 @@ const Notifications = ({ coachId }) => {
                 >
                   <CardContent>
                     <Stack direction="row" spacing={2} alignItems="center">
-                      <Avatar src={notification.avatar || ""} />
+                      <Avatar src={`http://127.0.0.1:8000/uploads/player_image/${notification.player?.image}` || ""} />
                       <Box sx={{ flexGrow: 1 }}>
                         <Typography variant="subtitle1" component="div">
                           {notification.message}
@@ -129,8 +129,17 @@ const Notifications = ({ coachId }) => {
                         >
                           <AccessTimeIcon size={16} />
                           <Typography variant="caption" color="text.secondary">
-                            {notification.created_at}
+                            {new Intl.DateTimeFormat('en-PK', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              second: '2-digit',
+                              timeZone: 'Asia/Karachi',
+                            }).format(new Date(notification.created_at))}
                           </Typography>
+
                           {notification.is_read ? (
                             <CheckCircleIcon
                             fontSize="small"

@@ -52,6 +52,7 @@ import Edit_player from './sidebar/User/Player/Edit_player';
 import ResetPassword from './Auth/ResetPassword';
 import ForgotOtp from './Auth/ForgotOtp';
 import Schedule from './website/Schedule';
+import PlayerRequest from './website/PlayerRequest';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 
@@ -73,6 +74,7 @@ function App() {
         <Route path='/schedule/:id' element={<Schedule />} />
         <Route path='/admin-profile' element={<AdminProfile />} />
         <Route path='/coachdetail/:id' element={<CoachDetail />} />
+        <Route path='/PlayerRequest/:id/:role' element={<PlayerRequest />} />
         
         {/* Wrap the dashboard and other private routes with ProtectedRoute */}
         <Route

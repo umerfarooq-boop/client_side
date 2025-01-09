@@ -4,11 +4,12 @@ import MyCalendar from './MyCalendar';
 import { useParams } from 'react-router-dom';
 import Nav from './Nav';
 import { Bars } from 'react-loader-spinner';
+import Appoinment from './Appoinment';
 
 function Schedule() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true); // Initialize with `true` to show the loader initially
-
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -35,12 +36,24 @@ function Schedule() {
   return (
     <>
       <Nav />
-      <div className="m-5">
-        <DirectionMap id={id} />
-      </div>
-      <div>
-        <MyCalendar />
-      </div>
+
+      <div className="text-center mt-16 mb-5">
+            <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
+              Schedule 
+              <span className="text-indigo-600">&nbsp;Booking</span>
+            </h3>
+        </div>
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 px-auto py-auto m-auto">
+  <div className="p-4">
+    <DirectionMap id={id} />
+  </div>
+  <div className="p-4">
+    <Appoinment id={id} />
+  </div>
+</div>
+
+<MyCalendar id={id}/>
+
     </>
   );
 }
