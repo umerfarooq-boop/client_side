@@ -82,7 +82,7 @@ const Notifications = ({ coachId }) => {
   color="inherit"
 >
   <Badge badgeContent={unreadCount} color="error">
-    <NotificationsIcon />
+    <NotificationsIcon className="text-black"/>
   </Badge>
 </IconButton>
 

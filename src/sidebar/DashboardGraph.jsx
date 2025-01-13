@@ -508,7 +508,7 @@ function DashboardGraph() {
       
       */}
 
-      <div class="container mx-auto p-4">
+      <div class="container mx-auto p-4 w-[100%]">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1">
           <div className=" rounded-md shadow-lg bg-white text-black">
             <div className="p-4 text-center mt-1 mb-1">
@@ -520,8 +520,8 @@ function DashboardGraph() {
             <div className="overflow-x-auto">
               {role === "coach" ? (
                 <div>
-                  <table className="min-w-full divide-y divide-gray-200 hidden md:table">
-                    <thead className="bg-gray-100">
+                  <table className="w-[100%] divide-y divide-gray-200 hidden md:table">
+                    <thead className="bg-gray-100 ">
                       <tr>
                         <th
                           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer"
@@ -715,17 +715,19 @@ function DashboardGraph() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1">
   <div className="w-full">
-    <MyCalendar id={id} />
+    {
+      role === 'coach' ? (
+        <div className="w-auto lg:h-[140vh] xl:h-screen md:h-[140vh] shadow shadow-indigo-300">
+          <MyCalendar id={id} />
+        </div>
+      ) : null
+    }
   </div>
 </div>
 
 
       {/* <Notifications coachId={id} /> */}
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
+                
       <div className="">
         <div className="container mx-auto p-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

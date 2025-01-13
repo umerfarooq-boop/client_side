@@ -9,6 +9,18 @@ import { TextField, MenuItem, Grid, List, ListItem } from '@mui/material';
 
 
 function AddPost() {
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
     const {
         handleSubmit,
         register,

@@ -12,7 +12,8 @@ function PlayerRequest() {
     const [page, setPage] = useState(0);
     const [data,setData] = useState([]);
     const player_id = localStorage.getItem('player_id');
-    const role = localStorage.getItem('role');
+    let role = localStorage.getItem('role');
+    role = 'player';
     const handleSort = (field) => {
         if (orderBy === field) {
           setOrder(order === "asc" ? "desc" : "asc");
@@ -45,7 +46,7 @@ function PlayerRequest() {
       useEffect(() => {
         const getData = async () => {
           try {
-            const response = await axios.get(`/SinglePlayerRequest/${player_id}/${player_id}`);
+            const response = await axios.get(`/SinglePlayerRequest/${player_id}/${role}`);
             if (response.data?.SinglePlayerRequest) {
               const scheduleData = Array.isArray(response.data.SinglePlayerRequest)
                 ? response.data.SinglePlayerRequest

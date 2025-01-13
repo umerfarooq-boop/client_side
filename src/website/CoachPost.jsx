@@ -31,7 +31,7 @@ function CoachPost() {
         ...new Set(fetchedPosts.map((item) => item.coach.level)),
       ];
 
-      setPagination(response.data.post);
+      setPagination(response.data.post.data);
       setPost(fetchedPosts);
       setFilteredPosts(fetchedPosts);
       setCoachLevels(uniqueLevels);
