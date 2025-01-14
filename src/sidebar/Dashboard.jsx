@@ -15,7 +15,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import DashboardGraph from "./DashboardGraph";
 import EastIcon from "@mui/icons-material/East";  
 import WestIcon from "@mui/icons-material/West";
-import WebIcon from "@mui/icons-material/West";
+import WebIcon from "@mui/icons-material/Web";
 import React, { useEffect, useState } from 'react';
 import axios from "../axios";
 
@@ -133,7 +133,7 @@ function Dashboard({children}) {
   const navList = (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       {role === 'admin' ? (
-        <div>
+        <div className="flex gap-3">
           <Typography
             as="li"
             variant="small"

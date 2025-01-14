@@ -60,7 +60,7 @@ const Profile = () => {
       Swal.fire({
         title: "Success!",
         text: "Profile Created Successfully",
-        icon: "success",
+        icon: "success",  
         confirmButtonText: "OK",
       }).then((result) => {
         if (result.isConfirmed) {

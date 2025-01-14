@@ -192,56 +192,56 @@ function Nav() {
         }
 
 
-        {
-  role === 'player' ? (
-    <div style={{ display: 'inline-block', position: 'relative' }}>
-      <p
-        id="demo-positioned-button"
-        aria-controls={openanchor ? 'demo-positioned-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={openanchor ? 'true' : undefined}
-        onClick={handleCl}
-        className="font-medium mt-1 text-sm item-center text-black cursor-pointer"
-      >
-        Coach <ArrowDropDownIcon />
-      </p>
-      <Menu
-        id="demo-positioned-menu"
-        anchorEl={anchor}
-        open={openanchor}
-        onClose={handleC}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        PaperProps={{
-          style: {
-            marginTop: '8px',
-            borderRadius: '8px',
-            minWidth: '200px',
-            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
-          },
-        }}
-      >
-        <Link to={'/coachpost'}>
-          <MenuItem onClick={handleC}>Coach</MenuItem>
-        </Link>
-        <Link>
-          <MenuItem onClick={handleC}>Profile</MenuItem>
-        </Link>
-        <Link>
-          <MenuItem onClick={handleC}>Profile</MenuItem>
-        </Link>
-      </Menu>
-    </div>
-  ) : role === 'coach' ? (
-    <h1 className="hidden">Umer</h1>
-  ) : null
-}
+        {/* {
+          role === 'player' ? (
+            <div style={{ display: 'inline-block', position: 'relative' }}>
+              <p
+                id="demo-positioned-button"
+                aria-controls={openanchor ? 'demo-positioned-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={openanchor ? 'true' : undefined}
+                onClick={handleCl}
+                className="font-medium mt-1 text-sm item-center text-black cursor-pointer"
+              >
+                Coach <ArrowDropDownIcon />
+              </p>
+              <Menu
+                id="demo-positioned-menu"
+                anchorEl={anchor}
+                open={openanchor}
+                onClose={handleC}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+                PaperProps={{
+                  style: {
+                    marginTop: '8px',
+                    borderRadius: '8px',
+                    minWidth: '200px',
+                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+                  },
+                }}
+              >
+                <Link to={'/coachpost'}>
+                  <MenuItem onClick={handleC}>Coach</MenuItem>
+                </Link>
+                <Link>
+                  <MenuItem onClick={handleC}>Profile</MenuItem>
+                </Link>
+                <Link>
+                  <MenuItem onClick={handleC}>Profile</MenuItem>
+                </Link>
+              </Menu>
+            </div>
+          ) : role === 'coach' ? (
+            <h1 className="hidden">Umer</h1>
+          ) : null
+        } */}
 
 
         <Typography

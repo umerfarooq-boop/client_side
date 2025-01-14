@@ -143,14 +143,18 @@ function PlayerRequest() {
                   <div className="flex space-x-2">
                     {
                         item.status === 'processing' ? (
-                            <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">
+                            <button className="bg-yellow-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">
                                 Processing
                             </button>
                         ) : item.status === 'booked' ? (
-                            <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
-                             Rejected
+                            <button className="bg-green-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
+                             Booked
                             </button>
-                        ) : null
+                        ) : item.status === 'reject' ? (
+                          <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
+                           Reject
+                          </button>
+                      ) : null
                     }
                     
                   </div>
@@ -233,7 +237,7 @@ function PlayerRequest() {
                 pageCount={pageCount}
                 onPageChange={handlePageClick}
                 containerClassName="flex items-center space-x-3"
-                pageLinkClassName="px-3 py-2 bg-white border rounded shadow-md transition duration-300 ease-in-out hover:bg-indigo-100 hover:text-indigo-700"
+                pageLinkClassName="px-3 py-2 bg-white text-black border rounded shadow-md transition duration-300 ease-in-out hover:bg-indigo-100 hover:text-indigo-700"
                 previousLinkClassName="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded shadow-md"
                 nextLinkClassName="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded shadow-md"
                 disabledClassName="opacity-50 cursor-not-allowed"

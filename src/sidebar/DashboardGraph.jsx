@@ -231,6 +231,18 @@ function DashboardGraph() {
     getData();
   }, [id, page]);
 
+  const accept = async (e) => {
+    const cid = e.target.getAttribute('data-id');
+    const response = await axios.get(`/AcceptRequest/${cid}`);
+    alert('Status Will be Updated');
+  }
+
+  const reject = async (e) => {
+    const rid = e.target.getAttribute('data-id');
+    const response = await axios.get(`/RejectRequest/${rid}`);
+    alert('Status Updated Successfully');
+  }
+
   return (
     <>
       <div className="container mx-auto p-4"></div>
@@ -610,14 +622,26 @@ function DashboardGraph() {
                             {item.to_date} &nbsp; {item.from_date}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                            <div className="flex space-x-2">
-                              <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">
+                            {
+                              item.status === 'processing' ? (
+                                <div className="flex space-x-2">
+                              <button onClick={accept} data-id={item.id} className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">
                                 Accept
                               </button>
-                              <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
+                              <button onClick={reject} data-id={item.id} className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
                                 Decline
                               </button>
                             </div>
+                              ) : item.status === 'booked' ? (
+                                <button className="bg-green-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">
+                                Booked
+                              </button>
+                              ) : item.status === 'reject' ? (
+                                <button  className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
+                                Reject
+                              </button>
+                              ) : null
+                            }
                           </td>
                         </tr>
                       ))}
@@ -675,12 +699,26 @@ function DashboardGraph() {
                           {item.to_date} &nbsp; {item.from_date}
                         </p>
                         <div className="mt-2">
-                          <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300 mr-2">
-                            Accept
-                          </button>
-                          <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
-                            Decline
-                          </button>
+                            {
+                              item.status === 'processing' ? (
+                                <div className="flex space-x-2">
+                              <button onClick={accept} data-id={item.id} className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">
+                                Accept
+                              </button>
+                              <button onClick={reject} data-id={item.id} className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
+                                Decline
+                              </button>
+                            </div>
+                              ) : item.status === 'booked' ? (
+                                <button className="bg-green-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">
+                                Booked
+                              </button>
+                              ) : item.status === 'reject' ? (
+                                <button  className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
+                                Reject
+                              </button>
+                              ) : null
+                            }
                         </div>
                       </div>
                     ))}
@@ -692,7 +730,7 @@ function DashboardGraph() {
                     pageCount={pageCount}
                     onPageChange={handlePageClick}
                     containerClassName="flex items-center space-x-3"
-                    pageLinkClassName="px-3 py-2 bg-white border rounded shadow-md transition duration-300 ease-in-out hover:bg-indigo-100 hover:text-indigo-700"
+                    pageLinkClassName="px-3 py-2 bg-white text-black border rounded shadow-md transition duration-300 ease-in-out hover:bg-indigo-100 hover:text-indigo-700"
                     previousLinkClassName="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded shadow-md"
                     nextLinkClassName="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded shadow-md"
                     disabledClassName="opacity-50 cursor-not-allowed"

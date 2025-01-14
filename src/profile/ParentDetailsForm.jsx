@@ -51,6 +51,23 @@ const ParentDetailsForm = () => {
                         helperText={errors.name?.message}
                     />
                 </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        label="Parent Email"
+                        {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Regex for a valid email format
+                            message: "Email must be valid",
+                        },
+                        })}
+                        fullWidth
+                        size="small"
+                        error={!!errors.email} // Match the key with the field name
+                        helperText={errors.email?.message} // Match the key with the field name
+                    />
+                </Grid>
+
 
                 <Grid item xs={12}>
                     <TextField
