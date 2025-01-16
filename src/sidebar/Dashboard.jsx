@@ -7,7 +7,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Fade from '@mui/material/Fade';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { ArrowDropDown } from '@mui/icons-material';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import Notifications from "../website/Notifications";
 import logo from "../../public/logo.png";
@@ -18,6 +18,11 @@ import WestIcon from "@mui/icons-material/West";
 import WebIcon from "@mui/icons-material/Web";
 import React, { useEffect, useState } from 'react';
 import axios from "../axios";
+import {
+  usePopupState,
+  bindTrigger,
+  bindMenu,
+} from 'material-ui-popup-state/hooks'
 
 function Dashboard({children}) {
     const [openNav, setOpenNav] = React.useState(false);
@@ -32,8 +37,11 @@ function Dashboard({children}) {
       login_id = localStorage.getItem('player_id');
   } else if (role === 'coach') {
       login_id = localStorage.getItem('coach_id');
+    } else if (role === 'admin'){
+    login_id = localStorage.getItem('admin_id');
+    
   }
-
+ 
   // console.log(`Login id is: ${login_id}`);
 
   // const player_id = localStorage.getItem('player_id');
@@ -59,6 +67,7 @@ function Dashboard({children}) {
   const token = localStorage.getItem('token') || '';  // Assuming token is stored in localStorage
   const coach_id = localStorage.getItem('coach_id') || '';
   const player_id = localStorage.getItem('player_id') || '';
+  const admin_id = localStorage.getItem('admin_id') || '';
   const [status,setStatus] = useState("");
 
 
@@ -70,6 +79,8 @@ function Dashboard({children}) {
               userId = coach_id;
           } else if (role === 'player') {
               userId = player_id;
+          } else if(role === 'admin'){
+             userId = admin_id;
           }
   
           if (!userId) {
@@ -88,7 +99,7 @@ function Dashboard({children}) {
                 if (data && data.user) {
                     setProfile(data.user);
 
-                    if (role === "player" && data.user.player?.status === "active") {
+                    if (role === "player" || role === "admin" && data.user.player?.status === "active") {
                         setStatus(data.user.player.status);
                         console.log("Player status:", data.user.player.status);
                     } else if (role === "coach" && data.user.coach?.status === "active") {
@@ -125,91 +136,96 @@ function Dashboard({children}) {
       login_id = localStorage.getItem('player_id');
   } else if (role === 'coach') {
       login_id = localStorage.getItem('coach_id');
+    } else if (role === 'admin'){
+    login_id = localStorage.getItem('admin_id');
   }
 
   // console.log(`Login id is: ${login_id}`);
-  
+  const popupState = usePopupState({ variant: 'popover', popupId: 'demoMenu' })
    
   const navList = (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       {role === 'admin' ? (
         <div className="flex gap-3">
-          <Typography
-            as="li"
-            variant="small"
-            color="blue-gray"
-            className="flex items-center gap-x-2 p-1 font-medium"
-          >
-            <Link to={'/allcoach'} className="flex items-center text-black">
-              Coaches
-            </Link>
-          </Typography>
-  
-          <Typography
-            as="li"
-            variant="small"
-            color="blue-gray"
-            className="flex items-center gap-x-2 p-1 font-medium"
-          >
-            <Link to={'/index_player'} className="flex items-center text-black">
-              Players
-            </Link>
-          </Typography>
-  
-          <Typography
-            as="li"
-            variant="small"
-            color="blue-gray"
-            className="flex items-center gap-x-2 p-1 font-medium"
-          >
-            <Link to={'/index_slides'} className="flex items-center text-black">
-              Slidder
-            </Link>
-          </Typography>
-  
-          <Typography
-            as="li"
-            variant="small"
-            color="blue-gray"
-            className="flex items-center gap-x-2 p-1 font-medium"
-          >
-            <Link to={'/index_services'} className="flex items-center text-black">
-              HomeServices
-            </Link>
-          </Typography>
-  
-          <Typography
-            as="li"
-            variant="small"
-            color="blue-gray"
-            className="flex items-center gap-x-2 p-1 font-medium"
-          >
-            <Link to={'/index_about_services'} className="flex items-center text-black">
-              About Services
-            </Link>
-          </Typography>
-  
-          <Typography
-            as="li"
-            variant="small"
-            color="blue-gray"
-            className="flex items-center gap-x-2 p-1 font-medium"
-          >
-            <Link to={'/index_about_question'} className="flex items-center text-black">
-              About Question
-            </Link>
-          </Typography>
-  
-          <Typography
-            as="li"
-            variant="small"
-            color="blue-gray"
-            className="flex items-center gap-x-2 p-1 font-medium"
-          >
-            <Link to={'/contact_feedback'} className="flex items-center text-black">
-              Contact Feedback
-            </Link>
-          </Typography>
+        <Button 
+          variant="text" 
+          endIcon={<ArrowDropDown className="text-black"/>} 
+          {...bindTrigger(popupState)}
+        >
+          Website<ArrowDropDown className="text-black"/>
+        </Button>
+      <Menu {...bindMenu(popupState)}>
+      <MenuItem onClick={popupState.close}>
+              <Link
+                variant="body1"
+                component={Link}
+                to="/allcoach"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                Coaches
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={popupState.close}>
+              <Link
+                variant="body1"
+                component={Link}
+                to="/index_player"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                Players
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={popupState.close}>
+              <Link
+                variant="body1"
+                component={Link}
+                to="/index_slides"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                Slidder
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={popupState.close}>
+              <Link
+                variant="body1"
+                component={Link}
+                to="/index_services"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                HomeServices
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={popupState.close}>
+              <Link
+                variant="body1"
+                component={Link}
+                to="/index_about_services"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                About Services
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={popupState.close}>
+              <Link
+                variant="body1"
+                component={Link}
+                to="/index_about_question"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                About Question
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={popupState.close}>
+              <Link
+                variant="body1"
+                component={Link}
+                to="/contact_feedback"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                Contact Feedback
+              </Link>
+            </MenuItem>
+      </Menu>
         </div>
       ) : role === 'coach' ? (
         <div>
@@ -265,7 +281,21 @@ function Dashboard({children}) {
                 loading="lazy"
               />
             </div>
-          ) : (
+          ) : role === 'admin' ? (
+            <div key={key}>
+              <img 
+                src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
+                className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
+                alt="Thumbnail"
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+                loading="lazy"
+              />
+            </div>
+          ) : role === 'coach' ? (
             <div key={key}>
               <div className="grid lg:grid-cols-2 gap-4">
               <div className="hidden lg:block">
@@ -290,7 +320,7 @@ function Dashboard({children}) {
                 </div>
               </div>
             </div>
-          )
+          ) : null
         ))
       }
       <Menu
@@ -399,7 +429,7 @@ function Dashboard({children}) {
                 onClick={handleClick}
               />
             </div>
-          ) : (
+          ) : role === 'coach' ? (
             <div key={key}>
   <div className="grid sm:grid-cols-1 gap-4">
     {/* Notifications - Visible on mobile and larger screens */}
@@ -425,7 +455,21 @@ function Dashboard({children}) {
 </div>
 
             
-          )
+          ) : role === 'admin' ? (
+            <div key={key}>
+              <img 
+                src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
+                className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
+                alt="Thumbnail"
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+                loading="lazy"
+              />
+            </div>
+          ) : null
         ))
       }
       <Menu

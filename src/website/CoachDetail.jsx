@@ -126,26 +126,27 @@ function CoachDetail() {
         <div>
           <Nav />
 
-          <div className="text-center mt-10">
+          <div className="text-center mt-10 mb-10">
             <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
               Coach <span className="text-indigo-600">Events</span>
             </h3>
           </div>
 
           {posts.length > 0 ? (
+            
             posts.map((post, key) => (
               <div
                 key={key}
-                className="shadow grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 mt-14 p-4"
+                className="shadow-inherit grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-7 justify-center item-center lg:grid-cols-3 xl:grid-cols-3 mt-14 p-4"
               >
                 <div>
                   <img
                     src={`http://127.0.0.1:8000/uploads/coach_posts/${post.post_image}`}
                     alt="Image Not Show"
-                    className="object-contain w-full h-72"
+                    className="object-contain xl:w-full xl:h-72 lg:w-72 lg:h-72 scale-95 hover:scale-75 duration-500"
                   />
                 </div>
-                <div>
+                <div className="mt-5">
                   <p className="font-medium text-2xl mb-2">{post.post_title}</p>
                   <p className="text-base text-gray-700 mb-4">{post.post_description}</p>
                   <div className="flex justify-between items-center border-t pt-2 mt-4">
@@ -196,11 +197,11 @@ function CoachDetail() {
                   ) : (
                     <p>Location not available</p>
                   )}
+                  
                 </div>
-                
               </div>
-              
             ))
+            
           ) : (
             <p>No posts available</p>
           )} 
@@ -226,7 +227,6 @@ function CoachDetail() {
       
       <div className="mt-20 sm:mt-24 md:mt-28 lg:mt-32">
         <div className="text-center mt-10"></div>
-        <Footer />
       </div>
       
       <Footer />

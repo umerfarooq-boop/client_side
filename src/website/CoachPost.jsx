@@ -15,7 +15,6 @@ function CoachPost() {
   const [coachLevels, setCoachLevels] = useState([]);
   const [selectedLevel, setSelectedLevel] = useState("");
   const [location, setLocation] = useState("");
-  ``
   const [pagination, setPagination] = useState({});
   const [page, setPage] = useState(1);
   const [toggle, setToggle] = useState(false);
@@ -31,7 +30,7 @@ function CoachPost() {
         ...new Set(fetchedPosts.map((item) => item.coach.level)),
       ];
 
-      setPagination(response.data.post.data);
+      setPagination(response.data.post);
       setPost(fetchedPosts);
       setFilteredPosts(fetchedPosts);
       setCoachLevels(uniqueLevels);
@@ -234,8 +233,8 @@ function CoachPost() {
               </div>
             ))}
           </div>
+            <div className="m-4 flex justify-end">{renderPaginationLinks()}</div>
 
-          <div className="m-4 flex justify-end">{renderPaginationLinks()}</div>
           </div>
 
         

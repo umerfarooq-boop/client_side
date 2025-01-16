@@ -41,6 +41,7 @@ function Nav() {
   const token = localStorage.getItem('token') || '';  // Assuming token is stored in localStorage
   const coach_id = localStorage.getItem('coach_id') || '';
   const player_id = localStorage.getItem('player_id') || '';
+  const admin_id = localStorage.getItem('admin_id') || '';
   const [status,setStatus] = useState("");
 
 
@@ -52,8 +53,9 @@ function Nav() {
               userId = coach_id;
           } else if (role === 'player') {
               userId = player_id;
+          } else if (role === 'admin'){
+              userId = localStorage.getItem('admin_id');
           }
-  
           if (!userId) {
               console.log('User ID is missing for the given role');
               return;
@@ -70,7 +72,7 @@ function Nav() {
                 if (data && data.user) {
                     setProfile(data.user);
 
-                    if (role === "player" && data.user.player?.status === "active") {
+                    if (role === "player" || role === 'admin' && data.user.player?.status === "active") {
                         setStatus(data.user.player.status);
                         console.log("Player status:", data.user.player.status);
                     } else if (role === "coach" && data.user.coach?.status === "active") {
@@ -107,6 +109,8 @@ function Nav() {
       login_id = localStorage.getItem('player_id');
   } else if (role === 'coach') {
       login_id = localStorage.getItem('coach_id');
+    }else if(role === 'admin'){
+    login_id = localStorage.getItem('admin_id');
   }
 
   // console.log(`Login id is: ${login_id}`);
@@ -307,7 +311,21 @@ function Nav() {
                 loading="lazy"
               />
             </div>
-          ) : (
+          ) : role === 'admin' ? (
+            <div key={key}>
+              <img 
+                src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
+                className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
+                alt="Thumbnail"
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+                loading="lazy"
+              />
+            </div>
+          ) : role === 'coach' ? (
             <div key={key}>
               <img 
                 src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach.image}`}
@@ -321,7 +339,7 @@ function Nav() {
                 loading="lazy"
               />
             </div>
-          )
+          ) : null
         ))
       }
       <Menu
@@ -428,6 +446,20 @@ function Nav() {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
+              />
+            </div>
+          ) : role === 'admin' ? (
+            <div key={key}>
+              <img 
+                src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
+                className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
+                alt="Thumbnail"
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+                loading="lazy"
               />
             </div>
           ) : (
