@@ -110,7 +110,7 @@ function Login() {
                 <div className="text-center">
                   <div className="flex items-center">
                   <h1 className="text-3xl font-extrabold text-blue-900">
-                    Login
+                    Sign in
                   </h1>&nbsp;&nbsp;
                   <img src={mainlogo} className="h-10 mt-5 w-10 m-auto" alt="" />
                   </div>
@@ -190,7 +190,7 @@ function Login() {
                         type="submit"
                         className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                       >
-                        <span className="ml-3">Login</span>
+                        <span className="ml-3">Sign in</span>
                       </button>
 
                       <p className="mt-6 text-xs text-gray-600 text-center">

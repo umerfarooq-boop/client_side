@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import axios from '../axios'
 import ReactPaginate from "react-paginate";
 import Nav from './Nav';
+import { MaterialReactTable } from 'material-react-table';
+import { format } from 'date-fns'; 
+
 
 function PlayerRequest() {
 
@@ -61,6 +64,128 @@ function PlayerRequest() {
         };
         getData();
       }, [page,player_id,role]);
+
+      const columns = useMemo(
+        () => [
+          {
+            accessorKey: 'player.player_name',
+            header: 'Name',
+            size: 150,
+          },
+          {
+            accessorKey: 'player.player_dob',
+            header: 'Age',
+            size: 150,
+            Cell: ({ row }) => {
+              const { player_dob } = row.original.player; // Assuming player_dob is in the player object
+          
+              // Calculate age from player_dob
+              const calculateAge = (dob) => {
+                const birthDate = new Date(dob);
+                const ageDifMs = Date.now() - birthDate.getTime();
+                const ageDate = new Date(ageDifMs);
+                return Math.abs(ageDate.getUTCFullYear() - 1970); // Get age in years
+              };
+          
+              const age = player_dob ? calculateAge(player_dob) : 'N/A';
+          
+              return (
+                <span>
+                  {age}
+                </span>
+              );
+            },
+          },
+                    
+          {
+            accessorKey: 'sport_category.name',
+            header: 'Sport',
+            size: 150,
+          },
+          {
+            header: 'Time',
+            size: 150,
+            cell: ({ row }) => {
+              const { start_time, end_time } = row.original; // Access the actual row data
+          
+              const formatTime = (time) => {
+                // Convert the 24-hour time (HH:mm:ss) into a Date object
+                const [hour, minute, second] = time.split(':').map(Number);
+                const date = new Date(1970, 0, 1, hour, minute, second); // Create a Date object for time
+                return format(date, 'h:mm a'); // Format the Date object into 12-hour format with AM/PM
+              };
+          
+              // If both start_time and end_time are available, format them into the range
+              if (start_time && end_time) {
+                return `${formatTime(start_time)} - ${formatTime(end_time)}`;
+              }
+          
+              return ''; // Return empty string if times are missing
+            },
+            accessorFn: (row) => `${row.start_time} - ${row.end_time}`, // Combine times into a single string for better mapping
+          }
+          
+          
+          
+          
+          
+          
+          
+          
+          ,          
+          {
+            accessorKey: 'date_range', // This can be any unique key; it's not directly used here
+            header: 'Date Range',
+            size: 150,
+            Cell: ({ row }) => {
+              const { to_date, from_date } = row.original;
+          
+              // Check if the dates exist and are valid
+              const formattedFromDate = from_date ? new Date(from_date).toLocaleDateString() : 'N/A';
+              const formattedToDate = to_date ? new Date(to_date).toLocaleDateString() : 'N/A';
+          
+              return (
+                <span>
+                  {formattedFromDate} - {formattedToDate}
+                </span>
+              );
+            },
+          },
+          
+          
+          {
+            accessorKey: 'status',
+            header: 'Status',
+            size: 5,
+            Cell: ({ row }) => {
+              const status = row.original.status; // Extracting status from row data
+          
+              return (
+                <div style={{ display: 'flex', gap: '7px' }}>
+                  {status === 'processing' ? (
+                    <button className="bg-yellow-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">
+                      Processing
+                    </button>
+                  ) : status === 'booked' ? (
+                    <button className="bg-green-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
+                      Booked
+                    </button>
+                  ) : status === 'reject' ? (
+                    <button className="bg-red-600 text-black font-semibold py-1 px-5 rounded shadow hover:bg-red-500 transition duration-300">
+                      Rejected
+                    </button>
+                  ) : null}
+                </div>
+              );
+            },
+          },
+          
+          
+        
+        ],
+        []
+      );
+
   return (
     <>
         <Nav />
@@ -71,7 +196,7 @@ function PlayerRequest() {
         {
           role === 'player' ? (
             <div>
-              <table className="min-w-full divide-y divide-gray-200 hidden md:table">
+              {/* <table className="min-w-full divide-y divide-gray-200 hidden md:table">
           <thead className="bg-gray-100">
             <tr>
               <th
@@ -150,9 +275,9 @@ function PlayerRequest() {
                             <button className="bg-green-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
                              Booked
                             </button>
-                        ) : item.status === 'reject' ? (
-                          <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
-                           Reject
+                        ) : item.status === 'rejected' ? (
+                          <button className="bg-red-600 text-black font-semibold py-1 px-5 rounded shadow hover:bg-red-500 transition duration-300">
+                           Rejected
                           </button>
                       ) : null
                     }
@@ -162,9 +287,9 @@ function PlayerRequest() {
               </tr>
             ))}
           </tbody>
-        </table>
+              </table> */}
         {/* Mobile View */}
-        <div className="block md:hidden">
+        {/* <div className="block md:hidden">
           {displayedData.map((item, index) => (
             <div
               key={index}
@@ -217,12 +342,12 @@ function PlayerRequest() {
             </div>
             
           ))}
-        </div>
+        </div> */}
             </div>
           ) : null
         }
       </div>
-      <ReactPaginate
+      {/* <ReactPaginate
                 className="flex items-center justify-center mt-4 space-x-3"
                 previousLabel={
                   <button className="">
@@ -242,9 +367,28 @@ function PlayerRequest() {
                 nextLinkClassName="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded shadow-md"
                 disabledClassName="opacity-50 cursor-not-allowed"
                 activeClassName="bg-indigo-500 text-white border-indigo-500 shadow-lg"
-              />
+              /> */}
 
-      
+                {
+                  role === 'player' ? (
+                    <div>
+              
+              <MaterialReactTable
+                columns={columns}
+                data={data}
+                muiTableBodyCellProps={{
+                    style: { wordWrap: 'break-word', maxWidth: '50px' },
+                }}
+                muiTableContainerProps={{
+                    style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
+                }}
+                // renderTopToolbarCustomActions={() => (
+                //     <Link to={'/addhome_slidder'} className='focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900'>Add Slidder</Link>
+                // )}
+            />
+            </div>
+                  ) : null
+                }
 
 
 

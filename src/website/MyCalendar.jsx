@@ -38,7 +38,7 @@ function MyCalendar() {
                 `${currentDate.toISOString().split('T')[0]}T${item.end_time}`
               ),
               status: item.status,
-              player_name: item.player.player_name, // Add player name
+              player_name: item.player.player_name,
             });
 
             currentDate.setDate(currentDate.getDate() + 1);
@@ -49,7 +49,7 @@ function MyCalendar() {
 
         setData(formattedData);
       } catch (error) {
-        console.log("Error fetching coach schedule data:", error);
+        console.log('Error fetching coach schedule data:', error);
       }
     };
 
@@ -63,6 +63,18 @@ function MyCalendar() {
       <div>Player: {event.player_name}</div>
     </div>
   );
+
+  const handleDrillDown = (date, view) => {
+    if (view === 'agenda') {
+      return;
+    }
+    setView('agenda');
+    setSelectedDate(date);
+  };
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [view, setView] = useState('month');
+
 
   return (
     <>
@@ -93,42 +105,55 @@ function MyCalendar() {
               <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
               <p className="font-medium text-sm text-yellow-500">Processing</p>
             </div>
+      
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
               <p className="font-medium text-sm text-green-500">Booked</p>
             </div>
+
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-red-600 rounded-full"></div>
+              <p className="font-medium text-sm text-red-600">Reject</p>
+            </div>
           </div>
 
           <div style={{ height: '80vh', width: '100%', padding: '40px' }}>
-            <Calendar
-              localizer={localizer}
-              events={data}
-              startAccessor="start"
-              endAccessor="end"
-              views={['month', 'week', 'agenda']}
-              titleAccessor="title"
-              style={{ height: 500 }}
-              components={{
-                agenda: {
-                  event: CustomAgendaEvent, // Custom agenda event rendering
-                },
-              }}
-              eventPropGetter={(event) => {
-                let backgroundColor;
-                if (event.status === 'processing') {
-                  backgroundColor = 'yellow';
-                } else if (event.status === 'booked') {
-                  backgroundColor = '#22c55e';
-                }
+          <Calendar
+        localizer={localizer}
+        events={data}
+        startAccessor="start"
+        endAccessor="end"
+        views={['month', 'week', 'agenda']}
+        titleAccessor="title"
+        style={{ height: 500 }}
+        onNavigate={(newDate) => setSelectedDate(newDate)}
+        onDrillDown={handleDrillDown}
+        date={selectedDate}
+        view={view}
+        onView={(newView) => setView(newView)}
+        components={{
+          agenda: {
+            event: CustomAgendaEvent,
+          },
+        }}
+        eventPropGetter={(event) => {
+          let backgroundColor;
+          if (event.status === 'processing') {
+            backgroundColor = 'yellow';
+          } else if (event.status === 'booked') {
+            backgroundColor = '#22c55e';
+          } else if(event.status === 'reject'){
+            backgroundColor = 'red'
+          }
 
-                return {
-                  style: {
-                    backgroundColor: backgroundColor,
-                    color: 'black',
-                  },
-                };
-              }}
-            />
+          return {
+            style: {
+              backgroundColor: backgroundColor,
+              color: 'black',
+            },
+          };
+        }}
+      />
           </div>
         </div>
       )}
