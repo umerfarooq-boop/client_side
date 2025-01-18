@@ -5,58 +5,35 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { RotatingLines } from "react-loader-spinner";
 import axios from '../axios';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCalendarData } from '../Redux/slices/calenderSlice';
+import { fetchBookedSlots } from '../Redux/slices/appointmentSlice';
 const localizer = momentLocalizer(moment);
 
 function MyCalendar() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [category, setCategory] = useState([]);
+  const dispatch = useDispatch();
+  const { events = [], loading: calendarLoading } = useSelector((state) => state.calendar || {});
+  const { bookedSlots = [], loading: appointmentLoading } = useSelector((state) => state.appointment || {});
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [view, setView] = useState('month');
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await axios.get(`/showCoachBookings/${id}`);
-        const getCategory = await axios.get('/category');
+    dispatch(fetchCalendarData(id));
+    dispatch(fetchBookedSlots({ id, date: moment(selectedDate).format('YYYY-MM-DD') }));
+  }, [dispatch, id, selectedDate]);
 
-        setCategory(getCategory.data.category);
-
-        const formattedData = response.data.coach.flatMap((item) => {
-          const dailyEvents = [];
-          const currentDate = new Date(item.from_date);
-          const endDate = new Date(item.to_date);
-
-          while (currentDate <= endDate) {
-            dailyEvents.push({
-              title: item.event_name,
-              start: new Date(
-                `${currentDate.toISOString().split('T')[0]}T${item.start_time}`
-              ),
-              end: new Date(
-                `${currentDate.toISOString().split('T')[0]}T${item.end_time}`
-              ),
-              status: item.status,
-              player_name: item.player.player_name,
-            });
-
-            currentDate.setDate(currentDate.getDate() + 1);
-          }
-
-          return dailyEvents;
-        });
-
-        setData(formattedData);
-      } catch (error) {
-        console.log('Error fetching coach schedule data:', error);
-      }
-    };
-
-    getData();
-  }, [id]);
-
-  // Custom agenda event component
+  const formattedEvents = events.map((event) => ({
+    ...event,
+    start: new Date(event.start),
+    end: new Date(event.end),
+  }));
+  
+  
   const CustomAgendaEvent = ({ event }) => (
     <div>
       <strong>{event.title}</strong>
@@ -72,13 +49,12 @@ function MyCalendar() {
     setSelectedDate(date);
   };
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [view, setView] = useState('month');
+
 
 
   return (
     <>
-      {loading ? (
+      {calendarLoading || appointmentLoading ? (
         <div className="flex flex-col items-center justify-center h-screen">
           <RotatingLines 
             visible={true}
@@ -120,7 +96,7 @@ function MyCalendar() {
           <div style={{ height: '80vh', width: '100%', padding: '40px' }}>
           <Calendar
         localizer={localizer}
-        events={data}
+        events={formattedEvents}
         startAccessor="start"
         endAccessor="end"
         views={['month', 'week', 'agenda']}

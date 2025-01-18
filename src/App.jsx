@@ -55,7 +55,6 @@ import Schedule from './website/Schedule';
 import PlayerRequest from './website/PlayerRequest';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
-
 function App() {
   return (
     <>

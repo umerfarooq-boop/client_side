@@ -10,77 +10,110 @@ import 'react-toastify/dist/ReactToastify.css';
 import { RotatingLines } from "react-loader-spinner";
 import Footer from './Footer'
 import Notifications from './Notifications';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchBookedSlots } from '../Redux/slices/appointmentSlice';
+import { fetchCalendarData } from '../Redux/slices/calenderSlice';
 const localizer = momentLocalizer(moment);
 
 function Appoinment() {
   const navigate = useNavigate();
-  const { register, handleSubmit, reset,watch,control } = useForm();
+  const { register, handleSubmit, reset,watch,control } =  useForm({
+    defaultValues: {
+      start_time: "",
+      end_time:"", 
+    },
+  });
   const player_id = localStorage.getItem('player_id' || '');
   console.log("Player_id is "+player_id);
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [category,setCategory] = useState([]);
-  const [bookedSlots, setBookedSlots] = useState([]);
+  // const [bookedSlots, setBookedSlots] = useState([]);
   // const coachid = localStorage.getItem('coach_id' || '');
   const role = localStorage.getItem('role' || '');
 
   const from_date = watch("from_date");
   const to_date = watch("to_date");
 
+ 
+
+  const dispatch = useDispatch();
+  const { bookedSlots,   error } = useSelector((state) => state.appointment);
 
   useEffect(() => {
-    const fetchBookedSlots = async () => {
-      if (from_date) {
-        try {
-          const response = await axios.get(`/fetchBookedSlots/${id}?date=${from_date}`);
-          setBookedSlots(response.data.bookedSlots || []);
-        } catch (error) {
-          console.error("Error fetching booked slots:", error);
-        }
-      }
-    };
-    fetchBookedSlots();
-  }, [from_date, id]);
+    if (from_date) {
+      dispatch(fetchBookedSlots({ id, date: from_date }));
+    }
+  }, [from_date, id, dispatch]);
+
+  // useEffect(() => {
+  //   const fetchBookedSlots = async () => {
+  //     if (from_date) {
+  //       try {
+  //         const response = await axios.get(`/fetchBookedSlots/${id}?date=${from_date}`);
+  //         setBookedSlots(response.data.bookedSlots || []);
+  //       } catch (error) {
+  //         console.error("Error fetching booked slots:", error);
+  //       }
+  //     }
+  //   };
+  //   fetchBookedSlots();
+  // }, [from_date, id]);
 
   const isTimeDisabled = (time) => {
-    const [inputHour] = time.split(":").map(Number);
+    const [inputHour, inputMin] = time.split(":").map(Number);
+    const inputMinutes = inputHour * 60 + inputMin;
   
-    // Explicitly disable 3:00 AM to 4:00 AM
-    if (inputHour === 3) return true;
-  
-    // Disable based on booked slots
     return bookedSlots.some((slot) => {
-      const [startHour, startMin] = slot.start_time.split(":").map(Number);
-      const [endHour, endMin] = slot.end_time.split(":").map(Number);
-      const [inputHour, inputMin] = time.split(":").map(Number);
+      const { start_time, end_time, from_date, to_date } = slot;
   
-      const inputMinutes = inputHour * 60 + inputMin;
+      const [startHour, startMin] = start_time.split(":").map(Number);
+      const [endHour, endMin] = end_time.split(":").map(Number);
+  
       const startMinutes = startHour * 60 + startMin;
       const endMinutes = endHour * 60 + endMin;
   
-      return inputMinutes >= startMinutes && inputMinutes <= endMinutes;
+      const selectedDate = new Date(from_date).toISOString().split("T")[0];
+      const selectedEndDate = new Date(to_date).toISOString().split("T")[0];
+  
+      // Check if the selected date falls within the booked date range
+      if (from_date <= from_date && from_date <= selectedEndDate) {
+        // Check if the time falls within the booked time slot
+        return inputMinutes >= startMinutes && inputMinutes <= endMinutes;
+      }
+      return false;
     });
   };
+  
 
-  const Addevent = (eventData) => {
-    // setLoading(true);
+  const Addevent = async (eventData) => {
+    // setLoading(true);  // Ensure you handle loading state
+  
     axios.post('/coachschedule', eventData)
       .then((response) => {
         if (response.status === 201) {
           console.log("Record Saved Successfully");
           toast.success("Schedule Created Successfully");
-          
+  
           reset();
-
+          reset({ start_time: "" });
+          reset({ end_time: "" });
+  
           const newEvent = {
             title: eventData.event_name,
             start: new Date(`${eventData.from_date}T${eventData.start_time}`),
             end: new Date(`${eventData.to_date}T${eventData.end_time}`),
             status: eventData.status,
+            player_name: eventData.player_name, // Ensure you pass the player name or any other data you need
           };
-
+  
+          // Add the new event to the local state
           setData((prevData) => [...prevData, newEvent]);
+  
+          // Dispatch the action to update the calendar in the Redux store
+          dispatch(fetchCalendarData(id)); // Assuming `id` is the coach's ID or a relevant identifier
+          dispatch(fetchBookedSlots({ id, date: moment(selectedDate).format('YYYY-MM-DD') })); // Update booked slots
         }
       })
       .catch((error) => {
@@ -88,13 +121,14 @@ function Appoinment() {
         if (error.response && error.response.status === 409) {
           toast.error("This time slot is already booked. Please choose a different time.");
         } else {
-          toast.error("Failed to add schedule");
+          // toast.error("Failed to add schedule");
         }
       })
       .finally(() => {
-        setLoading(false);
+        setLoading(false); // Ensure loading state is handled
       });
   };
+  
 
   function checkPlayer(){
     if(player_id == null){
