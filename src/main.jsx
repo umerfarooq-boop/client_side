@@ -3,15 +3,14 @@ import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
-import store from './Redux/store.jsx'; // Corrected import
-import { Provider } from 'react-redux';
+// import { AppointmentProvider } from './context/AppointmentContext';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <Provider store={store}>
+      {/* <AppointmentProvider> */}
         <App />
-      </Provider>
+      {/* </AppointmentProvider> */}
     </BrowserRouter>
   </StrictMode>
 );
