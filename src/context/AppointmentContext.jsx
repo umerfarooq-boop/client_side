@@ -38,6 +38,8 @@ export const AppointmentProvider = ({ children, id }) => { // Receive `id` as a 
     }
   };
 
+
+
   useEffect(() => {
     fetchAppointments();
   }, [id]); // Refetch when `id` changes
@@ -71,6 +73,7 @@ export const AppointmentProvider = ({ children, id }) => { // Receive `id` as a 
         updateAppointmentStatus,
         fetchAppointments,
         updateStatus,
+        
       }}
     >
       {children}

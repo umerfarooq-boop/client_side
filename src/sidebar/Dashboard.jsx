@@ -25,8 +25,8 @@ import {
 } from 'material-ui-popup-state/hooks'
 
 function Dashboard({children}) {
-    const [openNav, setOpenNav] = React.useState(false);
-      const [expanded, setExpanded] = useState(true);
+  const [openNav, setOpenNav] = React.useState(false);
+  const [expanded, setExpanded] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const role = localStorage.getItem('role' || '');
@@ -228,7 +228,7 @@ function Dashboard({children}) {
       </Menu>
         </div>
       ) : role === 'coach' ? (
-        <div>
+        <div className="flex gap-4">
           <Typography
             as="li"
             variant="small"
@@ -237,6 +237,16 @@ function Dashboard({children}) {
           >
             <Link to={'/allpost'} className="flex items-center text-black">
               Post
+            </Link>
+          </Typography>
+          <Typography
+            as="li"
+            variant="small"
+            color="blue-gray"
+            className="flex items-center gap-x-2 p-1 font-medium"
+          >
+            <Link to={`/showattendance/${coach_id}`} className="flex items-center text-black">
+              Attendance
             </Link>
           </Typography>
         </div>

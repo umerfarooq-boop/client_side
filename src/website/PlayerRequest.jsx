@@ -4,6 +4,8 @@ import ReactPaginate from "react-paginate";
 import Nav from './Nav';
 import { MaterialReactTable } from 'material-react-table';
 import { format } from 'date-fns'; 
+import { Link } from 'react-router-dom';
+import { RotatingLines } from 'react-loader-spinner';
 
 
 function PlayerRequest() {
@@ -14,6 +16,7 @@ function PlayerRequest() {
     const [order, setOrder] = useState("asc");
     const [page, setPage] = useState(0);
     const [data,setData] = useState([]);
+    const [loading,setLoading] = useState(true);
     const player_id = localStorage.getItem('player_id');
     let role = localStorage.getItem('role');
     role = 'player';
@@ -57,6 +60,7 @@ function PlayerRequest() {
               setData(scheduleData);
             //   setPagination(response.data.CoachSchedule);
               console.log(scheduleData);
+              setLoading(false);
             }
           } catch (error) {
             console.error("Error fetching data:", error);
@@ -167,9 +171,13 @@ function PlayerRequest() {
                       Processing
                     </button>
                   ) : status === 'booked' ? (
-                    <button className="bg-green-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
+                    <div>
+                      <button className="bg-green-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
                       Booked
                     </button>
+                      &nbsp;
+                      <Link className='bg-yellow-600 text-black font-semibold py-1.5 px-4 rounded shadow hover:bg-orange-500 transition duration-300' to={`/editplayer_appointment/${row.original.id}`}>Edit</Link>                
+                    </div>
                   ) : status === 'reject' ? (
                     <button className="bg-red-600 text-black font-semibold py-1 px-5 rounded shadow hover:bg-red-500 transition duration-300">
                       Rejected
@@ -196,197 +204,44 @@ function PlayerRequest() {
         {
           role === 'player' ? (
             <div>
-              {/* <table className="min-w-full divide-y divide-gray-200 hidden md:table">
-          <thead className="bg-gray-100">
-            <tr>
-              <th
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer"
-                onClick={() => handleSort("name")}
-              >
-                Name {orderBy === "name" ? (order === "asc" ? "↑" : "↓") : ""}
-              </th>
-              <th
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer"
-                onClick={() => handleSort("age")}
-              >
-                Age {orderBy === "age" ? (order === "asc" ? "↑" : "↓") : ""}
-              </th>
-              <th
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer"
-                onClick={() => handleSort("sport")}
-              >
-                Sport {orderBy === "sport" ? (order === "asc" ? "↑" : "↓") : ""}
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Time
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Date
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {displayedData.map((item, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                  {item.player?.player_name || "N/A"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                  {item.player?.player_dob
-                    ? (() => {
-                        const dob = new Date(item.player.player_dob);
-                        const diff = new Date() - dob;
-                        return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)); // Approximate years
-                      })()
-                    : "N/A"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                  {item.sport_category?.name || "N/A"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                  {item.start_time
-                    ? new Date(`1970-01-01T${item.start_time}`).toLocaleTimeString(
-                        [],
-                        { hour: "numeric", hour12: true }
-                      )
-                    : "N/A"}
-                  &nbsp;<b>-</b>&nbsp;
-                  {item.end_time
-                    ? new Date(`1970-01-01T${item.end_time}`).toLocaleTimeString(
-                        [],
-                        { hour: "numeric", hour12: true }
-                      )
-                    : "N/A"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                  {item.to_date} &nbsp; {item.from_date}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                  <div className="flex space-x-2">
-                    {
-                        item.status === 'processing' ? (
-                            <button className="bg-yellow-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">
-                                Processing
-                            </button>
-                        ) : item.status === 'booked' ? (
-                            <button className="bg-green-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
-                             Booked
-                            </button>
-                        ) : item.status === 'rejected' ? (
-                          <button className="bg-red-600 text-black font-semibold py-1 px-5 rounded shadow hover:bg-red-500 transition duration-300">
-                           Rejected
-                          </button>
-                      ) : null
-                    }
-                    
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-              </table> */}
-        {/* Mobile View */}
-        {/* <div className="block md:hidden">
-          {displayedData.map((item, index) => (
-            <div
-              key={index}
-              className="mb-4 p-4 border border-gray-200 rounded shadow-md bg-white"
-            >
-              <p className="text-sm font-medium text-gray-500">
-                <span className="font-semibold">Name:</span> {item.player?.player_name || "N/A"}
-              </p>
-              <p className="text-sm font-medium text-gray-500">
-                <span className="font-semibold">Age:</span>{" "}
-                {item.player?.player_dob
-                  ? (() => {
-                      const dob = new Date(item.player.player_dob);
-                      const diff = new Date() - dob;
-                      return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)); // Approximate years
-                    })()
-                  : "N/A"}
-              </p>
-              <p className="text-sm font-medium text-gray-500">
-                <span className="font-semibold">Sport:</span> {item.sport_category?.name || "N/A"}
-              </p>
-              <p className="text-sm font-medium text-gray-500">
-                <span className="font-semibold">Time:</span>{" "}
-                {item.start_time
-                  ? new Date(`1970-01-01T${item.start_time}`).toLocaleTimeString([], {
-                      hour: "numeric",
-                      hour12: true,
-                    })
-                  : "N/A"}
-                &nbsp;<b>-</b>&nbsp;
-                {item.end_time
-                  ? new Date(`1970-01-01T${item.end_time}`).toLocaleTimeString([], {
-                      hour: "numeric",
-                      hour12: true,
-                    })
-                  : "N/A"}
-              </p>
-              <p className="text-sm font-medium text-gray-500">
-                <span className="font-semibold">Date:</span> {item.to_date} &nbsp; {item.from_date}
-              </p>
-              <div className="mt-2">
-                <button className="bg-lime-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300 mr-2">
-                  Accept
-                </button>
-                <button className="bg-red-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
-                  Decline
-                </button>
-              </div>
               
-            </div>
-            
-          ))}
-        </div> */}
             </div>
           ) : null
         }
       </div>
-      {/* <ReactPaginate
-                className="flex items-center justify-center mt-4 space-x-3"
-                previousLabel={
-                  <button className="">
-                    Previous
-                  </button>
-                }
-                nextLabel={
-                  <button className="">
-                    Next
-                  </button>
-                }
-                pageCount={pageCount}
-                onPageChange={handlePageClick}
-                containerClassName="flex items-center space-x-3"
-                pageLinkClassName="px-3 py-2 bg-white text-black border rounded shadow-md transition duration-300 ease-in-out hover:bg-indigo-100 hover:text-indigo-700"
-                previousLinkClassName="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded shadow-md"
-                nextLinkClassName="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded shadow-md"
-                disabledClassName="opacity-50 cursor-not-allowed"
-                activeClassName="bg-indigo-500 text-white border-indigo-500 shadow-lg"
-              /> */}
+      
 
                 {
                   role === 'player' ? (
                     <div>
-              
-              <MaterialReactTable
-                columns={columns}
-                data={data}
-                muiTableBodyCellProps={{
-                    style: { wordWrap: 'break-word', maxWidth: '50px' },
-                }}
-                muiTableContainerProps={{
-                    style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
-                }}
-                // renderTopToolbarCustomActions={() => (
-                //     <Link to={'/addhome_slidder'} className='focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900'>Add Slidder</Link>
-                // )}
-            />
-            </div>
+                      {
+                      loading ? (
+                        <div className="flex flex-col items-center justify-center h-screen">
+                      <RotatingLines 
+                        visible={true}
+                        height="96"
+                        width="96"
+                        color="grey"
+                        strokeWidth="5"
+                        animationDuration="0.75"
+                        ariaLabel="rotating-lines-loading"
+                      />
+                    </div>
+                      ) :
+                      (
+                      <MaterialReactTable
+                          columns={columns}
+                          data={data}
+                          muiTableBodyCellProps={{
+                              style: { wordWrap: 'break-word', maxWidth: '200px' },
+                          }}
+                          muiTableContainerProps={{
+                              style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
+                          }}
+                      />
+                      )
+                    }
+                    </div>
                   ) : null
                 }
 

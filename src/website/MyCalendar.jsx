@@ -4,6 +4,7 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useAppointments } from "../context/AppointmentContext";
 import axios from "../axios";
+import { RotatingLines } from "react-loader-spinner";
 import { useParams } from "react-router-dom";
 const localizer = momentLocalizer(moment);
 
@@ -12,6 +13,7 @@ function MyCalendar() {
   const [category, setCategory] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [view, setView] = useState("month");
+  const [loading, setLoading] = useState(false);
   const {id} = useParams();
   useEffect(() => {
     const getCategoryData = async () => {
@@ -26,13 +28,33 @@ function MyCalendar() {
     getCategoryData();
   }, []);
 
-  useEffect(()=>{
-    console.log(appointments);
-  },[fetchAppointments,id])
+  const loadAppointments = async () => {
+    setLoading(true);  // Start loading when fetching appointments
+    await fetchAppointments();  // Fetch appointments
+    setLoading(false);  // Stop loading after fetching is complete
+  };
+
+  useEffect(() => {
+    loadAppointments();
+  }, []);  // Fetc
 
   return (
     <div style={{ height: "80vh", width: "100%", padding: "40px" }}>
-      <Calendar
+      {
+        loading ? (
+          <div className="flex items-center justify-center" style={{ height: "100%" }}>
+          <RotatingLines
+            visible={true}
+            height="96"
+            width="96"
+            color="grey"
+            strokeWidth="5"
+            animationDuration="0.75"
+            ariaLabel="rotating-lines-loading"
+          />
+        </div>
+        ) : (
+          <Calendar
         localizer={localizer}
         events={appointments} // Appointments from context
         startAccessor="start"
@@ -77,6 +99,8 @@ function MyCalendar() {
           };
         }}
       />
+        )
+      }
     </div>
   );
 }

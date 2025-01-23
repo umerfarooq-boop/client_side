@@ -8,7 +8,7 @@ import mainlogo from '../../public/mainlogo.png'
 import signup from '../../public/Auth_Images/signup.png'
 
 function Signup() {
-  // localStorage.clear();
+  localStorage.clear();
   const {
     register,
     handleSubmit,

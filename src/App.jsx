@@ -2,7 +2,7 @@ import './App.css';
 import Signup from './Auth/Signup';
 import Login from './Auth/Login';
 import Otp from './Auth/Otp';
-import { Routes, Route, Link, Navigate } from 'react-router-dom';
+import { Routes, Route, Link, Navigate, useParams } from 'react-router-dom';
 import AdminProfile from './admin/AdminProfile';
 import Page from './Page';
 import Profile from './profile/Profile';
@@ -53,9 +53,13 @@ import ResetPassword from './Auth/ResetPassword';
 import ForgotOtp from './Auth/ForgotOtp';
 import Schedule from './website/Schedule';
 import PlayerRequest from './website/PlayerRequest';
+import EditPlayerAppointment from './website/EditPlayerAppointment';
+import { AppointmentProvider } from './context/AppointmentContext';
+import ShowAttendance from './sidebar/Attendance/ShowAttendance';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
+  const {id} = useParams();
   return (
     <>
       <Link to='/'></Link>
@@ -84,6 +88,23 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        /**
+        * ! Edit Player Appointment
+        */
+        <Route
+          path='/editplayer_appointment/:id'
+          element={
+            <ProtectedRoute>
+              <AppointmentProvider id={id}>
+                <EditPlayerAppointment id={id}/>
+              </AppointmentProvider>
+            </ProtectedRoute>
+          }
+        />
+        /**
+        * ! Edit Player Appointment
+        */
 
         /**
         * ! Working of Menage Website
@@ -404,8 +425,21 @@ function App() {
           }
         />
 
+        <Route
+          path='/AddPost'
+          element={
+            <ProtectedRoute>
+              <AddPost />
+            </ProtectedRoute>
+          }
+        />
+
         /**
           * ? END POST RECORD
+        */
+
+        /**
+        * ? Vedio
         */
         <Route
           path='/vedio'
@@ -416,14 +450,27 @@ function App() {
           }
         />
 
+        /**
+        * ? Vedio
+        */
+
+        /**
+        * ? Menage Attendance
+        */
+
         <Route
-          path='/AddPost'
+          path='/showattendance/:id'
           element={
             <ProtectedRoute>
-              <AddPost />
+              <ShowAttendance />
             </ProtectedRoute>
           }
         />
+
+        /**
+        * ? Menage Attendance
+        */
+        
 
         {/* Public Profile route with a container */}
         <Route 
