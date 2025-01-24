@@ -71,51 +71,55 @@ function ShowAttendance() {
         size: 150,
         Cell: ({ row }) => {
           const [attendanceStatus, setAttendanceStatus] = React.useState(row.original.attendance_status);
+          const sessionStart = new Date(row.original.start_time);
+          const currentTime = new Date();
+          const fifteenMinutesPassed = (currentTime - sessionStart) / (1000 * 60) > 15;
+          const sessionNotStarted = currentTime < sessionStart;
       
           const markAttendance = async (status) => {
             try {
               const response = await axios.post(
-                `/markAttendance/${row.original.id}`, // Pass attendance ID
-                { attendance_status: status }, // Send the status (P, A, L)
-                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } } // Include JWT token if required
+                `/markAttendance/${row.original.id}`,
+                { attendance_status: status },
+                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
               );
-      
-              setAttendanceStatus(status); // Update local state to reflect new attendance status
-              alert(response.data.message); // Show success message
+              setAttendanceStatus(status);
+              toast.success(response.data.message);
             } catch (error) {
-              console.error(error.response?.data?.message || "Error occurred");
-              alert('Failed to update attendance.');
+              const errorMessage = error.response?.data?.message || 'Failed to update attendance.';
+              toast.error(errorMessage);
             }
           };
       
           return (
-            <div style={{ display: 'flex', gap: '20px' }}>
-              {/* Mark Present Button */}
-              {attendanceStatus === 'P' ? (
+            <div style={{ display: 'flex', gap: '10px' }}>
+              {attendanceStatus ? (
                 <button
-                  className="font-medium text-white bg-green-400 border-green-400 border rounded-full w-8 h-8 transition-all delay-300"
-                  disabled // Disable the button
+                  className="font-medium text-white bg-green-400 border-green-400 border rounded-full w-8 h-8"
+                  disabled
                 >
-                  P
+                  {attendanceStatus}
                 </button>
               ) : (
                 <>
-                  {/* Other Buttons */}
                   <button
-                    className="font-medium text-black bg-white hover:bg-green-600 border-green-400 border rounded-full w-8 h-8 transition-all delay-300"
-                    onClick={() => markAttendance('P')} // Mark Present
+                    className="font-medium text-black bg-white hover:bg-green-600 border-green-400 border rounded-full w-8 h-8"
+                    onClick={() => markAttendance('P')}
+                    disabled={sessionNotStarted || fifteenMinutesPassed}
                   >
                     P
                   </button>
                   <button
-                    className="font-medium text-black bg-white hover:bg-red-600 border-red-400 border rounded-full w-8 h-8 transition-all delay-300"
-                    onClick={() => markAttendance('A')} // Mark Absent
+                    className="font-medium text-black bg-white hover:bg-red-600 border-red-400 border rounded-full w-8 h-8"
+                    onClick={() => markAttendance('A')}
+                    disabled={sessionNotStarted || fifteenMinutesPassed}
                   >
                     A
                   </button>
                   <button
-                    className="font-medium text-black bg-white hover:bg-blue-600 border-blue-400 border rounded-full w-8 h-8 transition-all delay-300"
-                    onClick={() => markAttendance('L')} // Mark Late
+                    className="font-medium text-black bg-white hover:bg-blue-600 border-blue-400 border rounded-full w-8 h-8"
+                    onClick={() => markAttendance('L')}
+                    disabled={sessionNotStarted || fifteenMinutesPassed}
                   >
                     L
                   </button>
@@ -125,6 +129,10 @@ function ShowAttendance() {
           );
         },
       }
+      
+
+            
+      
       
       
       

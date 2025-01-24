@@ -55,6 +55,7 @@ const Profile = () => {
       // console.log(response.data.profile.coach_id);
       // localStorage.setItem('location',response.data.profile.profile_location);
       localStorage.setItem('player_id',response.data.profile.player_id);
+      // localStorage.setItem('playwith',response.data.profile.player.playwith);
       setLoader(false); 
 
       Swal.fire({

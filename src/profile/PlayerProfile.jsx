@@ -165,6 +165,7 @@ const player_record = localStorage.getItem('coach_id' || '');
                         helperText={errors.role?.message}
                         fullWidth
                         size="small"
+                        onChange={(e) => localStorage.setItem('playwith',e.target.value)}
                     >
                         <MenuItem value="individual">
                         Individual
