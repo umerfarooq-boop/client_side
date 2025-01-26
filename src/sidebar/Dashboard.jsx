@@ -249,8 +249,41 @@ function Dashboard({children}) {
               Attendance
             </Link>
           </Typography>
+          <Typography
+            as="li"
+            variant="small"
+            color="blue-gray"
+            className="flex items-center gap-x-2 p-1 font-medium"
+          >
+            <Link to={`/addScore/${coach_id}`} className="flex items-center text-black">
+              ScoreBoard
+            </Link>
+          </Typography>
         </div>
-      ) : null}
+      )  : role === 'player' ? (
+        <div className="flex gap-3">
+          <Typography
+            as="li"
+            variant="small"
+            color="blue-gray"
+            className="flex items-center gap-x-2 p-1 font-medium"
+          >
+            <Link to={`/showscore/${player_id}`} className="flex items-center text-black">
+              Score
+            </Link>
+          </Typography>
+          <Typography
+            as="li"
+            variant="small"
+            color="blue-gray"
+            className="flex items-center gap-x-2 p-1 font-medium"
+          >
+            <Link to={`/studentattendance/${player_id}`} className="flex items-center text-black">
+              Attendance
+            </Link>
+          </Typography>
+        </div>
+      ): null}
     </ul>
   );
   

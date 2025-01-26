@@ -56,6 +56,10 @@ import PlayerRequest from './website/PlayerRequest';
 import EditPlayerAppointment from './website/EditPlayerAppointment';
 import { AppointmentProvider } from './context/AppointmentContext';
 import ShowAttendance from './sidebar/Attendance/ShowAttendance';
+import AddScore from './sidebar/ScoreBoard/AddScore';
+import ShowScore from './sidebar/ScoreBoard/ShowScore';
+import ViewScore from './sidebar/ScoreBoard/ViewScore';
+import StudentAttendance from './sidebar/Attendance/StudentAttendance';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
@@ -466,9 +470,52 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path='/studentattendance/:id'
+          element={
+            <ProtectedRoute>
+              <StudentAttendance />
+            </ProtectedRoute>
+          }
+        />
 
         /**
         * ? Menage Attendance
+        */
+
+        /**
+        * ? Menage Score Board
+        */
+
+        <Route
+          path='/addScore/:id'
+          element={
+            <ProtectedRoute>
+              <AddScore />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/showscore/:id'
+          element={
+            <ProtectedRoute>
+              <ShowScore />
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path='/viewscore/:id'
+          element={
+            <ProtectedRoute>
+              <ViewScore />
+            </ProtectedRoute>
+          }
+        />
+
+        /**
+        * ? Menage Score Board
         */
         
 

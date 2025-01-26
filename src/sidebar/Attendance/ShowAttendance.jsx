@@ -114,6 +114,7 @@ function ShowAttendance() {
                     onClick={() => markAttendance('A')}
                     disabled={sessionNotStarted || fifteenMinutesPassed}
                   >
+                    
                     A
                   </button>
                   <button
@@ -129,14 +130,6 @@ function ShowAttendance() {
           );
         },
       }
-      
-
-            
-      
-      
-      
-      
-    
     ],
     []
   );
