@@ -523,12 +523,18 @@ function DashboardGraph() {
           <ChangeRequest id={id} />
           <MyCalendar id={id}/>
           </AppointmentProvider>
+          {/* <br /><br /> */}
         </div>
       ) : null
     }
   </div>
+  <br /><br />
 </div>
 
+<br />
+<br />
+<br />
+<br />
 
       {/* <Notifications coachId={id} /> */}
                 
