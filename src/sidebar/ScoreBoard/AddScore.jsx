@@ -1,456 +1,237 @@
-import Dashboard from '../Dashboard'
-import React, { useMemo, useState, useEffect } from 'react';
-import { MaterialReactTable } from 'material-react-table';
-import axios from '../../axios'
-import { Link, useParams } from 'react-router-dom';
-import { RotatingLines } from 'react-loader-spinner';
-import { ToastContainer, toast } from 'react-toastify';
-import ReactDOM from 'react-dom';
-import Modal from 'react-modal';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from "react";
+import axios from "../../axios";
 import Swal from "sweetalert2";
+import { useParams } from "react-router-dom";
+import Dashboard from "../Dashboard"
+const AddScore = () => {
+  const { id } = useParams();
+  const [players, setPlayers] = useState([]);
+  const [playerId, setPlayerId] = useState("");
+  const [playerType, setPlayerType] = useState("");
+  const [formData, setFormData] = useState({
+    played_over: "",
+    today_give_wickets: "",
+    through_over: "",
+    today_taken_wickets: "",
+  });
+  const [isEditing, setIsEditing] = useState(false);
 
+  useEffect(() => {
+    fetchPlayerName();
+  }, [id]);
 
-function AddScore() {
-    const [loading, setLoading] = useState(true);
-    const [toggle,setToggle] = useState(true);
-    const {id} = useParams();
-    const { register, handleSubmit,reset, formState: { errors } } = useForm();
-    const [modalIsOpen, setIsOpen] = useState(false);
-    const [playerType, setPlayerType] = useState("bowler"); // Default selected is 'bowler'
-    const [player,setPlayer] = useState([]);
-    const handlePlayerTypeChange = (event) => {
-      setPlayerType(event.target.value);
-    };
-    
+  const coachID = id;
 
-    const fetchPlayerName = async () => {
-      try {
+  const fetchPlayerName = async () => {
+    try {
       const response = await axios.get(`/coachschedule/${id}`);
       if (response.data && Array.isArray(response.data.coach_record)) {
-        setPlayer(response.data.coach_record);
-          console.log("That is player");
-          console.log(response.data.coach_record);
-          // setPlayerid(response.data.CoachSchedule.player.id);
-          setLoading(false)
-      } else {
-          console.error("Unexpected API response format:", response.data);
+        setPlayers(response.data.coach_record);
+      } else if (response.data?.coach_record) {
+        setPlayers([response.data.coach_record]);
       }
-      } catch (error) {
+    } catch (error) {
       console.error("Error fetching data:", error);
-      }
+    }
   };
-
-
-    const MenageScore = async (formData) => {
-      
-  
-      try {
-          await axios.post('/playerscore', formData);
-          
-          Swal.fire({
-              title: "Success!",
-              text: "Record Saved Successfully.",
-              icon: "success",
-              confirmButtonText: "OK",
-          });
-      } catch (error) {
-          Swal.fire({
-              title: "Error!",
-              text: error.response?.data?.message || "Failed to save the record.",
-              icon: "error",
-              confirmButtonText: "OK",
-          });
-      }finally{
-        reset();
-      }
-  };
-  
-    
-  const [playerId, setPlayerId] = useState(""); 
-  const [editForm, setEditForm] = useState(null); 
-
-  const handlePlayerChange = (e) => {
-    setPlayerId(e.target.value); 
-  };
-
 
   const EditRecord = async () => {
     if (!playerId) {
-      alert("Please select a player before editing.");
+      Swal.fire("Warning!", "Please select a player before editing.", "warning");
       return;
     }
     try {
       const response = await axios.get(`/EditPlayerRecord/${playerId}`);
-      // alert(playerId);
-      if (response.data && Array.isArray(response.data.playerScore)) {
-        setEditForm(response.data.playerScore);
-      } else if (response.data && response.data.playerScore) {
-        setEditForm([response.data.playerScore]);
+      if (response.data?.playerScore) {
+        const record = response.data.playerScore;
+        setPlayerType(record.player_type);
+        setFormData({
+          played_over: record.played_over || "",
+          today_give_wickets: record.today_give_wickets || "",
+          through_over: record.through_over || "",
+          today_taken_wickets: record.today_taken_wickets || "",
+        });
+        setIsEditing(true);
       }
-      console.log("Edit Record");
-      console.log(response.data.playerScore);
     } catch (error) {
       console.error("Error fetching player data:", error);
     }
   };
 
-  const Updateform = async (data) => {
-    try {
-      await axios.post(`/UpdateScore/${playerId}`, data);
-      setLoading(true);
-      // Reset the form fields
-      // reset(); // Clears the form by resetting to default values
+  const handlePlayerChange = (e) => {
+    setPlayerId(e.target.value);
+  };
+
+  const handlePlayerTypeChange = (e) => {
+    setPlayerType(e.target.value);
+    setFormData({
+      played_over: "",
+      today_give_wickets: "",
+      through_over: "",
+      today_taken_wickets: "",
+    });
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Validation Logic
+  const validateForm = () => {
+    let maxWickets = formData.played_over * 6; // Max wickets = overs * 6 (max per over)
+    let maxRuns = formData.played_over === 1 ? 32 : formData.played_over * 36; // Dynamic max runs
   
-      Swal.fire({
-        title: "Success!",
-        text: "Record Updated Successfully.",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-    } catch (error) {
-      Swal.fire({
-        title: "Error!",
-        text: error.response?.data?.message || "Failed to save the record.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
-    } finally {
-      // Ensure the form is reset regardless of success or failure
-      reset({
-        player_id: "",
-        player_type: "",
-        played_over: "",
-        today_give_wickets: "",
-        through_over: "",
-        today_taken_wickets: "",
-      });
-      setLoading(false);
+    if (playerType === "bowler") {
+      if (parseInt(formData.today_taken_wickets) > maxWickets) {
+        Swal.fire("Warning!", `Wickets taken cannot be more than ${maxWickets} for ${formData.played_over} overs.`, "warning");
+        return false;
+      }
     }
+  
+    if (playerType === "batsman") {
+      if (parseInt(formData.today_give_wickets) > maxRuns) {
+        Swal.fire("Warning!", `Maximum runs cannot exceed ${maxRuns} for ${formData.played_over} overs.`, "warning");
+        return false;
+      }
+    }
+  
+    if (playerType === "allrounder") {
+      if (parseInt(formData.today_taken_wickets) > maxWickets) {
+        Swal.fire("Warning!", `Wickets taken cannot be more than ${maxWickets} for ${formData.played_over} overs.`, "warning");
+        return false;
+      }
+      if (parseInt(formData.today_give_wickets) > maxRuns) {
+        Swal.fire("Warning!", `Maximum runs cannot exceed ${maxRuns} for ${formData.played_over} overs.`, "warning");
+        return false;
+      }
+    }
+  
+    return true;
   };
   
   
 
-    useEffect(() => {
-        // EditRecord();
-        // setEditForm(fetchPlayerName || []);
-        fetchPlayerName();
-    }, [id]);
-    
-  
-  
+  const MenageScore = async () => {
+    if (!playerId || !playerType) {
+      Swal.fire("Warning!", "Please select a player and player type.", "warning");
+      return;
+    }
+    if (!validateForm()) return;
+
+    try {
+      await axios.post("/playerscore", {
+        player_id: playerId,
+        player_type: playerType,
+        coach_id: coachID,
+        ...formData,
+      });
+
+      Swal.fire("Success!", "Record Saved Successfully.", "success");
+      resetForm();
+    } catch (error) {
+      Swal.fire("Error!", "Failed to save the record.", "error");
+    }
+  };
+
+  const Updateform = async () => {
+    if (!playerId || !playerType) {
+      Swal.fire("Warning!", "Please select a player and player type.", "warning");
+      return;
+    }
+    if (!validateForm()) return;
+
+    try {
+      await axios.post(`/UpdateScore/${playerId}`, {
+        player_type: playerType,
+        ...formData,
+      });
+
+      Swal.fire("Success!", "Record Updated Successfully.", "success");
+      resetForm();
+    } catch (error) {
+      Swal.fire("Error!", "Failed to update the record.", "error");
+    }
+  };
+
+  const resetForm = () => {
+    setPlayerId("");
+    setPlayerType("");
+    setFormData({
+      played_over: "",
+      today_give_wickets: "",
+      through_over: "",
+      today_taken_wickets: "",
+    });
+    setIsEditing(false);
+  };
+
   return (
     <Dashboard>
-        <ToastContainer/>
-        {
-            loading ? (
-              <div className="flex flex-col items-center justify-center h-screen">
-            <RotatingLines 
-              visible={true}
-              height="96"
-              width="96"
-              color="grey"
-              strokeWidth="5"
-              animationDuration="0.75"
-              ariaLabel="rotating-lines-loading"
-            />
-          </div>
-            ) :
-            (
+      <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-semibold text-center mb-4">
+        {isEditing ? "Edit Player Score" : "Add Player Score"}
+      </h2>
 
-            <div>
-
-              {
-                editForm  ? (
-                  <>
-                  {/* <h1 className='text-black'>Edit This Form</h1> */}
-                  {
-                    editForm.map((data,key)=>(
-                      <form
-  className="bg-white p-6 shadow rounded-lg space-y-6"
-  onSubmit={handleSubmit(Updateform)}
->
-  <div className="flex items-center justify-between border-b pb-4">
-    <div className="text-gray-700">Player Name</div>
-    <div>
-      <select
-        {...register("player_id", { required: "The player type field is required." })}
-        defaultValue={data?.player_id || ""}
-        className="border rounded-lg p-2 w-64 focus:outline-none focus:ring focus:ring-blue-300"
-      >
-        <option value="">Select Player Name</option>
-        {player.map((item, key) => (
-          <option key={item.player?.id || key} value={item.player?.id}>
-            {item.player?.player_name}
+      <label className="block text-sm font-medium text-gray-700">Select Player</label>
+      <select value={playerId} onChange={handlePlayerChange} className="w-full p-2 mt-1 border rounded">
+        <option value="">Choose a Player</option>
+        {players.map((player) => (
+          <option key={player.id} value={player.id}>
+            {player.player?.player_name}
           </option>
         ))}
       </select>
+
+      <label className="block mt-4 text-sm font-medium text-gray-700">Player Type</label>
+      <select value={playerType} onChange={handlePlayerTypeChange} className="w-full p-2 mt-1 border rounded">
+        <option value="">Choose Type</option>
+        <option value="bowler">Bowler</option>
+        <option value="batsman">Batsman</option>
+        <option value="allrounder">All-Rounder</option>
+      </select>
+
+      {playerType === "bowler" && (
+        <>
+          <label className="block mt-4">Through Overs</label>
+          <input type="number" name="through_over" value={formData.through_over} onChange={handleChange} className="w-full p-2 border rounded"/>
+          <label className="block mt-4">Wickets Taken</label>
+          <input type="number" name="today_taken_wickets" value={formData.today_taken_wickets} onChange={handleChange} className="w-full p-2 border rounded"/>
+        </>
+      )}
+
+      {playerType === "batsman" && (
+        <>
+          <label className="block mt-4">Played Overs</label>
+          <input type="number" name="played_over" value={formData.played_over} onChange={handleChange} className="w-full p-2 border rounded"/>
+          <label className="block mt-4">Runs Scored</label>
+          <input type="number" name="today_give_wickets" value={formData.today_give_wickets} onChange={handleChange} className="w-full p-2 border rounded"/>
+        </>
+      )}
+
+{playerType === "allrounder" && (
+        <>
+          <label className="block mt-4">Played Overs</label>
+          <input type="number" name="played_over" value={formData.played_over} onChange={handleChange} className="w-full p-2 border rounded"/>
+          <label className="block mt-4">Runs Scored</label>
+          <input type="number" name="today_give_wickets" value={formData.today_give_wickets} onChange={handleChange} className="w-full p-2 border rounded"/>
+          <label className="block mt-4">Through Overs</label>
+          <input type="number" name="through_over" value={formData.through_over} onChange={handleChange} className="w-full p-2 border rounded"/>
+          <label className="block mt-4">Wickets Taken</label>
+          <input type="number" name="today_taken_wickets" value={formData.today_taken_wickets} onChange={handleChange} className="w-full p-2 border rounded"/>
+        </>
+      )}
+
+      <div className="mt-4 flex justify-between">
+        <button onClick={EditRecord} className="bg-yellow-500 text-white p-2 rounded">Edit</button>
+        {!isEditing ? (
+          <button onClick={MenageScore} className="bg-blue-500 text-white p-2 rounded">Add Score</button>
+        ) : (
+          <button onClick={Updateform} className="bg-green-500 text-white p-2 rounded">Update Score</button>
+        )}
+      </div>
     </div>
-  </div>
-
-  <input
-    type="hidden"
-    defaultValue={data?.coach_id || ""}
-    {...register("coach_id")}
-  />
-
-  <div className="flex items-center justify-between border-b pb-4">
-    <div className="text-gray-600">Player Type</div>
-    <div>
-    <select
-  {...register("player_type", { required: "The player type field is required." })}
-  defaultValue={data.player_type || ""}
-  className="border rounded-lg p-2 w-64 focus:outline-none focus:ring focus:ring-blue-300"
-  onChange={handlePlayerTypeChange}
->
-  <option value="">Select Player Type</option>
-  <option value="bowler" selected={data.player_type === 'bowler'}>Bowler</option>
-  <option value="batsman" selected={data.player_type === 'batsman'}>Batsman</option>
-</select>
-
-    </div>
-  </div>
-
-  {playerType === "batsman" && (
-    <>
-      <div className="flex items-center justify-between border-b pb-4">
-        <div className="text-gray-600">Batsman Over</div>
-        <div>
-          <input
-            type="number"
-            {...register("played_over", { required: "Played over is required." })}
-            defaultValue={data?.played_over || ""}
-            className="border rounded-lg p-2 w-64 focus:outline-none focus:ring focus:ring-blue-300"
-          />
-        </div>
-      </div>
-      <div className="flex items-center justify-between border-b pb-4">
-        <div className="text-gray-600">Batsman Out</div>
-        <div>
-          <input
-            type="number"
-            {...register("today_give_wickets", { required: "Today give wickets is required." })}
-            defaultValue={data?.today_give_wickets || ""}
-            className="border rounded-lg p-2 w-64 focus:outline-none focus:ring focus:ring-blue-300"
-          />
-        </div>
-      </div>
-    </>
-  )}
-
-  {playerType === "bowler" && (
-    <>
-      <div className="flex items-center justify-between border-b pb-4">
-        <div className="text-gray-600">Bowler Over</div>
-        <div>
-          <input
-            type="number"
-            {...register("through_over", { required: "Through over is required." })}
-            defaultValue={data?.through_over || ""}
-            className="border rounded-lg p-2 w-64 focus:outline-none focus:ring focus:ring-blue-300"
-          />
-        </div>
-      </div>
-      <div className="flex items-center justify-between border-b pb-4">
-        <div className="text-gray-600">Bowler Out</div>
-        <div>
-          <input
-            type="number"
-            {...register("today_taken_wickets", { required: "Today taken wickets is required." })}
-            defaultValue={data?.today_taken_wickets || ""}
-            className="border rounded-lg p-2 w-64 focus:outline-none focus:ring focus:ring-blue-300"
-          />
-        </div>
-      </div>
-    </>
-  )}
-
-  <div className="flex justify-end">
-    <button
-      type="button"
-      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer"
-      onClick={() => EditRecord(data)}
-    >
-      Edit
-    </button>
-    &nbsp;&nbsp;
-    <button
-      type="submit"
-      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer"
-    >
-      Update
-    </button>
-  </div>
-                      </form>
-                    ))
-                  }
-                  </>
-                ) : (
-                  <>
-                  
-                    <form
-      className="bg-white p-6 shadow rounded-lg space-y-6"
-      onSubmit={handleSubmit(MenageScore)}
-    >
-      <div className="flex items-center justify-between border-b pb-4">
-        <div className=" text-gray-700">Player Name</div>
-        <div>
-          
-        <select
-          {...register("player_id", {
-            required: "The player type field is required.",
-          })}
-          defaultValue=""
-          className="border rounded-lg p-2 w-64 focus:outline-none focus:ring focus:ring-blue-300"
-          onChange={handlePlayerChange}
-        >
-          <option value="">Select Player Name</option>
-          {player.map((item, key) => (
-            <option key={item.player?.id || key} value={item.player?.id}>
-              {item.player?.player_name}
-            </option>
-          ))}
-        </select>
-
-        </div>
-      </div>
-
-      
-
-      <div className="hidden items-center justify-between border-b pb-4 ">
-        <div className="text-gray-600">Coach ID</div>
-        <div>
-          <input
-            type="hidden"
-            defaultValue={id}
-            {...register(`coach_id`)}
-            className="border rounded-lg p-2 w-64 focus:outline-none focus:ring focus:ring-blue-300"
-          />
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between border-b pb-4">
-        <div className="text-gray-600">Player Type</div>
-        <div>
-          <select
-            {...register(`player_type`, {
-              required: "The player type field is required.",
-            })}
-            value={playerType}
-            className="border rounded-lg p-2 w-64 focus:outline-none focus:ring focus:ring-blue-300"
-            onChange={handlePlayerTypeChange}
-          >
-            <option value="">Select Player Type</option>
-            <option value="bowler">Bowler</option>
-            <option value="batsman">Batsman</option>
-          </select>
-        </div>
-      </div>
-
-      {
-        playerType === 'batsman' && (
-          <>
-            <div className="flex items-center justify-between border-b pb-4">
-            <div className="text-gray-600">Batsman Over</div>
-            <div>
-              <input
-                type="number"
-                {...register(`played_over`, {
-                  required: "Played over is required.",
-                })}
-                placeholder="Over Played"
-                className="border rounded-lg p-2 w-64 focus:outline-none focus:ring focus:ring-blue-300"
-              />
-            </div>
-          </div>
-          <div className="flex items-center justify-between border-b pb-4">
-            <div className="text-gray-600">Batsman Out</div>
-            <div>
-              <input
-                type="number"
-                {...register(`today_give_wickets`, {
-                  required: "Today give wickets is required.",
-                })}
-                placeholder="Today Give Wickets"
-                className="border rounded-lg p-2 w-64 focus:outline-none focus:ring focus:ring-blue-300"
-              />
-            </div>
-          </div>
-          </>
-        )
-      }
-
-      {/* Bowler */}
-
-      {
-        playerType === 'bowler' && (
-          <>
-            <div className="flex items-center justify-between border-b pb-4">
-              <div className="text-gray-600">Bowler Over</div>
-              <div>
-              <input
-                  type="number"
-                  {...register(`through_over`, {
-                    required: "Today give wickets is required.",
-                  })}
-                  placeholder="Today Bowler Wickets"
-                  className="border rounded-lg p-2 w-64 focus:outline-none focus:ring focus:ring-blue-300"
-                />
-              </div>
-            </div>
-            <div className="flex items-center justify-between border-b pb-4">
-              <div className="text-gray-600">Bowler Out</div>
-              <div>
-              <input
-                  type="number"
-                  {...register(`today_taken_wickets`, {
-                    required: "Today give wickets is required.",
-                  })}
-                  placeholder="Today Give Wickets"
-                  className="border rounded-lg p-2 w-64 focus:outline-none focus:ring focus:ring-blue-300"
-                />
-              </div>
-            </div>
-          </>
-        )
-      }
-
-      
-
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer"
-        >ADD</button>&nbsp;&nbsp;
-         <button
-        type="button"
-        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer"
-        onClick={EditRecord} // Call EditRecord on click
-      >
-        Edit
-      </button>&nbsp;&nbsp;
-      {/* <button
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer"
-        // Call EditRecord on click
-      >
-        Update
-      </button> */}
-      </div>
-                  </form>
-                  </>
-                )
-              }
-
-            </div>
-    
-                      
-
-            )
-                      }
-                      
     </Dashboard>
-  )
-}
+  );
+};
 
-export default AddScore
+export default AddScore;
