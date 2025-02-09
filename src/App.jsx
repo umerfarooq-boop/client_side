@@ -60,6 +60,7 @@ import AddScore from './sidebar/ScoreBoard/AddScore';
 import ShowScore from './sidebar/ScoreBoard/ShowScore';
 import ViewScore from './sidebar/ScoreBoard/ViewScore';
 import StudentAttendance from './sidebar/Attendance/StudentAttendance';
+import Show_EditAppointment from './sidebar/EditAppointment/Show_EditAppointment';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
@@ -106,6 +107,20 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+         {/* Show Edit Appointment To Coach */}
+
+         <Route
+          path='/show_edit_appointment/:id'
+          element={
+            <ProtectedRoute>
+              <Show_EditAppointment />
+            </ProtectedRoute>
+          }
+        />  
+          
+         {/* Show Edit Appointment To Coach */}
+
         /**
         * ! Edit Player Appointment
         */

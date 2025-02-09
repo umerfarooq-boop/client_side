@@ -259,6 +259,16 @@ function Dashboard({children}) {
               ScoreBoard
             </Link>
           </Typography>
+          <Typography
+            as="li"
+            variant="small"
+            color="blue-gray"
+            className="flex items-center gap-x-2 p-1 font-medium"
+          >
+            <Link to={`/show_edit_appointment/${coach_id}`} className="flex items-center text-black">
+              Edit Appointments
+            </Link>
+          </Typography>
         </div>
       )  : role === 'player' ? (
         <div className="flex gap-3">
