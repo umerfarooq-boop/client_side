@@ -15,6 +15,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Fade from '@mui/material/Fade';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import SportsCricketIcon from '@mui/icons-material/SportsCricket';
 
 function Nav() {
     const [openNav, setOpenNav] = React.useState(false);
@@ -496,6 +497,7 @@ function Nav() {
                 role === 'player' ? (
                   <div>
                     <MenuItem><Link to={`/PlayerRequest/${player_id}/${role}`} onClick={handleClose}><BookmarkAddedIcon />Booking Request</Link></MenuItem>
+                    <MenuItem><Link to={'/equipment_request/'} onClick={handleClose}><SportsCricketIcon />Equipment Request</Link></MenuItem>
                   </div>
                 ) : null
               }

@@ -61,6 +61,9 @@ import ShowScore from './sidebar/ScoreBoard/ShowScore';
 import ViewScore from './sidebar/ScoreBoard/ViewScore';
 import StudentAttendance from './sidebar/Attendance/StudentAttendance';
 import Show_EditAppointment from './sidebar/EditAppointment/Show_EditAppointment';
+import AddEquipment from './sidebar/AssignEquipment/AddEquipment';
+import Equipment_Request from './website/Equipment_Request';
+import AllEquipmentRequest from './sidebar/AssignEquipment/AllEquipmentRequest';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
@@ -531,6 +534,45 @@ function App() {
 
         /**
         * ? Menage Score Board
+        */
+
+
+        /**
+        * ! Appointment
+        */
+
+        <Route
+          path='/AddEquipment'
+          element={
+            <ProtectedRoute>
+              <AddEquipment />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Player Request for Equipment */}
+        <Route
+          path='/equipment_request'
+          element={
+            <ProtectedRoute>
+              <Equipment_Request />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* All Equipment Request By Player */}
+
+        <Route
+          path='/all_equipment_request/:id'
+          element={
+            <ProtectedRoute>
+              <AllEquipmentRequest />
+            </ProtectedRoute>
+          }
+        />
+
+        /**
+        * ! Appointment
         */
         
 

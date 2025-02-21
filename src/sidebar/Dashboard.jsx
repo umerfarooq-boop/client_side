@@ -269,6 +269,26 @@ function Dashboard({children}) {
               Edit Appointments
             </Link>
           </Typography>
+          <Typography
+            as="li"
+            variant="small"
+            color="blue-gray"
+            className="flex items-center gap-x-2 p-1 font-medium"
+          >
+            <Link to={`/AddEquipment`} className="flex items-center text-black">
+             AddEquipment
+            </Link>
+          </Typography>
+          <Typography
+            as="li"
+            variant="small"
+            color="blue-gray"
+            className="flex items-center gap-x-2 p-1 font-medium"
+          >
+            <Link to={`/all_equipment_request/${coach_id}`} className="flex items-center text-black">
+             All Equipment Request
+            </Link>
+          </Typography>
         </div>
       )  : role === 'player' ? (
         <div className="flex gap-3">

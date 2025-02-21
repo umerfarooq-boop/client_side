@@ -52,6 +52,7 @@ const AddScore = () => {
           today_taken_wickets: record.today_taken_wickets || "",
         });
         setIsEditing(true);
+
       }
     } catch (error) {
       console.error("Error fetching player data:", error);
@@ -59,6 +60,7 @@ const AddScore = () => {
   };
 
   const handlePlayerChange = (e) => {
+    // alert(e.target.value)
     setPlayerId(e.target.value);
   };
 
@@ -76,14 +78,14 @@ const AddScore = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Validation Logic
+
   const validateForm = () => {
-    let maxWickets = formData.played_over * 6; // Max wickets = overs * 6 (max per over)
     let maxRuns = formData.played_over === 1 ? 32 : formData.played_over * 36; // Dynamic max runs
-  
+    let maxWickets = formData.through_over * 6; // Max wickets = overs * 6
+
     if (playerType === "bowler") {
       if (parseInt(formData.today_taken_wickets) > maxWickets) {
-        Swal.fire("Warning!", `Wickets taken cannot be more than ${maxWickets} for ${formData.played_over} overs.`, "warning");
+        Swal.fire("Warning!", `Wickets taken cannot be more than ${maxWickets} for ${formData.through_over} overs.`, "warning");
         return false;
       }
     }
@@ -108,30 +110,39 @@ const AddScore = () => {
   
     return true;
   };
+
+  
   
   
 
   const MenageScore = async () => {
+    // alert(playerId)
     if (!playerId || !playerType) {
       Swal.fire("Warning!", "Please select a player and player type.", "warning");
       return;
     }
     if (!validateForm()) return;
-
+  
     try {
-      await axios.post("/playerscore", {
+      const response = await axios.post("/playerscore", {
         player_id: playerId,
         player_type: playerType,
         coach_id: coachID,
         ...formData,
       });
-
+  
       Swal.fire("Success!", "Record Saved Successfully.", "success");
       resetForm();
     } catch (error) {
-      Swal.fire("Error!", "Failed to save the record.", "error");
+      if (error.response?.status === 402) {
+        Swal.fire("Warning!", error.response.data.message || "Please Mark Attendance First", "warning");
+      } else {
+        Swal.fire("Error!", error.response?.data?.message || "Failed to save the record.", "error");
+      }
     }
   };
+  
+  
 
   const Updateform = async () => {
     if (!playerId || !playerType) {
@@ -176,7 +187,7 @@ const AddScore = () => {
       <select value={playerId} onChange={handlePlayerChange} className="w-full p-2 mt-1 border rounded">
         <option value="">Choose a Player</option>
         {players.map((player) => (
-          <option key={player.id} value={player.id}>
+          <option key={player.player_id} value={player.player_id}>
             {player.player?.player_name}
           </option>
         ))}

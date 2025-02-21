@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { Link, useParams } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
 import Dashboard from "../Dashboard";
+import { ToastContainer, toast } from "react-toastify";
 
 function Show_EditAppointment() {
   const { id } = useParams();
@@ -15,7 +16,7 @@ function Show_EditAppointment() {
   const [page, setPage] = useState(0);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const player_id = localStorage.getItem("player_id");
+  const [player_id,setPlayerid] = useState("");
   let role = localStorage.getItem("role");
   role = "player";
   const handleSort = (field) => {
@@ -58,7 +59,9 @@ function Show_EditAppointment() {
             ? response.data.showAppointment
             : [response.data.showAppointment];
           setData(scheduleData);
-          //   setPagination(response.data.CoachSchedule);
+          //   setPagination(response.data.CoachSchedule);]
+          console.log("That is Schedule Data of PLAYER ID")
+          console.log(scheduleData.player_id)
           console.log(scheduleData);
           setLoading(false);
         }
@@ -68,6 +71,19 @@ function Show_EditAppointment() {
     };
     getData();
   }, [page, id, role]);
+
+  const AcceptPlayerRequest = async (playerid) => {
+    try {
+        const response = await axios.get(`/AcceptEditAppointment/${playerid}`);
+    if(response){
+        toast.success("Appointment Update Successfully");
+    }else{
+        toast.error("Something Went Wrong");
+    }
+    } catch (error) {
+        console.log(error)
+    }
+  }
 
   const columns = useMemo(
     () => [
@@ -158,31 +174,26 @@ function Show_EditAppointment() {
         size: 5,
         Cell: ({ row }) => {
           const status = row.original.status; // Extracting status from row data
-
+          const playerId = row.original.player_id || row.original.coach_schedule?.player_id; // Check both sources
           return (
-            <div style={{ display: "flex", gap: "7px" }}>
-              {status === "processing" ? (
-                <button className="bg-yellow-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">
-                  Processing
-                </button>
-              ) : status === "booked" ? (
-                <div>
-                  <button className="bg-green-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-red-500 transition duration-300">
-                    Booked
+            <div style={{ display: "flex", gap: "20px" }}>
+              
+                <div className="">
+                  
+                  <button
+                    className="bg-green-600 text-black font-semibold py-1.5 px-3 rounded shadow hover:bg-orange-500 transition duration-300"
+                    onClick={() => AcceptPlayerRequest(playerId)}
+                  >
+                    Accept
                   </button>
                   &nbsp;
                   <Link
-                    className="bg-yellow-600 text-black font-semibold py-1.5 px-4 rounded shadow hover:bg-orange-500 transition duration-300"
+                    className="bg-red-600 text-black font-semibold py-1.5 px-3 rounded shadow hover:bg-orange-500 transition duration-300"
                     to={`/editplayer_appointment/${row.original.id}`}
                   >
-                    Edit
+                    Reject
                   </Link>
                 </div>
-              ) : status === "reject" ? (
-                <button className="bg-red-600 text-black font-semibold py-1 px-5 rounded shadow hover:bg-red-500 transition duration-300">
-                  Rejected
-                </button>
-              ) : null}
             </div>
           );
         },
@@ -194,6 +205,7 @@ function Show_EditAppointment() {
   return (
     <>
         <Dashboard>
+            <ToastContainer />
             <div>
                 <div className="p-6 rounded-md shadow-lg bg-white text-black">
                 <div className="text-center">
