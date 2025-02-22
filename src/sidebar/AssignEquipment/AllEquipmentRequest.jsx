@@ -40,23 +40,39 @@ function AllEquipmentRequest() {
   // Handle status change
   const handleStatusChange = async (id) => {
     try {
-      const response = await axios.get(`/changePostStatus/${id}`);
+      const response = await axios.get(`/AcceptEquipmentRequest/${id}`);
       console.log(response);
-      if (response.status === 201 && response.data.status) {
+  
+      if (response.status === 200 && response.data.success) {
         setData((prevData) =>
-        prevData.map((item) =>
-          item.id === id ? { ...item, post_status: response.data.post.post_status } : item
-        )
+          prevData.map((item) =>
+            item.id === id ? { ...item, equipment_status: response.data.acceptRequest.equipment_status } : item
+          )
         );
-        console.log("Status updated successfully!");
-        toast.success("Status Updated Successfully");
+        toast.success(response.data.message || "Status Updated Successfully");
       } else {
+        toast.error(response.data.message || "Failed to update status.");
         console.error("Failed to update status:", response.data);
       }
     } catch (error) {
       console.error("Error updating status:", error);
+      
+      // Handle error responses with meaningful messages
+      if (error.response) {
+        toast.error(error.response.data.message || "An error occurred while updating status.");
+      } else {
+        toast.error("Network error, please try again.");
+      }
     }
   };
+
+  // const handleDeleteChange = async (id) => {
+  //   const response = await axios.get(`/DeleteEquipmentRequest/${id}`);
+  //   if(response.data && response.data.message ===  201){
+  //     toast.success(response.data.message);
+  //   }
+  // }
+  
 
 
 
@@ -116,34 +132,53 @@ function AllEquipmentRequest() {
         size: 250,
         Cell: ({ row }) => (
           <div style={{ display: 'flex', gap: '10px' }}>
-            {/* <Link to={`/add/${row.original.id}`} className="action-button add">
-              Add
-            </Link> */}
-            <Link to={`/updatepost/${row.original.id}`} className="relative z-50 block rounded-lg border border-yellow-900 bg-yellow-900 px-3 py-1 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-yellow-800">
-            <EditNoteIcon className='m-1' />
-            </Link>
-            <Link to={`/singlepost/${row.original.id}`} className="relative z-50 block rounded-lg border border-slate-800 bg-slate-900 px-3 py-1 text-center text-sm text-white shadow-2xl transition duration-200 hover:bg-slate-800">
-            <VisibilityOffOutlinedIcon className='m-1'/>
-            </Link>
-            <button
-            className="action-button status"
-            style={{
-              backgroundColor: row.original.post_status === "active" ? "green" : "red",
-              color: "white", // Ensure text is visible
-              border: "none", // Optional for a clean look
-              padding: "1px 16px", // Adjust padding as needed
-                  borderRadius: "5px", // Optional for rounded corners
+            {/* Accept Button (Hidden if already accepted) */}
+            {row.original.equipment_status !== "active" && (
+              <button
+                className="action-button accept"
+                style={{
+                  backgroundColor: "green",
+                  color: "white",
+                  border: "none",
+                  padding: "5px 16px",
+                  borderRadius: "5px",
                   cursor: "pointer",
-                  margin:"1px" // Pointer cursor for better UX
-            }}
-              onClick={() => handleStatusChange(row.original.id)}
-            >
-              {row.original.post_status === "active" ? <CheckCircleSharpIcon/> : <CancelSharpIcon/>}
-            </button>
-
+                }}
+                onClick={() => handleStatusChange(row.original.id, "accept")}
+              >
+                Accept
+              </button>
+            )}
+      
+            {/* Reject Button (Hidden if already accepted) */}
+            {row.original.equipment_status !== "active" && (
+              <button
+                className="action-button reject"
+                style={{
+                  backgroundColor: "red",
+                  color: "white",
+                  border: "none",
+                  padding: "5px 16px",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                }}
+                onClick={() => handleDeleteChange(row.original.id, "reject")}
+              >
+                Reject
+              </button>
+            )}
+      
+            {/* Status Display */}
+            {row.original.equipment_status === "active" && (
+              <span style={{ color: "green", fontWeight: "bold" }}>Accepted</span>
+            )}
+            {row.original.equipment_status === "rejected" && (
+              <span style={{ color: "red", fontWeight: "bold" }}>Rejected</span>
+            )}
           </div>
         ),
       },
+      
       
     
     ],
