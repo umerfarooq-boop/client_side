@@ -64,6 +64,7 @@ import Show_EditAppointment from './sidebar/EditAppointment/Show_EditAppointment
 import AddEquipment from './sidebar/AssignEquipment/AddEquipment';
 import Equipment_Request from './website/Equipment_Request';
 import AllEquipmentRequest from './sidebar/AssignEquipment/AllEquipmentRequest';
+import PlayerBookedEquipment from './website/PlayerBookedEquipment';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
@@ -570,6 +571,18 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Booked Student Equipment */}
+
+        <Route
+          path='/player_booked_equipment/:id'
+          element={
+            <ProtectedRoute>
+              <PlayerBookedEquipment />
+            </ProtectedRoute>
+          }
+        />
+
 
         /**
         * ! Appointment

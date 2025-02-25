@@ -311,7 +311,7 @@ function Dashboard({children}) {
             <Link to={`/studentattendance/${player_id}`} className="flex items-center text-black">
               Attendance
             </Link>
-          </Typography>
+          </Typography> 
         </div>
       ): null}
     </ul>
@@ -563,6 +563,7 @@ function Dashboard({children}) {
                 role === 'player' ? (
                   <div>
                     <MenuItem><Link to={`/PlayerRequest/${player_id}/${role}`} onClick={handleClose}><BookmarkAddedIcon />Booking Request</Link></MenuItem>
+                    <MenuItem><Link to={'/equipment_request'} onClick={handleClose}><BookmarkAddedIcon />Equipment Request</Link></MenuItem>
                   </div>
                 ) : null
               }

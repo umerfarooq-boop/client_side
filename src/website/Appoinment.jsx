@@ -234,15 +234,15 @@ function Appoinment() {
                       >
                         Start Time
                       </label>
-                      <input
+                      {/* <input
                         type="time"
                         id="start_time"
                         {...register("start_time", { required: "Start Time is required" })}
                         className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         disabled={!from_date}
                         list="start-time-options"
-                      />
-                      {/* {playwith === "individual" ? (
+                      /> */}
+                      {playwith === "individual" ? (
                         <div>
                           <Controller
                             name="start_time"
@@ -364,7 +364,7 @@ function Appoinment() {
                             )}
                           />
                         </div>
-                      ) : null} */}
+                      ) : null}
                     </div>
                   </div>
                 </div>
@@ -395,14 +395,14 @@ function Appoinment() {
                       >
                         End Time
                       </label>
-                      <input 
+                      {/* <input 
                         type="time" 
                         id="end_time" 
                         {...register('end_time', { required: 'End Time is required' })} 
                         className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" 
-                      />
+                      /> */}
 
-                      {/* {playwith === "individual" ? (
+                      {playwith === "individual" ? (
                         <div>
                           <Controller
                             name="end_time"
@@ -524,7 +524,7 @@ function Appoinment() {
                             )}
                           />
                         </div>
-                      ) : null} */}
+                      ) : null}
                     </div>
                   </div>
                 </div>
