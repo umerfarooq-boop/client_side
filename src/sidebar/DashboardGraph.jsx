@@ -39,6 +39,8 @@ import { ToastContainer, toast } from "react-toastify";
 import ChangeRequest from "./ChangeRequest";
 import { AppointmentProvider } from "../context/AppointmentContext";
 
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 function DashboardGraph() {
   const [activeTab, setActiveTab] = useState("profile");
 
@@ -171,6 +173,66 @@ function DashboardGraph() {
     },
   };
 
+  const [chartData, setChartData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // const apiUrl = 'YOUR_API_URL_HERE'; // Replace with your actual API URL
+      const coachId = 2; // Replace with the coach ID you want to fetch
+
+      try {
+        const response = await axios.get(`/showCoachBookings/${coachId}`);
+        const data = response.data;
+
+        if (data.success) {
+          const bookings = data.coach;
+
+          // Process data for Chart.js
+          const labels = bookings.map(booking => booking.from_date + ' ' + booking.start_time);
+          const startTimes = bookings.map(booking => parseTime(booking.start_time));
+          const endTimes = bookings.map(booking => parseTime(booking.end_time));
+          const playerNames = bookings.map(booking => booking.player.player_name);
+
+          setChartData({
+            labels,
+            datasets: [
+              {
+                label: 'Start Time',
+                data: startTimes,
+                backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2,
+                borderRadius: 10,
+                barPercentage: 0.6,
+              },
+              {
+                label: 'End Time',
+                data: endTimes,
+                backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                borderRadius: 10,
+                barPercentage: 0.6,
+              },
+            ],
+          });
+        } else {
+          console.error('Failed to fetch data:', data.message);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Helper function to convert time (HH:mm:ss) to decimal hours
+  const parseTime = (timeString) => {
+    const [hours, minutes, seconds] = timeString.split(':').map(Number);
+    return hours + minutes / 60 + seconds / 3600;
+  };
+
   const { id } = useParams();
   const [data, setData] = useState([]);
   // const [pagination, setPagination] = useState({});
@@ -279,17 +341,12 @@ function DashboardGraph() {
   return (
     <>
       <div className="container mx-auto p-4"></div>
-        <ToastContainer />
+        {/* <ToastContainer /> */}
 
       <div class="container mx-auto p-4 w-[100%]">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1">
           <div className=" rounded-md shadow-lg bg-white text-black">
-            <div className="p-4 text-center mt-1 mb-1">
-              <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
-                Player 
-                <span className="text-indigo-600">&nbsp;Requests</span>
-              </h3>
-            </div>
+  
             <div className="overflow-x-auto">
               {role === "coach" ? (
                 <div>
@@ -514,27 +571,78 @@ function DashboardGraph() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1">
-  <div className="w-full">
-    {
-      role === 'coach' ? (
-        <div className="w-auto lg:h-[140vh] xl:h-screen md:h-[140vh] shadow shadow-indigo-300">
-          <AppointmentProvider id={id}>
-          <ChangeRequest id={id} />
-          <MyCalendar id={id}/>
-          </AppointmentProvider>
-          {/* <br /><br /> */}
-        </div>
-      ) : null
-    }
+      <div className="grid grid-cols-1 gap-4">
+  {/* Calendar (80%) */}
+  <div>
+    {role === "coach" ? (
+      <div className="w-full h-screen shadow shadow-indigo-300">
+        <AppointmentProvider id={id}>
+          <MyCalendar id={id} />
+        </AppointmentProvider>
+      </div>
+    ) : null}
   </div>
-  <br /><br />
+
+
+    {/* Add graph component here */}
+  </div>
+<br /><br /><br />
+
+  <div style={{ height: '200px', width: '100%' }}>
+  <h2 style={{ fontSize: '16px', marginBottom: '10px' }}>Time Graph</h2>
+  {chartData ? (
+    <Bar
+      data={chartData}
+      options={{
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (tooltipItem) {
+                return `${tooltipItem.dataset.label}: ${tooltipItem.raw} hrs`;
+              },
+            },
+          },
+          legend: {
+            display: false, // Hide legend for simplicity
+          },
+        },
+        scales: {
+          x: {
+            title: {
+              display: false, // Hide x-axis title for compact view
+            },
+            ticks: {
+              display: false, // Hide labels for cleaner look
+            },
+          },
+          y: {
+            title: {
+              display: false, // Hide y-axis title for compact view
+            },
+            min: 0,
+            max: 24,
+            ticks: {
+              stepSize: 6,
+            },
+          },
+        },
+        barThickness: 10, // Reduce bar size
+      }}
+    />
+  ) : (
+    <p>Loading chart...</p>
+  )}
 </div>
+
+
 
 <br />
 <br />
 <br />
 <br />
+
 
       {/* <Notifications coachId={id} /> */}
                 

@@ -62,9 +62,12 @@ import ViewScore from './sidebar/ScoreBoard/ViewScore';
 import StudentAttendance from './sidebar/Attendance/StudentAttendance';
 import Show_EditAppointment from './sidebar/EditAppointment/Show_EditAppointment';
 import AddEquipment from './sidebar/AssignEquipment/AddEquipment';
-import Equipment_Request from './website/Equipment_Request';
-import AllEquipmentRequest from './sidebar/AssignEquipment/AllEquipmentRequest';
+import Equipment_Request from './website/Equipment_Request'; 
 import PlayerBookedEquipment from './website/PlayerBookedEquipment';
+import AllAppointment from './sidebar/EditAppointment/AllAppointment';
+import NewEquipmentRequest from './sidebar/AssignEquipment/NewEquipmentRequest';
+import EquipmentStock from './sidebar/AssignEquipment/EquipmentStock';
+import AllEquipments from './sidebar/AssignEquipment/AllEquipments';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
@@ -115,10 +118,20 @@ function App() {
          {/* Show Edit Appointment To Coach */}
 
          <Route
-          path='/show_edit_appointment/:id'
+          path='/show_edit_appointment'
           element={
             <ProtectedRoute>
               <Show_EditAppointment />
+            </ProtectedRoute>
+          }
+        />
+
+          {/* All Player Appointment of Player Shown To Coach  */}
+         <Route
+          path='/all_appointment/:id'
+          element={
+            <ProtectedRoute>
+              <AllAppointment />
             </ProtectedRoute>
           }
         />  
@@ -564,15 +577,37 @@ function App() {
         {/* All Equipment Request By Player */}
 
         <Route
-          path='/all_equipment_request/:id'
+          path='/new_equipment_request/:id'
           element={
             <ProtectedRoute>
-              <AllEquipmentRequest />
+              <NewEquipmentRequest />
             </ProtectedRoute>
           }
         />
 
         {/* Booked Student Equipment */}
+
+        {/* Equipment Stock */}
+        <Route
+          path='/equipment_stock/:id'
+          element={
+            <ProtectedRoute>
+              <EquipmentStock />
+            </ProtectedRoute>
+          }
+        />
+        {/* Equipment Stock */}
+
+        {/* All Equipments */}
+        <Route
+          path='/all_equipment/:id'
+          element={
+            <ProtectedRoute>
+              <AllEquipments />
+            </ProtectedRoute>
+          }
+        />
+        {/* All Equipments */}
 
         <Route
           path='/player_booked_equipment/:id'

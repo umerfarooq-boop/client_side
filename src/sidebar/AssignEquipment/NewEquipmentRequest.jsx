@@ -10,7 +10,7 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 import CheckCircleSharpIcon from '@mui/icons-material/CheckCircleSharp';
 import CancelSharpIcon from '@mui/icons-material/CancelSharp';
 
-function AllEquipmentRequest() {
+function NewEquipmentRequest() {
     const [data, setData] = useState([]); 
     const [loading, setLoading] = useState(true);
     const [toggle,setToggle] = useState(true);
@@ -65,6 +65,11 @@ function AllEquipmentRequest() {
       }
     }
   };
+
+  const ReturnEquipment = async (id) => {
+    const response = await axios.get(`/ReturnEquipment/${id}`)
+    toast.success('Equipment Return Successfully');
+  }
 
   // const handleDeleteChange = async (id) => {
   //   const response = await axios.get(`/DeleteEquipmentRequest/${id}`);
@@ -162,7 +167,7 @@ function AllEquipmentRequest() {
                   borderRadius: "5px",
                   cursor: "pointer",
                 }}
-                onClick={() => handleDeleteChange(row.original.id, "reject")}
+                // onClick={() => handleDeleteChange(row.original.id, "reject")}
               >
                 Reject
               </button>
@@ -170,8 +175,12 @@ function AllEquipmentRequest() {
       
             {/* Status Display */}
             {row.original.equipment_status === "active" && (
-              <span style={{ color: "green", fontWeight: "bold" }}>Accepted</span>
-            )}
+  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+    <span style={{ color: "green", fontWeight: "bold" }}>Accepted</span>
+    <button onClick={() => ReturnEquipment(row.original.id)}>Return</button>
+  </div>
+)}
+
             {row.original.equipment_status === "rejected" && (
               <span style={{ color: "red", fontWeight: "bold" }}>Rejected</span>
             )}
@@ -185,8 +194,8 @@ function AllEquipmentRequest() {
     []
   );
   return (
-    <Dashboard>
-        <ToastContainer/>
+    <div>
+                {/* <ToastContainer/> */}
         {
             loading ? (
               <div className="flex flex-col items-center justify-center h-screen">
@@ -202,7 +211,12 @@ function AllEquipmentRequest() {
           </div>
             ) :
             (
-            <MaterialReactTable
+              
+            <div>
+              <h1 className="text-2xl font-bold text-blue-900 text-center">
+              New Equipment Request
+            </h1>
+              <MaterialReactTable
                 columns={columns}
                 data={data}
                 muiTableBodyCellProps={{
@@ -215,10 +229,11 @@ function AllEquipmentRequest() {
                   <Link to={'/AddEquipment'} className='focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 italic'>Add Equipment</Link>
               )}
             />
+            </div>
             )
           }
-    </Dashboard>
+    </div>
   )
 }
 
-export default AllEquipmentRequest
+export default NewEquipmentRequest

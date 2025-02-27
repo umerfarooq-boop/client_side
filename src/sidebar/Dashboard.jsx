@@ -265,11 +265,11 @@ function Dashboard({children}) {
             color="blue-gray"
             className="flex items-center gap-x-2 p-1 font-medium"
           >
-            <Link to={`/show_edit_appointment/${coach_id}`} className="flex items-center text-black">
-              Edit Appointments
+            <Link to={`/all_appointment/${coach_id}`} className="flex items-center text-black">
+              Appointments
             </Link>
           </Typography>
-          <Typography
+          {/* <Typography
             as="li"
             variant="small"
             color="blue-gray"
@@ -278,15 +278,15 @@ function Dashboard({children}) {
             <Link to={`/AddEquipment`} className="flex items-center text-black">
              AddEquipment
             </Link>
-          </Typography>
+          </Typography> */}
           <Typography
             as="li"
             variant="small"
             color="blue-gray"
             className="flex items-center gap-x-2 p-1 font-medium"
           >
-            <Link to={`/all_equipment_request/${coach_id}`} className="flex items-center text-black">
-             All Equipment Request
+            <Link to={`/all_equipment/${coach_id}`} className="flex items-center text-black">
+             Equipment
             </Link>
           </Typography>
         </div>
@@ -593,7 +593,7 @@ function Dashboard({children}) {
       </MobileNav>
     </Navbar>
 	
-	<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }} className="m-5 ">
+	{/* <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }} className="m-5 ">
           <button
             onClick={() => navigate(-1)}
             className="bg-indigo-700 font-medium italic"
@@ -646,7 +646,7 @@ function Dashboard({children}) {
             Website <WebIcon style={{ marginLeft: '5px' }} />
           </button>
           </Link>
-        </div>
+        </div> */}
         <div className="p-10">
         {location.pathname === `/dashboard/${login_id}` && <DashboardGraph />}
         {children}

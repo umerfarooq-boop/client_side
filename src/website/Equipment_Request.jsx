@@ -3,12 +3,16 @@ import Nav from "./Nav";
 import { ToastContainer,toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import axios from '../axios'
-
+import Select from "react-select";
 function Equipment_Request() {
-    const {handleSubmit,register,reset} = useForm();
     const [equipment,setEquipment] = useState([]);
     const player_id = localStorage.getItem('player_id');
     const coach_record = localStorage.getItem('coach_record');
+    const { register, handleSubmit, reset, setValue } = useForm();
+    const [equipmentOptions, setEquipmentOptions] = useState([]);
+    const [selectedEquipment, setSelectedEquipment] = useState([]);
+    const [quantities, setQuantities] = useState({});
+  
     useEffect(()=>{
         const getEquipment = async () => {
             const response = await axios.get(`/assign_equipment/${coach_record}`);
@@ -20,39 +24,73 @@ function Equipment_Request() {
     },[player_id])
 
     
-    const ReqEquip = async (data) => {
-        try {
-            // Format the return_date_time to match the backend's expected format
-            if (data.return_date_time) {
-                data.return_date_time = data.return_date_time.replace("T", " ") + ":00";
-            }
-    
-            const response = await axios.post('/request_equipment', data);
-            reset()
-            // Show success message if the request is successful
-            if (response.data && response.data.message) {
-                toast.success(response.data.message);
-            } else {
-                toast.error("Unexpected response format");
-            }
-        } catch (error) {
-            // Display backend validation errors or generic errors
-            if (error.response && error.response.data) {
-                if (error.response.data.errors) {
-                    const validationMessages = Object.values(error.response.data.errors)
-                        .flat()
-                        .join(", ");
-                    toast.error(validationMessages);
-                } else if (error.response.data.message) {
-                    toast.error(error.response.data.message);
-                } else {
-                    toast.error("An error occurred. Please try again.");
-                }
-            } else {
-                toast.error("An error occurred. Please check your network connection.");
-            }
+    useEffect(() => {
+      const getEquipment = async () => {
+        const response = await axios.get(`/assign_equipment/${coach_record}`);
+        const options = response.data.equipment.map((item) => ({
+          value: item.id,
+          label: item.equipment_name,
+          maxQuantity: item.equipment_quantity,
+        }));
+        setEquipmentOptions(options);
+      };
+      getEquipment();
+    }, [coach_record]);
+  
+    // Handle equipment selection
+    const handleSelectChange = (selected) => {
+      setSelectedEquipment(selected || []);
+      const updatedQuantities = {};
+      (selected || []).forEach((item) => {
+        if (!quantities[item.value]) {
+          updatedQuantities[item.value] = 0; // Default quantity
+        } else {
+          updatedQuantities[item.value] = quantities[item.value]; // Preserve existing values
         }
-    }
+      });
+      setQuantities(updatedQuantities);
+    };
+  
+    // Handle quantity change
+    const handleQuantityChange = (id, value) => {
+      setQuantities({
+        ...quantities,
+        [id]: value,
+      });
+    };
+  
+    // Submit the request
+    const ReqEquip = async (data) => {
+      try {
+        const payload = {
+          player_id,
+          coach_id: coach_record,
+          equipment: selectedEquipment.map((item) => ({
+            equipment_name_id: item.value,
+            equipment_quantity: quantities[item.value],
+          })),
+          return_date_time: data.return_date_time.replace("T", " ") + ":00",
+        };
+  
+        const response = await axios.post("/request_equipment", payload);
+        reset();
+        setSelectedEquipment([]);
+        setQuantities({});
+        if (response.data && response.data.message) {
+          toast.success(response.data.message);
+        }
+      } catch (error) {
+        if (error.response && error.response.data.errors) {
+          const validationMessages = Object.values(error.response.data.errors)
+            .flat()
+            .join(", ");
+          toast.error(validationMessages);
+        } else {
+          toast.error("An error occurred. Please try again.");
+        }
+      }
+    };
+  
     
     return (
     <>
@@ -84,23 +122,33 @@ function Equipment_Request() {
 
           {/* Equipment Name */}
 
-          <select {...register('equipment_name_id')} id="">
-            {
-                equipment.map((item,index)=>(
-                    <option key={index} value={item.id}>{item.equipment_name}</option>
-                ))
-            }
-          </select>
+          <div className="mb-4">
+        <label className="block font-medium">Select Equipment</label>
+        <Select
+          options={equipmentOptions}
+          isMulti
+          onChange={handleSelectChange}
+        />
+      </div>
 
-          {/* Equipment Name */}
-
+      {/* Quantity Inputs */}
+      {selectedEquipment.map((item) => (
+        <div key={item.value} className="mb-2">
+          <label className="block font-medium">
+            {item.label} (Max: {item.maxQuantity})
+          </label>
           <input
             type="number"
-            {...register("equipment_quantity")}
-            min={0}
+            min="1"
+            max={item.maxQuantity}
+            value={quantities[item.value] || ""}
+            onChange={(e) => handleQuantityChange(item.value, e.target.value)}
             placeholder="Quantity"
-            className="block w-full p-3 mb-2 bg-gray-100 rounded-lg border border-gray-200 focus:outline-none focus:bg-white"
+            className="block w-full p-2 border rounded"
           />
+        </div>
+      ))}
+
 
           <input
             type="hidden"

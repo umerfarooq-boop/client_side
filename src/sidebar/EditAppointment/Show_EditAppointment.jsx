@@ -4,8 +4,9 @@ import { MaterialReactTable } from "material-react-table";
 import { format } from "date-fns";
 import { Link, useParams } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
-import Dashboard from "../Dashboard";
 import { ToastContainer, toast } from "react-toastify";
+import ChangeRequest from "../ChangeRequest";
+import { AppointmentProvider } from "../../context/AppointmentContext";
 
 function Show_EditAppointment() {
   const { id } = useParams();
@@ -204,8 +205,7 @@ function Show_EditAppointment() {
 
   return (
     <>
-        <Dashboard>
-            <ToastContainer />
+                  <ToastContainer />
             <div>
                 <div className="p-6 rounded-md shadow-lg bg-white text-black">
                 <div className="text-center">
@@ -232,7 +232,14 @@ function Show_EditAppointment() {
                         />
                         </div>
                     ) : (
-                        <MaterialReactTable
+                        <div>
+                          <div>
+                          {/* <AppointmentProvider id={id}>
+                          <ChangeRequest id={id} />    
+                        </AppointmentProvider>   */}
+                          </div>
+                              <div>
+                              <MaterialReactTable
                         columns={columns}
                         data={data}
                         muiTableBodyCellProps={{
@@ -241,13 +248,14 @@ function Show_EditAppointment() {
                         muiTableContainerProps={{
                             style: { overflowX: "auto" }, // Horizontal scrolling for smaller screens
                         }}
-                        />
+                        />  
+                              </div>                   
+                        </div>
                     )}
                     </div>
                 ) : null}
                 </div>
             </div>
-        </Dashboard>
     </>
   );
 }
