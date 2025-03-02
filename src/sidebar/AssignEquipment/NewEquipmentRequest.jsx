@@ -5,10 +5,8 @@ import axios from '../../axios'
 import { Link } from 'react-router-dom';
 import { RotatingLines } from 'react-loader-spinner';
 import { ToastContainer, toast } from 'react-toastify';
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
-import CheckCircleSharpIcon from '@mui/icons-material/CheckCircleSharp';
-import CancelSharpIcon from '@mui/icons-material/CancelSharp';
+import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
+import { useForm } from 'react-hook-form';
 
 function NewEquipmentRequest() {
     const [data, setData] = useState([]); 
@@ -16,7 +14,11 @@ function NewEquipmentRequest() {
     const [toggle,setToggle] = useState(true);
     const player_id = localStorage.getItem('player_id');
     const coach_record = localStorage.getItem('coach_id');
+    const [open, setOpen] = useState(false);
 
+    const handleClickOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    
     useEffect(()=>{
         const fetchData = async () => {
             try {
@@ -66,10 +68,47 @@ function NewEquipmentRequest() {
     }
   };
 
-  const ReturnEquipment = async (id) => {
-    const response = await axios.get(`/ReturnEquipment/${id}`)
-    toast.success('Equipment Return Successfully');
-  }
+  const { register, handleSubmit, reset, setError, formState: { errors } } = useForm();
+  const [serverErrors, setServerErrors] = useState(null);
+  let id =0;
+  const ReturnEquipment = async (data) => {
+      try {
+          setServerErrors(null); // Clear previous errors
+  
+          // First, call the API to return equipment
+          const returnResponse = await axios.post(`/ReturnEquipment/${id}`, {
+              quantity: data.quantity,
+          });
+  
+          if (returnResponse.status === 200) {
+              // Then, store the return record
+              const storeResponse = await axios.post("/return_equipment", data);
+  
+              if (storeResponse.status === 201) {
+                  toast.success("Equipment Returned Successfully");
+                  reset(); // Reset the form
+              } else {
+                  toast.error("Failed to save return record");
+              }
+          } else {
+              toast.error(returnResponse.data.message || "Failed to return equipment");
+          }
+      } catch (error) {
+          if (error.response && error.response.data.errors) {
+              setServerErrors(error.response.data.errors);
+  
+              Object.keys(error.response.data.errors).forEach((field) => {
+                  setError(field, { type: "server", message: error.response.data.errors[field][0] });
+              });
+          } else {
+              toast.error("Failed to return equipment");
+              console.error("Error:", error);
+          }
+      }
+  };
+  
+  
+
 
   // const handleDeleteChange = async (id) => {
   //   const response = await axios.get(`/DeleteEquipmentRequest/${id}`);
@@ -172,14 +211,76 @@ function NewEquipmentRequest() {
                 Reject
               </button>
             )}
+
       
             {/* Status Display */}
             {row.original.equipment_status === "active" && (
-  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-    <span style={{ color: "green", fontWeight: "bold" }}>Accepted</span>
-    <button onClick={() => ReturnEquipment(row.original.id)}>Return</button>
-  </div>
-)}
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <span style={{ color: "green", fontWeight: "bold" }}>Accepted</span>
+     <Link to={'/return_equipment'} className='pl-5 text-red-600 font-semibold'>Return</Link>
+      {/* <Button variant="outlined" onClick={handleClickOpen}>Open form dialog</Button>
+
+      <Dialog open={open} onClose={handleClose} key={row.original.id} fullWidth maxWidth="sm">
+        <DialogTitle>Return Equipment</DialogTitle>
+        <form onSubmit={handleSubmit(ReturnEquipment)}>
+          <DialogContent>
+            <TextField 
+              label="Player Name" 
+              fullWidth 
+              margin="dense" 
+              {...register("player_id")} 
+              defaultValue={row.original.player?.id} 
+              InputProps={{ readOnly: true }}
+            />
+            <TextField 
+              label="Coach Name" 
+              fullWidth 
+              margin="dense" 
+              {...register("coach_id")} 
+              defaultValue={row.original.coach?.id} 
+              InputProps={{ readOnly: true }}
+            />
+            <TextField 
+              label="Quantity" 
+              type="number" 
+              fullWidth 
+              margin="dense" 
+              {...register("quantity", { required: "Quantity is required" })} 
+              error={!!errors.quantity}
+              helperText={errors.quantity?.message}
+            />
+            <TextField 
+              label="Equipment Name" 
+              fullWidth 
+              margin="dense" 
+              {...register("equipment_name")} 
+              defaultValue={row.original.equipment?.equipment_name} 
+              InputProps={{ readOnly: true }}
+            />
+            <TextField 
+              label="Return Note" 
+              fullWidth 
+              margin="dense" 
+              {...register("return_note")} 
+            />
+            <TextField 
+              label="Return Date" 
+              fullWidth 
+              margin="dense" 
+              {...register("return_date_time")} 
+              defaultValue={row.original.return_date_time} 
+              InputProps={{ readOnly: true }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="secondary">Cancel</Button>
+            <Button type="submit" color="primary" variant="contained">Return</Button>
+          </DialogActions>
+        </form>
+      </Dialog> */}
+    </div>
+            )}
+
 
             {row.original.equipment_status === "rejected" && (
               <span style={{ color: "red", fontWeight: "bold" }}>Rejected</span>
