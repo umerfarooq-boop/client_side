@@ -217,7 +217,7 @@ function NewEquipmentRequest() {
             {row.original.equipment_status === "active" && (
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
       <span style={{ color: "green", fontWeight: "bold" }}>Accepted</span>
-     <Link to={'/return_equipment'} className='pl-5 text-red-600 font-semibold'>Return</Link>
+     <Link to={`/return_equipment/${row.original.id}`} className='pl-5 text-red-600 font-semibold'>Return</Link>
       {/* <Button variant="outlined" onClick={handleClickOpen}>Open form dialog</Button>
 
       <Dialog open={open} onClose={handleClose} key={row.original.id} fullWidth maxWidth="sm">
@@ -297,42 +297,44 @@ function NewEquipmentRequest() {
   return (
     <div>
                 {/* <ToastContainer/> */}
-        {
-            loading ? (
-              <div className="flex flex-col items-center justify-center h-screen">
-            <RotatingLines 
-              visible={true}
-              height="96"
-              width="96"
-              color="grey"
-              strokeWidth="5"
-              animationDuration="0.75"
-              ariaLabel="rotating-lines-loading"
-            />
-          </div>
-            ) :
-            (
-              
-            <div>
-              <h1 className="text-2xl font-bold text-blue-900 text-center">
-              New Equipment Request
-            </h1>
-              <MaterialReactTable
-                columns={columns}
-                data={data}
-                muiTableBodyCellProps={{
-                    style: { wordWrap: 'break-word', maxWidth: '200px' },
-                }}
-                muiTableContainerProps={{
-                    style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
-                }}
-                renderTopToolbarCustomActions={() => (
-                  <Link to={'/AddEquipment'} className='focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 italic'>Add Equipment</Link>
-              )}
-            />
-            </div>
-            )
-          }
+                {loading ? (
+  <div className="flex flex-col items-center justify-center h-screen">
+    <RotatingLines 
+      visible={true}
+      height="96"
+      width="96"
+      color="grey"
+      strokeWidth="5"
+      animationDuration="0.75"
+      ariaLabel="rotating-lines-loading"
+    />
+  </div>
+) : data.length > 0 ? (  // Ensure this check is outside the curly braces
+  <div>
+    <h1 className="text-2xl font-bold text-blue-900 text-center">
+      New Equipment Request
+    </h1>
+    <MaterialReactTable
+      columns={columns}
+      data={data}
+      muiTableBodyCellProps={{
+        style: { wordWrap: 'break-word', maxWidth: '200px' },
+      }}
+      muiTableContainerProps={{
+        style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
+      }}
+      renderTopToolbarCustomActions={() => (
+        <Link 
+          to={'/AddEquipment'} 
+          className="focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 italic"
+        >
+          Add Equipment
+        </Link>
+      )}
+    />
+  </div>
+) : null}  
+
     </div>
   )
 }

@@ -68,6 +68,7 @@ import AllAppointment from './sidebar/EditAppointment/AllAppointment';
 import NewEquipmentRequest from './sidebar/AssignEquipment/NewEquipmentRequest';
 import EquipmentStock from './sidebar/AssignEquipment/EquipmentStock';
 import AllEquipments from './sidebar/AssignEquipment/AllEquipments';
+import ReturnEquipment from './sidebar/AssignEquipment/ReturnEquipment';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
@@ -617,6 +618,18 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+
+        <Route
+          path='/return_equipment/:id'
+          element={
+            <ProtectedRoute>
+              <ReturnEquipment />
+            </ProtectedRoute>
+          }
+        />
+
+
 
 
         /**

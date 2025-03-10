@@ -208,11 +208,7 @@ function Show_EditAppointment() {
                   <ToastContainer />
             <div>
                 <div className="p-6 rounded-md shadow-lg bg-white text-black">
-                <div className="text-center">
-                    <h3 className="text-3xl sm:text-2xl leading-normal font-extrabold italic tracking-tight text-gray-900">
-                    Edit Boo<span className="text-indigo-600">king Requests</span>
-                    </h3>
-                </div>
+                
                 <div className="overflow-x-auto">
                     {role === "player" ? <div></div> : null}
                 </div>
@@ -231,8 +227,14 @@ function Show_EditAppointment() {
                             ariaLabel="rotating-lines-loading"
                         />
                         </div>
-                    ) : (
+                    ) : data.length > 0 && (
+                      
                         <div>
+                          <div className="text-center">
+                    <h3 className="text-3xl sm:text-2xl leading-normal font-extrabold italic tracking-tight text-gray-900">
+                    Edit Boo<span className="text-indigo-600">king Requests</span>
+                    </h3>
+                </div>
                           <div>
                           {/* <AppointmentProvider id={id}>
                           <ChangeRequest id={id} />    
@@ -251,7 +253,9 @@ function Show_EditAppointment() {
                         />  
                               </div>                   
                         </div>
-                    )}
+                    )
+                    
+                    }
                     </div>
                 ) : null}
                 </div>
