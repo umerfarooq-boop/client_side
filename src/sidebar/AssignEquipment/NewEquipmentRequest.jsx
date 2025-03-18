@@ -2,7 +2,7 @@ import Dashboard from '../Dashboard'
 import React, { useMemo, useState, useEffect } from 'react';
 import { MaterialReactTable } from 'material-react-table';
 import axios from '../../axios'
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { RotatingLines } from 'react-loader-spinner';
 import { ToastContainer, toast } from 'react-toastify';
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
@@ -15,7 +15,6 @@ function NewEquipmentRequest() {
     const player_id = localStorage.getItem('player_id');
     const coach_record = localStorage.getItem('coach_id');
     const [open, setOpen] = useState(false);
-
     const handleClickOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     
@@ -40,33 +39,33 @@ function NewEquipmentRequest() {
     },[coach_record])
 
   // Handle status change
-  const handleStatusChange = async (id) => {
-    try {
-      const response = await axios.get(`/AcceptEquipmentRequest/${id}`);
-      console.log(response);
+  // const handleStatusChange = async (id) => {
+  //   try {
+  //     const response = await axios.get(`/AcceptEquipmentRequest/${id}`);
+  //     console.log(response);
   
-      if (response.status === 200 && response.data.success) {
-        setData((prevData) =>
-          prevData.map((item) =>
-            item.id === id ? { ...item, equipment_status: response.data.acceptRequest.equipment_status } : item
-          )
-        );
-        toast.success(response.data.message || "Status Updated Successfully");
-      } else {
-        toast.error(response.data.message || "Failed to update status.");
-        console.error("Failed to update status:", response.data);
-      }
-    } catch (error) {
-      console.error("Error updating status:", error);
+  //     if (response.status === 200 && response.data.success) {
+  //       setData((prevData) =>
+  //         prevData.map((item) =>
+  //           item.id === id ? { ...item, equipment_status: response.data.acceptRequest.equipment_status } : item
+  //         )
+  //       );
+  //       toast.success(response.data.message || "Status Updated Successfully");
+  //     } else {
+  //       toast.error(response.data.message || "Failed to update status.");
+  //       console.error("Failed to update status:", response.data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating status:", error);
       
-      // Handle error responses with meaningful messages
-      if (error.response) {
-        toast.error(error.response.data.message || "An error occurred while updating status.");
-      } else {
-        toast.error("Network error, please try again.");
-      }
-    }
-  };
+  //     // Handle error responses with meaningful messages
+  //     if (error.response) {
+  //       toast.error(error.response.data.message || "An error occurred while updating status.");
+  //     } else {
+  //       toast.error("Network error, please try again.");
+  //     }
+  //   }
+  // };
 
   const { register, handleSubmit, reset, setError, formState: { errors } } = useForm();
   const [serverErrors, setServerErrors] = useState(null);
@@ -86,7 +85,7 @@ function NewEquipmentRequest() {
   
               if (storeResponse.status === 201) {
                   toast.success("Equipment Returned Successfully");
-                  reset(); // Reset the form
+                  reset();
               } else {
                   toast.error("Failed to save return record");
               }
@@ -129,7 +128,7 @@ function NewEquipmentRequest() {
     //     size: 150,
     //   },
       {
-        accessorKey: 'player.player_name',
+        accessorKey: 'player_name',
         header: 'Player Name',
         size: 150,
       },
@@ -146,7 +145,7 @@ function NewEquipmentRequest() {
       //   size: 100,
       // },
       {
-        accessorKey: 'equipment.equipment_name',
+        accessorKey: 'equipment_name',
         header: 'Equipment',
         size: 100,
       },
@@ -170,6 +169,8 @@ function NewEquipmentRequest() {
         },
       },
       
+      // When click on accept button it redirect to next page where get id from URL when goto this page show form here where show field of quantity here coach can update the quantity and this quantity store in update it
+
       {
         accessorKey: 'equipment_status',
         header: 'Status',
@@ -178,7 +179,7 @@ function NewEquipmentRequest() {
           <div style={{ display: 'flex', gap: '10px' }}>
             {/* Accept Button (Hidden if already accepted) */}
             {row.original.equipment_status !== "active" && (
-              <button
+              <Link
                 className="action-button accept"
                 style={{
                   backgroundColor: "green",
@@ -188,10 +189,11 @@ function NewEquipmentRequest() {
                   borderRadius: "5px",
                   cursor: "pointer",
                 }}
-                onClick={() => handleStatusChange(row.original.id, "accept")}
+                to={`/accept_equipment_request/${row.original.id}`}
+                // onClick={() => handleStatusChange(row.original.id, "accept")}
               >
                 Accept
-              </button>
+              </Link>
             )}
       
             {/* Reject Button (Hidden if already accepted) */}
@@ -218,67 +220,7 @@ function NewEquipmentRequest() {
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
       <span style={{ color: "green", fontWeight: "bold" }}>Accepted</span>
      <Link to={`/return_equipment/${row.original.id}`} className='pl-5 text-red-600 font-semibold'>Return</Link>
-      {/* <Button variant="outlined" onClick={handleClickOpen}>Open form dialog</Button>
-
-      <Dialog open={open} onClose={handleClose} key={row.original.id} fullWidth maxWidth="sm">
-        <DialogTitle>Return Equipment</DialogTitle>
-        <form onSubmit={handleSubmit(ReturnEquipment)}>
-          <DialogContent>
-            <TextField 
-              label="Player Name" 
-              fullWidth 
-              margin="dense" 
-              {...register("player_id")} 
-              defaultValue={row.original.player?.id} 
-              InputProps={{ readOnly: true }}
-            />
-            <TextField 
-              label="Coach Name" 
-              fullWidth 
-              margin="dense" 
-              {...register("coach_id")} 
-              defaultValue={row.original.coach?.id} 
-              InputProps={{ readOnly: true }}
-            />
-            <TextField 
-              label="Quantity" 
-              type="number" 
-              fullWidth 
-              margin="dense" 
-              {...register("quantity", { required: "Quantity is required" })} 
-              error={!!errors.quantity}
-              helperText={errors.quantity?.message}
-            />
-            <TextField 
-              label="Equipment Name" 
-              fullWidth 
-              margin="dense" 
-              {...register("equipment_name")} 
-              defaultValue={row.original.equipment?.equipment_name} 
-              InputProps={{ readOnly: true }}
-            />
-            <TextField 
-              label="Return Note" 
-              fullWidth 
-              margin="dense" 
-              {...register("return_note")} 
-            />
-            <TextField 
-              label="Return Date" 
-              fullWidth 
-              margin="dense" 
-              {...register("return_date_time")} 
-              defaultValue={row.original.return_date_time} 
-              InputProps={{ readOnly: true }}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="secondary">Cancel</Button>
-            <Button type="submit" color="primary" variant="contained">Return</Button>
-          </DialogActions>
-        </form>
-      </Dialog> */}
-    </div>
+      </div>
             )}
 
 

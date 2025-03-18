@@ -21,7 +21,7 @@ function PlayerBookedEquipment() {
     useEffect(()=>{
         const fetchData = async () => {
             try {
-                const response = await axios.get(`/request_equipment/${coach_record}`);
+                const response = await axios.get(`/request_equipment/${player_id}`);
                 if (response.data && Array.isArray(response.data.requestequipment)) {
                     setData(response.data.requestequipment); // Directly set the array
                 } else if (response.data && response.data.requestequipment) {
@@ -86,7 +86,7 @@ function PlayerBookedEquipment() {
     //     size: 150,
     //   },
       {
-        accessorKey: 'player.player_name',
+        accessorKey: 'player_name',
         header: 'Player Name',
         size: 150,
       },
@@ -103,7 +103,7 @@ function PlayerBookedEquipment() {
       //   size: 100,
       // },
       {
-        accessorKey: 'equipment.equipment_name',
+        accessorKey: 'equipment_name',
         header: 'Equipment',
         size: 100,
       },
@@ -203,7 +203,9 @@ function PlayerBookedEquipment() {
           </div>
             ) :
             (
-            <MaterialReactTable
+            <div>
+              <h1>Player</h1>
+              <MaterialReactTable
                 columns={columns}
                 data={data}
                 muiTableBodyCellProps={{
@@ -212,10 +214,8 @@ function PlayerBookedEquipment() {
                 muiTableContainerProps={{
                     style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
                 }}
-                renderTopToolbarCustomActions={() => (
-                  <Link to={'/AddEquipment'} className='focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 italic'>Add Equipment</Link>
-              )}
             />
+            </div>
             )
           }
     </Dashboard>

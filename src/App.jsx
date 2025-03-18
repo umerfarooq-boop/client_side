@@ -69,6 +69,7 @@ import NewEquipmentRequest from './sidebar/AssignEquipment/NewEquipmentRequest';
 import EquipmentStock from './sidebar/AssignEquipment/EquipmentStock';
 import AllEquipments from './sidebar/AssignEquipment/AllEquipments';
 import ReturnEquipment from './sidebar/AssignEquipment/ReturnEquipment';
+import AcceptEquipmentRequest from './sidebar/AssignEquipment/AcceptEquipmentRequest';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
@@ -619,6 +620,19 @@ function App() {
           }
         />
 
+        {/* Singal Equipment Request For Accepting */}
+
+        <Route
+          path='/accept_equipment_request/:id'
+          element={
+            <ProtectedRoute>
+              <AcceptEquipmentRequest />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Singal Equipment Request For Accepting */}
+
 
         <Route
           path='/return_equipment/:id'
@@ -628,9 +642,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-
-
 
         /**
         * ! Appointment

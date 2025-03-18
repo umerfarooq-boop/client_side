@@ -78,6 +78,7 @@ function Equipment_Request() {
         setQuantities({});
         if (response.data && response.data.message) {
           toast.success(response.data.message);
+          reset();
         }
       } catch (error) {
         if (error.response && error.response.data.errors) {

@@ -68,53 +68,118 @@ function ReturnEquipment() {
     <>
       <ToastContainer />
       <div>
-        {equipment.map((item, index) => (
-          <form key={index} onSubmit={handleSubmit(handleReturnEquipment)} className="bg-white p-6 rounded-lg shadow-md space-y-4">
-            <div className="grid grid-cols-1 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Player Name</label>
-                <input type="text" {...register("player_id")} defaultValue={item.player?.id} readOnly className="input-field" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Coach Name</label>
-                <input type="text" {...register("coach_id")} defaultValue={item.coach?.id} readOnly className="input-field" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Quantity</label>
-                <input 
-  type="number" 
-  defaultValue={item.equipment_quantity} 
-  {...register("quantity", { 
-    required: "Quantity is required", 
-    min: 1, 
-    valueAsNumber: true // Ensures input is a number 
-  })} 
-  className={`input-field ${errors.quantity ? 'border-red-500' : ''}`}
-/>
+  {equipment.map((item, index) => (
+    <form 
+      key={index} 
+      onSubmit={handleSubmit(handleReturnEquipment)} 
+      className="bg-white p-6 rounded-lg shadow-md space-y-4"
+    >
+      <div className="grid grid-cols-1 gap-4">
+        
+        {/* Player Name (Display Name, Store ID) */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Player Name</label>
+          <input 
+            type="text" 
+            defaultValue={item.player_name} 
+            readOnly 
+            className="input-field" 
+          />
+          <input 
+            type="hidden" 
+            {...register("player_id")} 
+            defaultValue={item.player_id} 
+          />
+        </div>
 
-            <input type="hidden" value={id} {...register('equipment_request_id')} />
+        {/* Coach Name (Display Name, Store ID) */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Coach Name</label>
+          <input 
+            type="text" 
+            defaultValue={item.coach?.name} 
+            readOnly 
+            className="input-field" 
+          />
+          <input 
+            type="hidden" 
+            {...register("coach_id")} 
+            defaultValue={item.coach_id} 
+          />
+        </div>
 
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Equipment Name</label>
-                <input type="text" {...register("equipment_name")} defaultValue={item.equipment?.id} readOnly className="input-field" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Return Note</label>
-                <input type="text" {...register("return_note")} className="input-field" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Return Date</label>
-                <input type="text" {...register("return_date_time")} value={item.return_date_time} readOnly className="input-field" />
-              </div>
-            </div>
-            <div className="flex justify-end space-x-4 mt-4">
-              <button type="button" onClick={() => navigate(-1)} className="btn-cancel">Cancel</button>
-              <button type="submit" className="btn-primary">Return</button>
-            </div>
-          </form>
-        ))}
+        {/* Equipment Quantity (Editable) */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Quantity</label>
+          <input 
+            type="number" 
+            defaultValue={item.equipment_quantity} 
+            {...register("quantity", { 
+              required: "Quantity is required", 
+              min: 1, 
+              valueAsNumber: true // Ensures input is a number 
+            })} 
+            className={`input-field ${errors.quantity ? 'border-red-500' : ''}`}
+          />
+          <input 
+            type="hidden" 
+            {...register("equipment_request_id")} 
+            defaultValue={id} 
+          />
+        </div>
+
+        {/* Equipment Name (Display Name) */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Equipment Name</label>
+          <input 
+            type="text" 
+            defaultValue={item.equipment_name} 
+            readOnly 
+            className="input-field" 
+          />
+          <input 
+            type="hidden" 
+            defaultValue={item.equipment_name_id} 
+            {...register('equipment_name')}
+            readOnly 
+            className="input-field" 
+          />
+        </div>
+
+        {/* Return Note (Optional) */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Return Note</label>
+          <input 
+            type="text" 
+            {...register("return_note")} 
+            className="input-field" 
+          />
+        </div>
+
+        {/* Return Date (Editable) */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Return Date</label>
+          <input 
+            type="datetime-local" 
+            defaultValue={item.return_date_time} 
+            {...register("return_date_time")} 
+            className="input-field"
+          />
+        </div>
+
       </div>
+      <div className="flex justify-end space-x-4 mt-4">
+        <button type="button" onClick={() => navigate(-1)} className="btn-cancel">
+          Cancel
+        </button>
+        <button type="submit" className="btn-primary">
+          Return
+        </button>
+      </div>
+    </form>
+  ))}
+</div>
+
     </>
   );
 }
