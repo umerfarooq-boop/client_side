@@ -5,12 +5,11 @@ import {
   LinearScale,
   BarElement,
   Title,
-  Tooltip,
   Legend,
   PointElement,
   LineElement,
 } from "chart.js";
-import { Chart, Bar, Line } from "react-chartjs-2";
+import { Chart } from "react-chartjs-2";
 import ReactPaginate from "react-paginate";
 // Register necessary components and scales
 ChartJS.register(
@@ -18,7 +17,6 @@ ChartJS.register(
   LinearScale,
   BarElement,
   Title,
-  Tooltip,
   Legend,
   PointElement, // Required for Line chart points
   LineElement // Required for Line chart lines
@@ -38,9 +36,38 @@ import MyCalendar from "../website/MyCalendar";
 import { ToastContainer, toast } from "react-toastify";
 import ChangeRequest from "./ChangeRequest";
 import { AppointmentProvider } from "../context/AppointmentContext";
+import { LineChart, Line, BarChart, Bar, PieChart, Pie, Tooltip, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Cell } from 'recharts';
 
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+const playerData = [
+  { month: 'Jan', players: 30 },
+  { month: 'Feb', players: 50 },
+  { month: 'Mar', players: 80 },
+  { month: 'Apr', players: 65 },
+  { month: 'May', players: 90 },
+  { month: 'Jun', players: 120 },
+];
+
+const bookingData = [
+  { month: 'Jan', bookings: 10 },
+  { month: 'Feb', bookings: 25 },
+  { month: 'Mar', bookings: 35 },
+  { month: 'Apr', bookings: 50 },
+  { month: 'May', bookings: 70 },
+  { month: 'Jun', bookings: 95 },
+];
+
+const reviewsData = [
+  { rating: '1 Star', count: 5 },
+  { rating: '2 Stars', count: 10 },
+  { rating: '3 Stars', count: 20 },
+  { rating: '4 Stars', count: 35 },
+  { rating: '5 Stars', count: 50 },
+];
+
+const COLORS = ['#FF8042', '#FFBB28', '#00C49F', '#0088FE', '#FF4444'];
+
+// ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 function DashboardGraph() {
   const [activeTab, setActiveTab] = useState("profile");
 
@@ -340,7 +367,55 @@ function DashboardGraph() {
 
   return (
     <>
-      <div className="container mx-auto p-4"></div>
+      {
+        role === "coach" ? (
+          <div className="container mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+      {/* Player Analytics */}
+      <div className="shadow-sm border border-gray-200 rounded-xl p-4 bg-white">
+        <h2 className="text-md font-semibold mb-3">Monthly Player Growth</h2>
+        <ResponsiveContainer width="100%" height={200}>
+          <LineChart data={playerData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
+            <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+            <YAxis tick={{ fontSize: 12 }} />
+            <Tooltip />
+            <Line type="monotone" dataKey="players" stroke="#4F46E5" strokeWidth={2} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Booking Analytics */}
+      <div className="shadow-sm border border-gray-200 rounded-xl p-4 bg-white">
+        <h2 className="text-md font-semibold mb-3">Monthly Bookings</h2>
+        <ResponsiveContainer width="100%" height={200}>
+          <BarChart data={bookingData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
+            <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+            <YAxis tick={{ fontSize: 12 }} />
+            <Tooltip />
+            <Bar dataKey="bookings" fill="#34D399" radius={[6, 6, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Reviews Analytics */}
+      <div className="shadow-sm border border-gray-200 rounded-xl p-4 bg-white">
+        <h2 className="text-md font-semibold mb-3">Player Ratings</h2>
+        <ResponsiveContainer width="100%" height={200}>
+          <PieChart>
+            <Tooltip />
+            <Pie data={reviewsData} dataKey="count" nameKey="rating" cx="50%" cy="50%" outerRadius={70}>
+              {reviewsData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+        ) : null
+      }
+
         {/* <ToastContainer /> */}
 
       <div class="container mx-auto p-4 w-[100%]">
@@ -586,9 +661,9 @@ function DashboardGraph() {
 
     {/* Add graph component here */}
   </div>
-<br /><br /><br />
 
-  <div style={{ height: '200px', width: '100%' }}>
+
+  {/* <div style={{ height: '200px', width: '100%' }}>
   <h2 style={{ fontSize: '16px', marginBottom: '10px' }}>Time Graph</h2>
   {chartData ? (
     <Bar
@@ -634,19 +709,13 @@ function DashboardGraph() {
   ) : (
     <p>Loading chart...</p>
   )}
-</div>
+</div> */}
 
-
-
-<br />
-<br />
-<br />
-<br />
 
 
       {/* <Notifications coachId={id} /> */}
                 
-      <div className="">
+      {/* <div className="">
         <div className="container mx-auto p-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="shadow-lg rounded-lg p-4 bg-white">
@@ -666,7 +735,7 @@ function DashboardGraph() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

@@ -67,13 +67,20 @@ function ReturnEquipment() {
   return (
     <>
       <ToastContainer />
-      <div>
-  {equipment.map((item, index) => (
+      <div className='justify-center items-center flex  border-l-pink-600 shadow-2xl shadow-slate-900'>
+        <div className='w-1/3'>
+        {equipment.map((item, index) => (
     <form 
       key={index} 
       onSubmit={handleSubmit(handleReturnEquipment)} 
       className="bg-white p-6 rounded-lg shadow-md space-y-4"
     >
+      <div className="text-center mb-10">
+              <h3 className="text-xl sm:text-3xl leading-normal font-extrabold tracking-tight text-gray-900">
+                Return{" "}
+                <span className="text-indigo-600">Equipment</span>
+              </h3>
+          </div>
       <div className="grid grid-cols-1 gap-4">
         
         {/* Player Name (Display Name, Store ID) */}
@@ -83,7 +90,7 @@ function ReturnEquipment() {
             type="text" 
             defaultValue={item.player_name} 
             readOnly 
-            className="input-field" 
+            className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-300 shadow-sm focus:shadow" 
           />
           <input 
             type="hidden" 
@@ -97,9 +104,9 @@ function ReturnEquipment() {
           <label className="block text-sm font-medium text-gray-700">Coach Name</label>
           <input 
             type="text" 
-            defaultValue={item.coach?.name} 
+            defaultValue={item.coach_name} 
             readOnly 
-            className="input-field" 
+            className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-300 shadow-sm focus:shadow" 
           />
           <input 
             type="hidden" 
@@ -119,7 +126,7 @@ function ReturnEquipment() {
               min: 1, 
               valueAsNumber: true // Ensures input is a number 
             })} 
-            className={`input-field ${errors.quantity ? 'border-red-500' : ''}`}
+            className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-300 shadow-sm focus:shadow"
           />
           <input 
             type="hidden" 
@@ -135,7 +142,7 @@ function ReturnEquipment() {
             type="text" 
             defaultValue={item.equipment_name} 
             readOnly 
-            className="input-field" 
+            className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-300 shadow-sm focus:shadow" 
           />
           <input 
             type="hidden" 
@@ -152,7 +159,7 @@ function ReturnEquipment() {
           <input 
             type="text" 
             {...register("return_note")} 
-            className="input-field" 
+            className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-300 shadow-sm focus:shadow" 
           />
         </div>
 
@@ -163,22 +170,23 @@ function ReturnEquipment() {
             type="datetime-local" 
             defaultValue={item.return_date_time} 
             {...register("return_date_time")} 
-            className="input-field"
+            className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-300 shadow-sm focus:shadow"
           />
         </div>
 
       </div>
       <div className="flex justify-end space-x-4 mt-4">
-        <button type="button" onClick={() => navigate(-1)} className="btn-cancel">
+        <button type="button" onClick={() => navigate(-1)} className="rounded-md px-4 py-2 hover:border-indigo-900 border">
           Cancel
         </button>
-        <button type="submit" className="btn-primary">
+        <button type="submit" className="rounded-md bg-indigo-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-indigo-700 focus:shadow-none active:bg-indigo-700 hover:bg-indigo-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
           Return
         </button>
       </div>
     </form>
   ))}
-</div>
+        </div>
+      </div>
 
     </>
   );

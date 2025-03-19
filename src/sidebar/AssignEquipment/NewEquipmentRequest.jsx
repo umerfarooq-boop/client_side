@@ -109,12 +109,12 @@ function NewEquipmentRequest() {
   
 
 
-  // const handleDeleteChange = async (id) => {
-  //   const response = await axios.get(`/DeleteEquipmentRequest/${id}`);
-  //   if(response.data && response.data.message ===  201){
-  //     toast.success(response.data.message);
-  //   }
-  // }
+  const handleDeleteChange = async (id) => {
+    const response = await axios.get(`/DeleteEquipmentRequest/${id}`);
+    if(response.data && response.data.message ===  201){
+      toast.success(response.data.message);
+    }
+  }
   
 
 
@@ -208,7 +208,7 @@ function NewEquipmentRequest() {
                   borderRadius: "5px",
                   cursor: "pointer",
                 }}
-                // onClick={() => handleDeleteChange(row.original.id, "reject")}
+                onClick={() => handleDeleteChange(row.original.id, "reject")}
               >
                 Reject
               </button>
@@ -253,9 +253,12 @@ function NewEquipmentRequest() {
   </div>
 ) : data.length > 0 ? (  // Ensure this check is outside the curly braces
   <div>
-    <h1 className="text-2xl font-bold text-blue-900 text-center">
-      New Equipment Request
-    </h1>
+    <div className="text-center mb-10">
+              <h3 className="text-xl sm:text-3xl leading-normal font-extrabold tracking-tight text-gray-900">
+                New{" "}
+                <span className="text-indigo-600">Equipment Request</span>
+              </h3>
+          </div>
     <MaterialReactTable
       columns={columns}
       data={data}
@@ -265,14 +268,14 @@ function NewEquipmentRequest() {
       muiTableContainerProps={{
         style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
       }}
-      renderTopToolbarCustomActions={() => (
-        <Link 
-          to={'/AddEquipment'} 
-          className="focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 italic"
-        >
-          Add Equipment
-        </Link>
-      )}
+      // renderTopToolbarCustomActions={() => (
+      //   <Link 
+      //     to={'/AddEquipment'} 
+      //     className="focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 italic"
+      //   >
+      //     Add Equipment
+      //   </Link>
+      // )}
     />
   </div>
 ) : null}  
