@@ -70,6 +70,8 @@ import EquipmentStock from './sidebar/AssignEquipment/EquipmentStock';
 import AllEquipments from './sidebar/AssignEquipment/AllEquipments';
 import ReturnEquipment from './sidebar/AssignEquipment/ReturnEquipment';
 import AcceptEquipmentRequest from './sidebar/AssignEquipment/AcceptEquipmentRequest';
+import PageNotFound from './website/PageNotFound';
+import AccountSuspendPage from './website/AccountSuspendPage';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
@@ -92,7 +94,8 @@ function App() {
         <Route path='/admin-profile' element={<AdminProfile />} />
         <Route path='/coachdetail/:id' element={<CoachDetail />} />
         <Route path='/PlayerRequest/:id/:role' element={<PlayerRequest />} />
-        
+        <Route path='/*' element={<PageNotFound/>} />
+        <Route path='/account_suspend' element={<AccountSuspendPage/>} />
         {/* Wrap the dashboard and other private routes with ProtectedRoute */}
         <Route
           path='/dashboard/:id/*'

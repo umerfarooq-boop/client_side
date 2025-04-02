@@ -297,7 +297,7 @@ function AddPost() {
     </div>
 
     {/* Coach ID (hidden) */}
-    <input type="hidden" {...register('coach_id')} value={coach_id} />
+    <input type="text" {...register('coach_id')} value={coach_id} />
 
     {/* Submit Button */}
     <button

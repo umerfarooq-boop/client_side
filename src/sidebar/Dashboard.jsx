@@ -39,7 +39,6 @@ function Dashboard({children}) {
       login_id = localStorage.getItem('coach_id');
     } else if (role === 'admin'){
     login_id = localStorage.getItem('admin_id');
-    
   }
  
   // console.log(`Login id is: ${login_id}`);
@@ -82,6 +81,8 @@ function Dashboard({children}) {
           } else if(role === 'admin'){
              userId = admin_id;
           }
+
+          const user_id = localStorage.getItem('user_id');
   
           if (!userId) {
               console.log('User ID is missing for the given role');
@@ -89,7 +90,7 @@ function Dashboard({children}) {
           }
   
           try {
-              const response = await axios.get(`/profile-data/${userId}/${role}`, {
+              const response = await axios.get(`/profile-data/${user_id}/${role}`, {
                   headers: {
                       Authorization: `Bearer ${token}`,
                   },
@@ -99,10 +100,10 @@ function Dashboard({children}) {
                 if (data && data.user) {
                     setProfile(data.user);
 
-                    if (role === "player" || role === "admin" && data.user.player?.status === "active") {
+                    if (role === "player" && data.user.player?.status === "active") {
                         setStatus(data.user.player.status);
                         console.log("Player status:", data.user.player.status);
-                    } else if (role === "coach" && data.user.coach?.status === "active") {
+                    } else if (role === "coach" || role === "admin" && data.user.coach?.status === "active") {
                         setStatus(data.user.coach.status);
                         console.log("Coach status:", data.user.coach.status);
                     }
@@ -119,7 +120,7 @@ function Dashboard({children}) {
   
       getProfileData(); 
   
-  }, [role, coach_id, player_id, token]);
+  }, [role, coach_id, player_id, token,admin_id,status]);
 
   const [anchor, setAnchor] = React.useState(null);
   const openanchor = Boolean(anchor);
@@ -225,6 +226,7 @@ function Dashboard({children}) {
                 Contact Feedback
               </Link>
             </MenuItem>
+            <MenuItem><Link to={'/signup'} onClick={handleClose}><LogoutIcon /> Logout</Link></MenuItem>
       </Menu>
         </div>
       ) : role === 'coach' ? (
@@ -357,7 +359,9 @@ function Dashboard({children}) {
           ) : role === 'admin' ? (
             <div key={key}>
               <img 
-                src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
+               src={index.coach?.image 
+                ? `http://127.0.0.1:8000/uploads/coach_image/${index.coach?.image}` 
+                : "/default-avatar.png"}              
                 className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
                 alt="Thumbnail"
                 id="basic-button"
@@ -531,7 +535,7 @@ function Dashboard({children}) {
           ) : role === 'admin' ? (
             <div key={key}>
               <img 
-                src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
+                src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach?.image}`}
                 className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
                 alt="Thumbnail"
                 id="basic-button"
@@ -541,6 +545,8 @@ function Dashboard({children}) {
                 onClick={handleClick}
                 loading="lazy"
               />
+
+              <h1 className="text-black">King</h1>
             </div>
           ) : null
         ))

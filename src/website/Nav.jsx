@@ -55,13 +55,14 @@ function Nav() {
           } else if (role === 'player') {
               userId = player_id;
           } else if (role === 'admin'){
-              userId = localStorage.getItem('admin_id');
+              userId = admin_id;
           }
           if (!userId) {
               console.log('User ID is missing for the given role');
               return;
           }
-  
+          console.log(userId)
+          console.log(role)
           try {
               const response = await axios.get(`/profile-data/${userId}/${role}`, {
                   headers: {
@@ -113,6 +114,7 @@ function Nav() {
     }else if(role === 'admin'){
     login_id = localStorage.getItem('admin_id');
   }
+  // Ensure you store and use user_id
 
   // console.log(`Login id is: ${login_id}`);
   
@@ -315,7 +317,7 @@ function Nav() {
           ) : role === 'admin' ? (
             <div key={key}>
               <img 
-                src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
+                src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach.image}`}
                 className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
                 alt="Thumbnail"
                 id="basic-button"
@@ -439,7 +441,7 @@ function Nav() {
           role === 'player' ? (
             <div key={key}>
               <img 
-                src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
+                src={`http://127.0.0.1:8000/uploads/player_image/${index.player?.image}`}
                 className="lg:block  w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
                 alt="Thumbnail"
                 id="basic-button"
@@ -452,7 +454,7 @@ function Nav() {
           ) : role === 'admin' ? (
             <div key={key}>
               <img 
-                src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
+                src={`http://127.0.0.1:8000/uploads/player_image/${index.player?.image}`}
                 className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
                 alt="Thumbnail"
                 id="basic-button"
@@ -466,7 +468,7 @@ function Nav() {
           ) : (
             <div key={key}>
               <img 
-                src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach.image}`}
+                src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach?.image}`}
                 className=" lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
                 alt="Thumbnail"
                 id="basic-button"

@@ -139,6 +139,8 @@ function Appoinment() {
         const response = await axios.post("/TeamBooking", eventData);
         if (response.status === 201) {
           toast.success("Schedule Created Successfully");
+          const coach_record = response.data.coach.coach_id;
+          localStorage.setItem('coach_record',coach_record);
           const newEvent = {
             title: eventData.event_name,
             start: new Date(`${eventData.from_date}T${eventData.start_time}`),

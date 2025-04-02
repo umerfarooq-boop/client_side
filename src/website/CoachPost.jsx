@@ -129,6 +129,8 @@ function CoachPost() {
             </h3>
           </div>
 
+          {/* <h1>UMer</h1> */}
+
           <div>
       
         <div className="grid-cols-1 flex justify-end items-end mr-10">
@@ -241,7 +243,7 @@ function CoachPost() {
 
       )}
       <div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </>
   );

@@ -189,6 +189,11 @@ const Main = ({ nextStep, setRole }) => {
             Coach
           </MenuItem>
         )}
+        {role === 'admin' && (
+          <MenuItem value="admin" disabled selected>
+            Admin
+          </MenuItem>
+        )}
           </TextField>
         </Grid>
       </Grid>

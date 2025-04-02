@@ -51,10 +51,10 @@ const Profile = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       console.log(response.data);
-      localStorage.setItem('coach_id',response.data.profile.coach_id);
+      localStorage.setItem('coach_profile_id',response.data.profile.coach_id);
       // console.log(response.data.profile.coach_id);
       // localStorage.setItem('location',response.data.profile.profile_location);
-      localStorage.setItem('player_id',response.data.profile.player_id);
+      localStorage.setItem('player_profile_id',response.data.profile.player_id);
       // localStorage.setItem('playwith',response.data.profile.player.playwith);
       setLoader(false); 
 
@@ -72,7 +72,9 @@ const Profile = () => {
           }else if(role === 'coach'){
             navigate('/');
           } 
-        }
+          }else if(role === 'admin'){
+            navigate('/');
+          } 
       });
     } catch (error) {
       console.error(error);
