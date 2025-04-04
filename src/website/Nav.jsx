@@ -250,7 +250,6 @@ function Nav() {
           ) : null
         } */}
 
-
         <Typography
           as="li"
           variant="small"

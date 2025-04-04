@@ -90,6 +90,8 @@ const Loginuser = async (data) => {
       localStorage.setItem('email', user.email);
       localStorage.setItem('user_id', user.id);
 
+      const email = localStorage.getItem('email');
+
       // If the role is a player, store player-related info
       if (user.role === "player") {
           try {
@@ -135,6 +137,28 @@ const Loginuser = async (data) => {
           }
       }
 
+      if (user.role === "parent") {
+        try {
+          const response = await axios.get(`/getParent/${email}`);
+      
+          const parentData = response.data.ParentData;
+      
+          if (parentData) {
+            if (parentData.status === "block") {
+              localStorage.clear();
+              navigate("/account_suspend");
+              return;
+            }
+      
+            localStorage.setItem("parent_id", parentData.id);
+          }
+        } catch (error) {
+          console.error("Error fetching parent profile data:", error);
+        }
+      }
+      
+      
+
       if (user.role === "admin") {
           localStorage.setItem('admin_id', user.id);
       }
@@ -146,6 +170,8 @@ const Loginuser = async (data) => {
           navigate('/');
       } else if (user.role === 'admin') {
           navigate(`/dashboard/${user.id}`);
+      } else if(user.role === "parent"){
+        navigate(`/parent_home/${user_id}`)
       }
 
   } catch (error) {

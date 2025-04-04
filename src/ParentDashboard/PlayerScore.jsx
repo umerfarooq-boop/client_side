@@ -1,21 +1,28 @@
-import Dashboard from '../Dashboard'
+import Dashboard from '../sidebar/Dashboard'
 import React, { useMemo, useState, useEffect } from 'react';
 import { MaterialReactTable } from 'material-react-table';
-import axios from '../../axios'
-import { useParams } from 'react-router-dom';
+import axios from '../axios'
+import { Link, useParams } from 'react-router-dom';
 import { RotatingLines } from 'react-loader-spinner';
 import { ToastContainer, toast } from 'react-toastify';
 
-function ShowScore() {
+function PlayerScore() {
   const [data, setData] = useState([]); 
   const [loading, setLoading] = useState(true);
-  const { id } = useParams();
+  const parent_id = localStorage.getItem('parent_id');
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`/playerscore/${id}`);
-      if (response.data && response.data.playerScore) {
-        setData(response.data.playerScore);
+      const response = await axios.get(`/ShowPlayerScore/${parent_id}`);
+      const playerObj = response.data.player_score?.[0];
+  
+      if (playerObj && Array.isArray(playerObj.player_score)) {
+        const scores = playerObj.player_score.map(score => ({
+          ...score,
+          player_name: playerObj.player?.player_name, // Accessing player_name from player object
+          coach_name: score.coach?.name || '', // coach is nested in score
+        }));
+        setData(scores);
         setLoading(false);
       } else {
         console.error("Unexpected API response format:", response.data);
@@ -24,21 +31,22 @@ function ShowScore() {
       console.error("Error fetching data:", error);
     }
   };
+  
+  
 
   useEffect(() => {
     fetchData();
   }, []);
-
+  
   const columns = useMemo(() => {
-    // Common columns
     const baseColumns = [
       {
-        accessorKey: 'player.player_name',
+        accessorKey: 'player_name',
         header: 'Player Name',
         size: 150,
       },
       {
-        accessorKey: 'coach.name',
+        accessorKey: 'coach_name',
         header: 'Coach Name',
         size: 150,
       },
@@ -54,7 +62,6 @@ function ShowScore() {
       },
     ];
   
-    // Check if there's data to inspect player_type
     if (data.length > 0) {
       const playerType = data[0].player_type;
   
@@ -113,6 +120,8 @@ function ShowScore() {
     return baseColumns;
   }, [data]);
   
+  
+  
 
   return (
     <Dashboard>
@@ -131,20 +140,23 @@ function ShowScore() {
             />
           </div>
         ) : (
-          <MaterialReactTable
+            <MaterialReactTable
             columns={columns}
             data={data}
             muiTableBodyCellProps={{
-              style: { wordWrap: 'break-word', width: 'auto' },
+                style: { wordWrap: 'break-word', maxWidth: '200px' },
             }}
             muiTableContainerProps={{
-              style: { overflowX: 'auto' },
+                style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
             }}
-          />
+            renderTopToolbarCustomActions={() => (
+              <Link to={'/'} className='focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 italic'>Detail</Link>
+          )}
+        />
         )
       }
     </Dashboard>
   );
 }
 
-export default ShowScore;
+export default PlayerScore

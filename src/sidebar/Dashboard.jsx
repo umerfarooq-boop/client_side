@@ -1,4 +1,4 @@
-import {Navbar,MobileNav,Typography,Button, IconButton } from "@material-tailwind/react";
+import {Navbar,MobileNav,Typography,Button, IconButton, button } from "@material-tailwind/react";
 // import About from './About' 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -139,6 +139,8 @@ function Dashboard({children}) {
       login_id = localStorage.getItem('coach_id');
     } else if (role === 'admin'){
     login_id = localStorage.getItem('admin_id');
+  }else if(role === 'parent'){
+    login_id = localStorage.getItem('parent_id');
   }
 
   // console.log(`Login id is: ${login_id}`);
@@ -315,7 +317,38 @@ function Dashboard({children}) {
             </Link>
           </Typography> 
         </div>
-      ): null}
+      ) 
+      :  role === 'parent' ? (
+        <div className="flex gap-3">
+          <Typography
+            as="li"
+            variant="small"
+            color="blue-gray"
+            className="flex items-center gap-x-2 p-1 font-medium"
+          >
+            <Link to={`/parent_player_attendance/${login_id}`} className="flex items-center text-black">
+            Attendance
+            </Link>
+          </Typography>
+          <Typography
+            as="li"
+            variant="small"
+            color="blue-gray"
+            className="flex items-center gap-x-2 p-1 font-medium"
+          >
+            <Link to={`/parent_player_score/${login_id}`} className="flex items-center text-black">
+              Score
+            </Link>
+          </Typography> 
+          <div className="ml-auto">
+            <button className="bg-indigo-900 text-white px-4 py-1.5 rounded-md hover:bg-indigo-700">
+              Logout
+            </button>
+          </div>
+
+        </div>
+      ) : null
+    }
     </ul>
   );
   

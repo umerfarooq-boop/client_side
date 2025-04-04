@@ -72,6 +72,9 @@ import ReturnEquipment from './sidebar/AssignEquipment/ReturnEquipment';
 import AcceptEquipmentRequest from './sidebar/AssignEquipment/AcceptEquipmentRequest';
 import PageNotFound from './website/PageNotFound';
 import AccountSuspendPage from './website/AccountSuspendPage';
+import ParentHome from './ParentDashboard/ParentHome';
+import PlayerAttendance from './ParentDashboard/PlayerAttendance';
+import PlayerScore from './ParentDashboard/PlayerScore'
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
@@ -96,6 +99,9 @@ function App() {
         <Route path='/PlayerRequest/:id/:role' element={<PlayerRequest />} />
         <Route path='/*' element={<PageNotFound/>} />
         <Route path='/account_suspend' element={<AccountSuspendPage/>} />
+        <Route path='/parent_home/:id' element={<ParentHome />} />
+        <Route path='/parent_player_attendance/:id' element={<PlayerAttendance />} />
+        <Route path='/parent_player_score/:id' element={<PlayerScore />} />
         {/* Wrap the dashboard and other private routes with ProtectedRoute */}
         <Route
           path='/dashboard/:id/*'
