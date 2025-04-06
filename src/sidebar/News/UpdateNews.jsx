@@ -5,9 +5,10 @@ import axios from "../../axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useForm } from 'react-hook-form';
 import 'ckeditor5/ckeditor5.css';
-
+import { RotatingLines } from 'react-loader-spinner';
 
 function Updatenews() {
+  const [loading,setLoading] = useState(false);
   const { id } = useParams();
   const {
     handleSubmit,
@@ -21,9 +22,11 @@ function Updatenews() {
   useEffect(() => {
     const getPost = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(`/posts/${id}`);
         setPost(response.data.post);
         console.log(response.data.post);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -67,7 +70,22 @@ function Updatenews() {
         <Dashboard>
           <ToastContainer />
           {/* <form onSubmit={handleSubmit(addPost)} className="flex flex-col gap-6"> */}
-          {post.map((index, key) => (
+          {
+            loading ? (
+<div className="flex flex-col items-center justify-center h-screen">
+            <RotatingLines 
+              visible={true}
+              height="96"
+              width="96"
+              color="grey"
+              strokeWidth="5"
+              animationDuration="0.75"
+              ariaLabel="rotating-lines-loading"
+            />
+          </div>
+            ) : (
+              <div>
+                          {post.map((index, key) => (
             <form
               className="flex flex-col gap-6"
               onSubmit={handleSubmit(updatePost)}
@@ -183,12 +201,13 @@ function Updatenews() {
                   </label>
                   <input
                     type="file"
-                    {...register("post_image")}
                     id="image"
+                    {...register("post_image")}
                     onChange={handleImageChange}
-                    className="block w-full text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded-lg file:py-2 file:px-4 file:border-0 file:mr-4 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    className="block w-full text-gray-700 bg-white border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
                   />
                 </div>
+
 
                 {/* Post Status */}
                 <div className="md:w-1/2 px-3">
@@ -236,6 +255,9 @@ function Updatenews() {
               </button>
             </form>
           ))}
+              </div>
+            )
+          }
         </Dashboard>
       </>
     </>

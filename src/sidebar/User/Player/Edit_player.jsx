@@ -71,48 +71,89 @@ function Edit_player() {
     }
   };
 
-  const editCoachInfo = (data) => {
-    const formData = new FormData();
+  // const editPlayerInfo = (data) => {
+  //   const formData = new FormData();
 
-    // Append form data for coach and academy
-    formData.append('name', data.name);
-    formData.append('experience', data.experience);
-    formData.append('level', data.level);
-    formData.append('phone_number', data.phone_number);
-    formData.append('coach_location', data.coach_location);
-    formData.append('academy_name', data.academy_name);
-    formData.append('academy_location', data.academy_location);
-    formData.append('address', data.address);
-    formData.append('academy_phonenumber', data.academy_phonenumber);
+  //   // Append form data for coach and academy
+  //   formData.append('player_name', data.name);
+  //   formData.append('player_phonenumber', data.player_phonenumber);
+  //   formData.append('player_gender', data.player_gender);
+  //   formData.append('cat_id', data.cat_id);
   
-    // Append files conditionally
+  //   // Append files conditionally
+  //   if (data.image[0]) {
+  //     formData.append('image', data.image[0]);
+  //   }
+
+  //   // Make the API call to update coach and academy details
+  //   axios
+  //     .post(`/UpdatePlayerData/${id}`, formData,{
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     })
+  //     .then((response) => {
+  //       toast.success("Record Updated Successfully");
+  //       console.log(response.data); // Debug response if needed
+  //       navigation('/allcoach');
+  //     })
+  //     .catch((error) => {
+  //       toast.error("Failed to Update Record");
+  //       console.error(error.response?.data || error.message);
+  //     });
+  // };
+  
+
+  const editPlayerInfo = (data) => {
+    const formData = new FormData();
+  
+    formData.append('player_name', data.player_name);
+    formData.append('player_phonenumber', data.player_phonenumber);
+    formData.append('player_gender', data.player_gender);
+    formData.append('cat_id', selectedCategory);
+  
     if (data.image[0]) {
       formData.append('image', data.image[0]);
     }
-    if (data.certificate[0]) {
-      formData.append('certificate', data.certificate[0]);
-    }
-    if (data.academy_certificate[0]) {
-      formData.append('academy_certificate', data.academy_certificate[0]);
-    }
-
-    // Make the API call to update coach and academy details
+  
+    // Append parent info
+    data.parent.forEach((parent, index) => {
+      formData.append(`parent[${index}][name]`, parent.name);
+      formData.append(`parent[${index}][cnic]`, parent.cnic);
+      formData.append(`parent[${index}][phone_number]`, parent.phone_number);
+    });
+  
     axios
-      .post(`/updateRecord/${id}`, formData,{
+      .post(`/UpdatePlayerData/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
       .then((response) => {
         toast.success("Record Updated Successfully");
-        console.log(response.data); // Debug response if needed
-        navigation('/allcoach');
+        navigation(-1);
       })
       .catch((error) => {
         toast.error("Failed to Update Record");
         console.error(error.response?.data || error.message);
       });
   };
+
+  const user_id = localStorage.getItem('user_id');
+
+
+    const onSubmit = (data) => {
+      axios
+        .post(`/UpdatePassword/${user_id}`, data)
+        .then((response) => {
+          toast.success('Password updated successfully');
+          reset();
+        })
+        .catch((error) => {
+          toast.error('Failed to update password');
+          console.error(error.response?.data || error.message);
+        });
+    };
   
 
   return (
@@ -122,14 +163,14 @@ function Edit_player() {
         <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
           <div className="text-center mb-4">
             <h1 className="text-2xl xl:text-4xl font-bold text-blue-900">
-              Edit Coach
+              Edit Player
             </h1>
           </div>
           {data.map((index, key) => (
             <form
               className="flex flex-col gap-6"
               key={key}
-              onSubmit={handleSubmit(editCoachInfo)}
+              onSubmit={handleSubmit(editPlayerInfo)}
             >
               <div className="-mx-3 md:flex mb-6">
                 {/* Post Title */}
@@ -272,8 +313,6 @@ function Edit_player() {
                     className="block w-full text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded-lg file:py-2 file:px-4 file:border-0 file:mr-4 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                   />
                 </div>
-
-
               </div>
 
               <div className="text-center mb-4">
@@ -368,6 +407,40 @@ function Edit_player() {
               </button>
             </form>
           ))}
+
+          <div >
+              <div className="text-center mb-4 mt-10">
+          <h1 className="text-2xl xl:text-4xl font-bold text-blue-900">
+            Update Password
+          </h1>
+          <div className="border p-4 max-w-md mx-auto mt-4 rounded shadow">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <input
+                type="password"
+                placeholder="New Password"
+                {...register('password')}
+                className="w-full mb-3 p-2 border rounded"
+                required
+              />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                {...register('password_confirmation')}
+                className="w-full mb-3 p-2 border rounded"
+                required
+              />
+              <button
+                type="submit"
+                className="w-full mt-2 tracking-wide font-semibold bg-blue-900 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out"
+              >
+                Update Password
+              </button>
+            </form>
+          </div>
+        </div>
+          </div>
+
+
         </div>
       </Dashboard>
     </>

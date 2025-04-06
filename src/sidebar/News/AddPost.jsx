@@ -6,13 +6,14 @@ import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import the CSS for styling
 // import { AddressAutofill } from '@mapbox/search-js-react';
 import { TextField, MenuItem, Grid, List, ListItem } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 
 
 function AddPost() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+  const navigate = useNavigate();
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -59,7 +60,9 @@ function AddPost() {
           })
           .then((response) => {
             toast.success("Post Add Successfully");
-            // console.log(response.data.vedio);
+            setTimeout(()=>{
+              navigate(-1);
+            },1000)
             reset();
           })
           .catch((error) => {
@@ -139,92 +142,93 @@ function AddPost() {
     <h1 className="text-2xl xl:text-4xl font-bold text-blue-900">Add Post</h1>
   </div>
   <form onSubmit={handleSubmit(addPost)} className="flex flex-col gap-6">
-    <div className="-mx-3 md:flex mb-6">
-      {/* Post Title */}
-      <div className="md:w-1/2 px-3 mb-6 md:mb-0">
-        <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor="post_title">
-          Post Title
-        </label>
-        <input
-          type="text"
-        id="post_title"
-        placeholder="Post Title"
-        {...register('post_title', { 
-          required: "Post Title is required", 
-          maxLength: {
-            value: 25,
-            message: "Post Title cannot exceed 10 characters"
-          } 
-        })}
-        className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
-          errors.post_title ? 'border-red-500' : 'border-grey-lighter'
-        } rounded py-3 px-4 mb-3`}
-        maxLength={25}
-      />
-      {errors.post_title && (
-        <p className="text-red-500 text-xs italic">
-          {errors.post_title.message}
-        </p>
-      )}
+  <div className="-mx-3 md:flex mb-6">
+  {/* Post Title */}
+  <div className="md:w-1/3 px-3 mb-6 md:mb-0">
+    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="post_title">
+      Post Title
+    </label>
+    <input
+      type="text"
+      id="post_title"
+      placeholder="Post Title"
+      {...register('post_title', {
+        required: "Post Title is required",
+        maxLength: {
+          value: 25,
+          message: "Post Title cannot exceed 25 characters"
+        }
+      })}
+      className={`appearance-none block w-full bg-white text-gray-700 border ${
+        errors.post_title ? 'border-red-500' : 'border-gray-300'
+      } rounded py-3 px-4 mb-1 leading-tight focus:outline-none focus:bg-white`}
+      maxLength={25}
+    />
+    {errors.post_title && (
+      <p className="text-red-500 text-xs italic">{errors.post_title.message}</p>
+    )}
+  </div>
 
-      </div>
+  {/* City */}
+  <div className="md:w-1/3 px-3 mb-6 md:mb-0">
+    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="city">
+      City
+    </label>
+    <input
+      type="text"
+      id="city"
+      placeholder="Enter city name"
+      value={inputValue}
+      onChange={handleCityChange}
+      className={`appearance-none block w-full bg-white text-gray-700 border ${
+        errors.profile_location ? 'border-red-500' : 'border-gray-300'
+      } rounded py-3 px-4 mb-1 leading-tight focus:outline-none focus:bg-white`}
+    />
+    {errors.profile_location && (
+      <p className="text-red-500 text-xs italic">{errors.profile_location.message}</p>
+    )}
+    {citySuggestions.length > 0 && (
+      <ul className="border border-gray-300 rounded mt-1 max-h-32 overflow-y-auto bg-white z-10">
+        {citySuggestions.map((city, index) => (
+          <li
+            key={index}
+            onClick={() => handleCitySelect(city)}
+            className="cursor-pointer px-3 py-2 hover:bg-gray-100"
+          >
+            {city}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
 
-      
-      <Grid item xs={12}>
-          <TextField
-            label="City"
-            placeholder="Enter city name"
-            value={inputValue}
-            onChange={handleCityChange}
-            fullWidth
-            size="small"
-            error={!!errors.profile_location}
-            helperText={errors.profile_location?.message}
-            // {...register('profile_location', { required: 'Location is required' })}
-          />
-          {citySuggestions.length > 0 && (
-            <List style={{ border: '1px solid #ccc', maxHeight: '150px', overflowY: 'auto' }}>
-              {citySuggestions.map((city, index) => (
-                <ListItem button key={index} onClick={() => handleCitySelect(city)}>
-                  {city}
-                </ListItem>
-              ))}
-            </List>
-          )}
-        </Grid>
+  {/* Post Name */}
+  <div className="md:w-1/3 px-3">
+    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="post_name">
+      Post Name
+    </label>
+    <input
+      type="text"
+      id="post_name"
+      placeholder="Post Name"
+      {...register('post_name', {
+        required: "Post Name is required",
+        maxLength: {
+          value: 25,
+          message: "Post Name cannot exceed 25 characters"
+        }
+      })}
+      className={`appearance-none block w-full bg-white text-gray-700 border ${
+        errors.post_name ? 'border-red-500' : 'border-gray-300'
+      } rounded py-3 px-4 mb-1 leading-tight focus:outline-none focus:bg-white`}
+      maxLength={25}
+    />
+    {errors.post_name && (
+      <p className="text-red-500 text-xs italic">{errors.post_name.message}</p>
+    )}
+  </div>
+</div>
 
-      {/* <input type="hidden" value={location} {...register('post_location')} /> */}
-      
-      {/* Post Name */}
-      <div className="md:w-1/2 px-3">
-        <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor="post_name">
-          Post Name
-        </label>
-        <input
-          type="text"
-          id="post_name"
-          placeholder="Post Name"
-          {...register('post_name', {
-            required: "Post Name is required", 
-            // minLength: {
-            //   value: 25,
-            //   message: "Post Name must be exactly 25 characters"
-            // },
-            maxLength: {
-              value: 25,
-              message: "Post Name must be exactly 25 characters"
-            }
-          })}
-          className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${errors.post_name ? 'border-red-500' : 'border-grey-lighter'} rounded py-3 px-4`}
-          maxLength={25}
-        />
-        {errors.post_name && (
-          <p className="text-red-500 text-xs italic">
-            {errors.post_name.message}
-          </p>
-        )}
-      </div>
-    </div>
 
     <div className="-mx-3 mb-6">
   {/* Post Description */}
@@ -297,7 +301,7 @@ function AddPost() {
     </div>
 
     {/* Coach ID (hidden) */}
-    <input type="text" {...register('coach_id')} value={coach_id} />
+    <input type="hidden" {...register('coach_id')} value={coach_id} />
 
     {/* Submit Button */}
     <button

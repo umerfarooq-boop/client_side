@@ -13,10 +13,10 @@ function AllPost() {
     const [data, setData] = useState([]); 
     const [loading, setLoading] = useState(true);
     const [toggle,setToggle] = useState(true);
-
+    const coach_id = localStorage.getItem('coach_id');
     const fetchData = async () => {
         try {
-        const response = await axios.get("/posts");
+        const response = await axios.get(`ShowSignleCoachPost/${coach_id}`);
         if (response.data && response.data.post) {
             setData(response.data.post); // Assuming `coach` contains an array of data
             setLoading(false)

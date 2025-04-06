@@ -87,6 +87,7 @@ function Nav() {
               } else if(response.data && response.data.user) {
                   setProfile([response.data.user]);
               }
+            
           } catch (error) {
               console.error('Error fetching profile data:', error);
           }
