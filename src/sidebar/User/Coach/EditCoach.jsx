@@ -365,7 +365,7 @@ function EditCoach() {
                   Edit Accademy Record
                 </h1>
               </div>
-
+ 
               <div className="-mx-3 md:flex mb-6">
                 {/* Post Description */}
                 <div className="md:w-1/2 px-3">

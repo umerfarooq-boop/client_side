@@ -30,7 +30,7 @@ import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import BuildCircleIcon from "@mui/icons-material/BuildCircle";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-
+import RateReviewIcon from '@mui/icons-material/RateReview';
 import PeopleIcon from "@mui/icons-material/People";
 import GroupIcon from "@mui/icons-material/Group";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
@@ -469,6 +469,20 @@ function Dashboard({ children }) {
               className="flex items-center text-black"
             >
               Profile
+            </Link>
+          </Typography>
+          <Typography
+            as="li"
+            variant="small"
+            color="blue-gray"
+            className="flex items-center gap-x-2 p-1 font-medium"
+          >
+            <RateReviewIcon className="text-[#90A4AE]" fontSize="small" />
+            <Link
+              to={`/add_reviews`}
+              className="flex items-center text-black"
+            >
+              Reviews 
             </Link>
           </Typography>
         </div>

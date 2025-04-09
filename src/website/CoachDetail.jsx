@@ -7,6 +7,9 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { RotatingLines } from "react-loader-spinner";
 import Footer from "./Footer";
 import Map, { Marker } from "react-map-gl";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import StarIcon from "@mui/icons-material/StarBorder";
+import { format } from "date-fns";
 
 function CoachDetail() {
   const { id } = useParams();
@@ -16,12 +19,79 @@ function CoachDetail() {
   const [page, setPage] = useState(1);
   const [coordinates, setCoordinates] = useState({});
   const navigate = useNavigate();
+  const [showReviews, setShowReviews] = useState(false);
+  // Coach Reviews Rating
+
+
+  const [playerReviews, setPlayerReviews] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [sortBy, setSortBy] = useState("recent");
+  // const {coach_id} = useParams(); 
+
+  const getPlayerRecord = async () => {
+    try {
+      const response = await axios.get(`rating_reviews/${id}`);
+      if (response.data && Array.isArray(response.data.reviews)) {
+        setPlayerReviews(response.data.reviews);
+        setReviews(response.data.reviews);
+
+        // Calculate average rating
+        const totalRating = response.data.reviews.reduce(
+          (acc, review) => acc + review.rating,
+          0
+        );
+        const avgRating = totalRating / response.data.reviews.length;
+        setAverageRating(avgRating);
+      } else if (response.data && response.data.reviews) {
+        setPlayerReviews([response.data.reviews]);
+      }
+    } catch (error) {
+      console.error("Error fetching player reviews:", error);
+    }
+  };
+
+  useEffect(() => {
+    getPlayerRecord();
+  }, [id]);
+
+  const handleSort = (criteria) => {
+    let sortedReviews = [...playerReviews]; // Always use original data
+
+    if (criteria === "recent") {
+      sortedReviews.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+    } else if (criteria === "rating") {
+      sortedReviews.sort((a, b) => b.rating - a.rating);
+    } else if (criteria === "helpful") {
+      sortedReviews.sort((a, b) => b.helpful - a.helpful);
+    }
+
+    setReviews(sortedReviews); // Update displayed reviews
+  };
+
+  useEffect(() => {
+    if (sortBy) {
+      handleSort(sortBy);
+    }
+  }, [sortBy, playerReviews]);
+
+
+  const player_id = localStorage.getItem("player_id");
+  const coach_record = localStorage.getItem("coach_record");
+
+  // Coach Reviews Rating
 
   const getPost = async () => {
     setLoader(true);
     try {
       const response = await axios.get(`/showBlogPost/${id}?page=${page}`);
-      if (response.data && response.data.post && Array.isArray(response.data.post.data)) {
+      if (
+        response.data &&
+        response.data.post &&
+        Array.isArray(response.data.post.data)
+      ) {
         const postList = response.data.post.data;
         setPosts(postList);
         setPagination(response.data.post);
@@ -133,7 +203,6 @@ function CoachDetail() {
           </div>
 
           {posts.length > 0 ? (
-            
             posts.map((post, key) => (
               <div
                 key={key}
@@ -148,7 +217,9 @@ function CoachDetail() {
                 </div>
                 <div className="mt-5">
                   <p className="font-medium text-2xl mb-2">{post.post_title}</p>
-                  <p className="text-base text-gray-700 mb-4">{post.post_description}</p>
+                  <p className="text-base text-gray-700 mb-4">
+                    {post.post_description}
+                  </p>
                   <div className="flex justify-between items-center border-t pt-2 mt-4">
                     <div className="flex items-center space-x-1 text-gray-600">
                       <AccessTimeIcon className="text-gray-500" />
@@ -162,20 +233,23 @@ function CoachDetail() {
                           const days = Math.floor(hours / 24);
                           const weeks = Math.floor(days / 7);
                           if (seconds < 60) return "Just now";
-                          if (minutes < 60) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
-                          if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-                          if (days < 7) return `${days} day${days > 1 ? "s" : ""} ago`;
+                          if (minutes < 60)
+                            return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+                          if (hours < 24)
+                            return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+                          if (days < 7)
+                            return `${days} day${days > 1 ? "s" : ""} ago`;
                           return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
                         })()}
                       </p>
                     </div>
                     <div className="flex items-center space-x-1 text-gray-600">
                       <LocationOnSharpIcon className="text-gray-500" />
-                      <p>{post.post_location.split(',')[0]}</p>
+                      <p>{post.post_location.split(",")[0]}</p>
                     </div>
                   </div>
                 </div>
-                <div >
+                <div>
                   {coordinates[post.id] ? (
                     <Map
                       initialViewState={{
@@ -193,43 +267,176 @@ function CoachDetail() {
                         color="red"
                       />
                     </Map>
-                    
                   ) : (
                     <p>Location not available</p>
                   )}
-                  
                 </div>
               </div>
             ))
-            
           ) : (
             <p>No posts available</p>
-          )} 
-         <div className="m-4 flex justify-end">{renderPaginationLinks()}</div>
-      
+          )}
+          <div className="m-4 flex justify-end">{renderPaginationLinks()}</div>
 
-      <button
-      onClick={loadingEvent}
-      className="justify-center m-auto items-center flex text-black bg-cyan-500 rounded-md font-medium p-3 text-xl mt-24"
-    >
-      
-      {loader ? (
-        <Bars
-          height="40"
-          width="40"
-          color="black"
-          className="item-center "
-          ariaLabel="bars-loading"
-          visible={true}
-        />
-      ) : <p className="text-medium text-md ">Book Appointment</p>}
-    </button>
-      
-      <div className="mt-20 sm:mt-24 md:mt-28 lg:mt-32">
-        <div className="text-center mt-10"></div>
-      </div>
-      
-      <Footer />
+          {/* Coach Reviews */}
+            {
+              playerReviews.length > 0 ? (
+                <div>
+          <div className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold mb-4">Customer Reviews</h2>
+              <div className="flex items-center gap-4 mb-2">
+                {playerReviews.length > 0 && playerReviews[0].coach?.image ? (
+                  <img
+                    src={`http://127.0.0.1:8000/uploads/coach_image/${playerReviews[0].coach.image}`}
+                    alt="Coach"
+                    style={{
+                      width: "70px",
+                      height: "70px",
+                      borderRadius: "5px",
+                      padding: "5px",
+                      border: "1px solid #ddd",
+                    }}
+                  />
+                ) : (
+                  <span>No coach image available</span>
+                )}
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="text-4xl font-bold">
+                  {averageRating.toFixed(1)}
+                </div>
+                <div>
+                  <div className="flex text-yellow-400 mb-1">
+                    {[1, 2, 3, 4, 5].map((num) => (
+                      <StarIcon
+                        key={num}
+                        className={
+                          num <= averageRating
+                            ? "text-yellow-400"
+                            : "text-gray-300"
+                        }
+                      />
+                    ))}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {reviews.length} reviews
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-4 flex justify-between items-center">
+              <h3 className="text-xl font-semibold">All Reviews</h3>
+              {/* <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="p-2 border rounded"
+              >
+                <option value="recent">Most Recent</option>
+                <option value="rating">Highest Rated</option>
+                <option value="helpful">Most Helpful</option>
+              </select> */}
+
+              <select
+              value={showReviews ? "reviews" : "hide"}
+              onChange={(e) => setShowReviews(e.target.value === "reviews")}
+              className="p-2 border rounded"
+            >
+              <option value="hide">Hide</option>
+              <option value="reviews">Reviews</option>
+            </select>
+            </div>
+
+            <div className="space-y-4">
+            <div
+  className={`transition-all duration-500 ease-in-out ${
+    showReviews ? "max-h-auto opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+  }`}
+>
+              {playerReviews.map((review, index) => (
+                <div
+                  key={index}
+                  className="p-4 border rounded-lg hover:shadow-md transition-shadow"
+                >
+                  {/* Player Info */}
+                  <div className="flex items-center gap-4 mb-3">
+                    <img
+                      src={`http://127.0.0.1:8000/uploads/player_image/${review.player?.image}`}
+                      alt="Player"
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <div>
+                      <div className="font-medium">
+                        {review.player?.player_name}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {format(new Date(review.created_at), "MMM d, yyyy")}
+                      </div>
+                    </div>
+                    <div className="ml-auto flex items-center text-green-600">
+                      <CheckCircleIcon className="w-5 h-5 mr-1" />
+                      <span className="text-sm">Verified Reviews</span>
+                    </div>
+                  </div>
+
+                  {/* Star Rating */}
+                  <div className="flex text-yellow-400 mb-2">
+                    {[1, 2, 3, 4, 5].map((num) => (
+                      <StarIcon
+                        key={num}
+                        className={
+                          num <= review.rating
+                            ? "text-yellow-400"
+                            : "text-gray-300"
+                        }
+                      />
+                    ))}
+                  </div>
+
+                  {/* Review Text */}
+                  <p className="text-gray-700 mb-3">{review.reviews}</p>
+
+                  {/* Helpful Button */}
+                  <button className="text-sm text-gray-600 mt-2 hover:text-blue-600 transition-colors"></button>
+                </div>
+              ))}
+              </div>
+            </div>
+          </div>
+                </div>
+              ) : (
+                <div>
+                  <h1>No Reviews</h1>
+                </div>
+              )
+            }
+          {/* Coach Reviews */}
+
+          <button
+            onClick={loadingEvent}
+            className="justify-center m-auto items-center flex text-black bg-cyan-500 rounded-md font-medium p-3 text-xl mt-24"
+          >
+            {loader ? (
+              <Bars
+                height="40"
+                width="40"
+                color="black"
+                className="item-center "
+                ariaLabel="bars-loading"
+                visible={true}
+              />
+            ) : (
+              <p className="text-medium text-md ">Book Appointment</p>
+            )}
+          </button>
+
+          <div className="mt-20 sm:mt-24 md:mt-28 lg:mt-32">
+            <div className="text-center mt-10"></div>
+          </div>
+
+          <Footer />
         </div>
       )}
     </>

@@ -75,6 +75,7 @@ import AccountSuspendPage from './website/AccountSuspendPage';
 import ParentHome from './ParentDashboard/ParentHome';
 import PlayerAttendance from './ParentDashboard/PlayerAttendance';
 import PlayerScore from './ParentDashboard/PlayerScore'
+import AddReviews from './PlayerReviews/AddReviews';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
@@ -651,6 +652,18 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+          {/* Add Coach Reviews */}
+          <Route
+          path='/add_reviews'
+          element={
+            <ProtectedRoute>
+              <AddReviews />
+            </ProtectedRoute>
+          }
+        />
+          {/* Add Coach Reviews */}
+
 
         /**
         * ! Appointment
