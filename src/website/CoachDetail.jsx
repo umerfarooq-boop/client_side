@@ -22,7 +22,7 @@ function CoachDetail() {
   const [showReviews, setShowReviews] = useState(false);
   // Coach Reviews Rating
 
-
+  const role = localStorage.getItem('role')
   const [playerReviews, setPlayerReviews] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
@@ -284,7 +284,7 @@ function CoachDetail() {
                 <div>
           <div className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-lg">
             <div className="mb-8">
-              <h2 className="text-3xl font-bold mb-4">Customer Reviews</h2>
+              <h2 className="text-3xl font-bold mb-4">Player Reviews</h2>
               <div className="flex items-center gap-4 mb-2">
                 {playerReviews.length > 0 && playerReviews[0].coach?.image ? (
                   <img
@@ -327,7 +327,10 @@ function CoachDetail() {
               </div>
             </div>
 
-            <div className="mb-4 flex justify-between items-center">
+          {
+            role === 'admin' ? (
+              <div>
+                <div className="mb-4 flex justify-between items-center">
               <h3 className="text-xl font-semibold">All Reviews</h3>
               {/* <select
                 value={sortBy}
@@ -404,6 +407,13 @@ function CoachDetail() {
               ))}
               </div>
             </div>
+              </div>
+            ) : (
+              <div></div>
+            )
+          }
+
+
           </div>
                 </div>
               ) : (
@@ -414,7 +424,10 @@ function CoachDetail() {
             }
           {/* Coach Reviews */}
 
-          <button
+          {
+            role === 'player' ? (
+              <div>
+                <button
             onClick={loadingEvent}
             className="justify-center m-auto items-center flex text-black bg-cyan-500 rounded-md font-medium p-3 text-xl mt-24"
           >
@@ -431,6 +444,11 @@ function CoachDetail() {
               <p className="text-medium text-md ">Book Appointment</p>
             )}
           </button>
+              </div>
+            ) : (
+              <div></div>
+            )
+          }
 
           <div className="mt-20 sm:mt-24 md:mt-28 lg:mt-32">
             <div className="text-center mt-10"></div>

@@ -171,7 +171,7 @@ function Nav() {
         </Typography>
         
         {
-          role === 'player' ? (
+          role === 'player' || role === 'admin'? (
             <div>
               <Typography
           as="li"
