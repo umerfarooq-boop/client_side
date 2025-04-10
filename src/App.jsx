@@ -76,6 +76,7 @@ import ParentHome from './ParentDashboard/ParentHome';
 import PlayerAttendance from './ParentDashboard/PlayerAttendance';
 import PlayerScore from './ParentDashboard/PlayerScore'
 import AddReviews from './PlayerReviews/AddReviews';
+import CheckoutForm from './Payment/CheckoutForm';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
@@ -103,6 +104,13 @@ function App() {
         <Route path='/parent_home/:id' element={<ParentHome />} />
         <Route path='/parent_player_attendance/:id' element={<PlayerAttendance />} />
         <Route path='/parent_player_score/:id' element={<PlayerScore />} />
+
+
+        {/* Payment Form Checkout */}
+        <Route path='/checkoutform' element={<CheckoutForm />} />
+        {/* Payment Form Checkout */}
+
+
         {/* Wrap the dashboard and other private routes with ProtectedRoute */}
         <Route
           path='/dashboard/:id/*'
