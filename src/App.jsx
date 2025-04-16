@@ -77,8 +77,11 @@ import PlayerAttendance from './ParentDashboard/PlayerAttendance';
 import PlayerScore from './ParentDashboard/PlayerScore'
 import AddReviews from './PlayerReviews/AddReviews';
 import CheckoutForm from './Payment/CheckoutForm';
+import PaymentPage from './Payment/PaymentPage';
+import StripePaymentForm from './Payment/StripePaymentForm';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
+
 function App() {
   const {id} = useParams();
   return (
@@ -107,7 +110,11 @@ function App() {
 
 
         {/* Payment Form Checkout */}
-        <Route path='/checkoutform' element={<CheckoutForm />} />
+        <Route path="/checkoutform" element={<CheckoutForm />} />
+        <Route path="/payment" element={<PaymentPage />} />
+
+        <Route path="/stripepaymentform" element={<StripePaymentForm />} />
+
         {/* Payment Form Checkout */}
 
 

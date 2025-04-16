@@ -111,8 +111,41 @@ function Appoinment() {
         const response = await axios.post("/coachschedule", eventData);
         if (response.status === 201) {
           toast.success("Schedule Created Successfully");
-          const coach_record = response.data.coach.coach_id;
-          localStorage.setItem('coach_record',coach_record);
+          // const coach_record = response.data.coach.coach_id;
+          // localStorage.setItem('coach_record',coach_record);
+          // const coach_userid = response.data.coach?.coach?.created_by;
+          // if (coach_userid !== undefined) {
+          //   localStorage.setItem('coach_userid', coach_userid); // Specify a key for the value
+          // } else {
+          //   console.error('created_by is undefined in the coach object.');
+          // }
+
+          // const firstCoach = response.data.coach?.[0];
+  
+          const firstCoach = response.data.coach;
+  
+          if (firstCoach) {
+            // Debugging: Log the first coach object
+            console.log("First Coach Object:", firstCoach);
+        
+            // Storing coach_id from the main coach object
+            const coach_record = firstCoach?.coach_id;
+            if (coach_record !== undefined) {
+              localStorage.setItem('coach_record', coach_record);
+            } else {
+              console.error('coach_id is undefined.');
+            }
+        
+            // Storing created_by from the nested coach object
+            const coach_userid = firstCoach?.coach?.created_by;
+            if (coach_userid !== undefined) {
+              localStorage.setItem('coach_userid', coach_userid);
+            } else {
+              console.error('created_by is undefined in the nested coach object.');
+            }
+          } else {
+            console.error('No coach object found in the response.');
+          }
           const newEvent = {
             title: eventData.event_name,
             start: new Date(`${eventData.from_date}T${eventData.start_time}`),

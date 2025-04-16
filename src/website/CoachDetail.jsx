@@ -353,11 +353,11 @@ function CoachDetail() {
             </div>
 
             <div className="space-y-4">
-            <div
-  className={`transition-all duration-500 ease-in-out ${
-    showReviews ? "max-h-auto opacity-100" : "max-h-0 opacity-0 overflow-hidden"
-  }`}
->
+              <div
+                className={`transition-all duration-500 ease-in-out ${
+                  showReviews ? "max-h-auto opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+                }`}
+              >
               {playerReviews.map((review, index) => (
                 <div
                   key={index}

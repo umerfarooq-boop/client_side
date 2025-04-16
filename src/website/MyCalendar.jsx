@@ -6,6 +6,7 @@ import { useAppointments } from "../context/AppointmentContext";
 import axios from "../axios";
 import { RotatingLines } from "react-loader-spinner";
 import { useParams } from "react-router-dom";
+import Chat from "../Chat/Chat";
 const localizer = momentLocalizer(moment);
 
 function MyCalendar() {
@@ -14,6 +15,10 @@ function MyCalendar() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [view, setView] = useState("month");
   const [loading, setLoading] = useState(false);
+  const player_id = localStorage.getItem('player_id');
+  const coach_record = localStorage.getItem('coach_record');
+  const currentUser = localStorage.getItem('user_id');
+  const coach_userid = JSON.parse(localStorage.getItem('coach_userid'));
   const {id} = useParams();
   useEffect(() => {
     const getCategoryData = async () => {
@@ -54,51 +59,61 @@ function MyCalendar() {
           />
         </div>
         ) : (
-          <Calendar
-        localizer={localizer}
-        events={appointments} // Appointments from context
-        startAccessor="start"
-        endAccessor="end"
-        views={["month", "week", "agenda"]}
-        titleAccessor="title"
-        style={{ height: 500 }}
-        onNavigate={(newDate) => setSelectedDate(newDate)}
-        onDrillDown={(date, view) => {
-          if (view === "agenda") return;
-          setView("agenda");
-          setSelectedDate(date);
-        }}
-        date={selectedDate}
-        view={view}
-        onView={(newView) => setView(newView)}
-        components={{
-          agenda: {
-            event: ({ event }) => (
-              <div>
-                <strong>{event.title}</strong>
-                <div>Player: {event.player_name}</div>
-              </div>
-            ),
-          },
-        }}
-        eventPropGetter={(event) => {
-          let backgroundColor;
-          if (event.status === "processing") {
-            backgroundColor = "yellow";
-          } else if (event.status === "booked") {
-            backgroundColor = "#22c55e";
-          } else if (event.status === "reject") {
-            backgroundColor = "red";
-          }
+          <div>
+            <Calendar
+              localizer={localizer}
+                  events={appointments} // Appointments from context
+                  startAccessor="start"
+                  endAccessor="end"
+                  views={["month", "week", "agenda"]}
+                  titleAccessor="title"
+                  style={{ height: 500 }}
+                  onNavigate={(newDate) => setSelectedDate(newDate)}
+                  onDrillDown={(date, view) => {
+                    if (view === "agenda") return;
+                    setView("agenda");
+                    setSelectedDate(date);
+                  }}
+                  date={selectedDate}
+                  view={view}
+                  onView={(newView) => setView(newView)}
+                  components={{
+                    agenda: {
+                      event: ({ event }) => (
+                        <div>
+                          <strong>{event.title}</strong>
+                          <div>Player: {event.player_name}</div>
+                        </div>
+                      ),
+                    },
+                  }}
+                  eventPropGetter={(event) => {
+                    let backgroundColor;
+                    if (event.status === "processing") {
+                      backgroundColor = "yellow";
+                    } else if (event.status === "booked") {
+                      backgroundColor = "#22c55e";
+                    } else if (event.status === "reject") {
+                      backgroundColor = "red";
+                    }
 
-          return {
-            style: {
-              backgroundColor,
-              color: "black",
-            },
-          };
-        }}
-      />
+                    return {
+                      style: {
+                        backgroundColor,
+                        color: "black",
+                      },
+                    };
+              }}
+            />
+
+              {/* ✅ Show Chat Box below calendar if user is selected */}
+  
+              <div className="mt-4">
+                <Chat currentUser={currentUser} receiverId={coach_userid}/>
+              </div>
+ 
+            
+          </div>
         )
       }
     </div>
