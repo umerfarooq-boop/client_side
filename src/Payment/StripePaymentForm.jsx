@@ -13,6 +13,7 @@ const CheckoutForm = ({ amount }) => {
   const elements = useElements();
   const [clientSecret, setClientSecret] = useState('');
   const navigate = useNavigate();
+  const user_id = localStorage.getItem('user_id');
   useEffect(() => {
     axios.post('/create-payment-intent', { amount })
       .then(res => setClientSecret(res.data.clientSecret))
@@ -36,7 +37,8 @@ const CheckoutForm = ({ amount }) => {
       payment_method: {
         card,
         billing_details: {
-          name: name
+          name: name,
+          user_id:{user_id}
         },
       },
     });

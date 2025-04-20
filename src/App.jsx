@@ -79,6 +79,8 @@ import AddReviews from './PlayerReviews/AddReviews';
 import CheckoutForm from './Payment/CheckoutForm';
 import PaymentPage from './Payment/PaymentPage';
 import StripePaymentForm from './Payment/StripePaymentForm';
+import Question from './website/Question';
+import Testimonial from './website/Testimonial';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 
@@ -98,6 +100,8 @@ function App() {
         <Route path='/coachpost' element={<CoachPost />} />
         <Route path='/page' element={<Page />} />
         <Route path='/contact' element={<Contact />} />
+        <Route path='/question' element={<Question />} />
+        <Route path='/testimonial' element={<Testimonial />} />
         <Route path='/schedule/:id' element={<Schedule />} />
         <Route path='/admin-profile' element={<AdminProfile />} />
         <Route path='/coachdetail/:id' element={<CoachDetail />} />
