@@ -18,7 +18,7 @@ import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import SportsCricketIcon from '@mui/icons-material/SportsCricket';
 
 function Nav() {
-    const [openNav, setOpenNav] = React.useState(false);
+    const [openNav, setOpenNav] = useState(false);
     
   
     React.useEffect(() => {

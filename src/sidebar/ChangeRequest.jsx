@@ -207,7 +207,7 @@ function ChangeRequest({id}) {
                     >
                       Decline
                     </button>
-                    <Chat currentUser={currentUser} receiverId={item.created_by} />
+                    <Chat currentUser={currentUser} receiverId={item.created_by}   />
                   </div>
                 ) : item.status === "booked" ? (
                   <button className="bg-green-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">

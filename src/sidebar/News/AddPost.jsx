@@ -247,7 +247,7 @@ function AddPost() {
         validate: {
           maxWords: (value) => {
             const wordCount = value.trim().split(/\s+/).length;
-            return wordCount <= 100 || "Post Description cannot exceed 100 words";
+            return wordCount <= 120 || "Post Description cannot exceed 120 words";
           }
         }
       })}

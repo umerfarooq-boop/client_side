@@ -12,6 +12,7 @@ function Signup() {
   // localStorage.removeItem('coach_record');
 localStorage.removeItem('email');
 localStorage.removeItem('role');
+localStorage.removeItem('coach_id');
 localStorage.removeItem('token');
 localStorage.removeItem('user_id');
 localStorage.removeItem('mapbox.eventData.uuid:dW1lcndhbGk=');
@@ -32,7 +33,7 @@ localStorage.removeItem('profile_location');
   const [loading, setLoading] = useState(false);
   const Signupuser = async (data) => {
     // localStorage.removeItem('email');
-    localStorage.removeItem('token');
+    // localStorage.removeItem('token');
     // localStorage.removeItem('role');
     // localStorage.removeItem('name');
 

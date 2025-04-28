@@ -183,20 +183,21 @@ useEffect(() => {
       <CloseIcon />
     </IconButton>
   </div>
+
   <div
-    ref={chatContainerRef}
-    className="h-40 overflow-y-auto flex flex-col"
-  >
-    {messages.map((msg, i) => (
+  ref={chatContainerRef}
+  className="h-40 overflow-y-auto flex flex-col space-y-2 px-4"
+>
+  {messages.map((msg, i) => {
+    const isSender = msg.sender_id === currentUser;
+    return (
       <div
         key={i}
-        className={`flex mb-2 ${
-          msg.sender_id === currentUser ? 'justify-end' : 'justify-start'
-        }`}
+        className={`flex ${isSender ? 'justify-end' : 'justify-start'}`}
       >
         <div
-          className={`p-2 rounded-lg max-w-xs ${
-            msg.sender_id === currentUser ? 'bg-blue-500 text-white' : 'bg-gray-200'
+          className={`p-2 rounded-lg max-w-xs break-words ${
+            isSender ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'
           }`}
         >
           {msg.message.startsWith('http') ? (
@@ -204,7 +205,7 @@ useEffect(() => {
               href={msg.message}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-700 underline"
+              className={`underline ${isSender ? 'text-white' : 'text-blue-700'}`}
             >
               {msg.message}
             </a>
@@ -213,8 +214,12 @@ useEffect(() => {
           )}
         </div>
       </div>
-    ))}
-  </div>
+    );
+  })}
+</div>
+
+
+
   <div className="flex mt-4">
     <input
       type="text"

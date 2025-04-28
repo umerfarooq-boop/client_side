@@ -96,7 +96,7 @@ const CoachProfile = () => {
 
     return (
         <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
-            <input type="hidden" value={user_id} {...register('user_id')} />
+            <input type="hidden" value={user_id} {...register('created_by')} />
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                     <TextField

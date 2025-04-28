@@ -108,6 +108,16 @@ const CheckoutForm = () => {
         date.setMinutes(minutes);
         return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).replace(":00", "");
     };
+
+    const getDayCount = (from, to) => {
+        const start = new Date(from);
+        const end = new Date(to);
+        const diffTime = end - start;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays + 1; // always count at least 1 day
+      };
+      
+
     const handleFieldChange = (fieldName, value) => {
         // Set the field's updated value in the form
         setValue(fieldName, value);
@@ -287,47 +297,35 @@ const CheckoutForm = () => {
                                     </div>
 
                                     <div className="flex items-center justify-between mt-3">
-                                        <span className="flex items-center gap-2 font-semibold">
-                                            📅 Schedule:
-                                        </span>
+                                    <span className="flex items-center gap-2 font-semibold">📅 Schedule:</span>
                                     <span className="text-lg font-medium">
-                                    {index.to_date && index.from_date 
-                                        ? `${Math.ceil(
-                                            (new Date(index.to_date) - new Date(index.from_date)) / (1000 * 60 * 60 * 24)
-                                        )} days`
+                                        {index.to_date && index.from_date 
+                                        ? `${getDayCount(index.from_date, index.to_date)} days`
                                         : "N/A"}
                                     </span>
                                     </div>
 
                                     <div className="flex items-center justify-between mt-3">
-                                    <span className="flex items-center gap-2 font-semibold">
-                                        🕒 Time:
+                                    <span className="flex items-center gap-2 font-semibold">🕒 Time:</span>
+                                    <span className="text-lg font-medium">
+                                        {formatTime(index.start_time)} to {formatTime(index.end_time)}
                                     </span>
-                                        <span className="text-lg font-medium">
-                                            {formatTime(index.start_time)} to {formatTime(index.end_time)}
-                                        </span>
                                     </div>
 
                                     <div className="flex items-center justify-between mt-3">
-                                        <span className="flex items-center gap-2 font-semibold">
-                                            <span role="img" aria-label="clock">💰</span> Hourly Rate:
-                                        </span>
-                                        <span className="text-lg font-medium">
-                                            {index.coach?.per_hour_charges}
-                                        </span>
+                                    <span className="flex items-center gap-2 font-semibold">💰 Hourly Rate:</span>
+                                    <span className="text-lg font-medium">
+                                        {index.coach?.per_hour_charges}
+                                    </span>
                                     </div>
 
                                     <div className="flex items-center justify-between border-t border-dashed pt-4 mt-4">
-                                        <span className="flex items-center gap-2 text-lg font-bold text-yellow-600">
-                                        💵 Total Amount:
-                                        </span>
-                                        <span className="text-xl font-extrabold text-black">
-                                            {index.to_date && index.from_date && index.coach?.per_hour_charges
-                                                ? `Rs ${Math.ceil(
-                                                    (new Date(index.to_date) - new Date(index.from_date)) / (1000 * 60 * 60 * 24)
-                                                ) * index.coach.per_hour_charges}`
-                                                : "N/A"}
-                                        </span>
+                                    <span className="flex items-center gap-2 text-lg font-bold text-yellow-600">💵 Total Amount:</span>
+                                    <span className="text-xl font-extrabold text-black">
+                                        {index.to_date && index.from_date && index.coach?.per_hour_charges
+                                        ? `Rs ${getDayCount(index.from_date, index.to_date) * index.coach.per_hour_charges}`
+                                        : "N/A"}
+                                    </span>
                                     </div>
                                     {/* // Hidden fields */}
 
@@ -347,7 +345,7 @@ const CheckoutForm = () => {
                                                 ? Math.ceil(
                                                     (new Date(index.to_date) - new Date(index.from_date)) / (1000 * 60 * 60 * 24)
                                                 ) * index.coach.per_hour_charges
-                                                : 0
+                                                : 2000
                                         }
                                         InputProps={{ readOnly: true }}
                                     />

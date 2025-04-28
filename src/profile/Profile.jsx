@@ -58,9 +58,9 @@ const Profile = () => {
       // localStorage.setItem('playwith',response.data.profile.player.playwith);
       setLoader(false); 
 
-      // if (response.data.url) {
-      //   window.location.href = response.data.url;
-      // }
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      }
       
 
       Swal.fire({
