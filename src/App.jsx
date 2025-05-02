@@ -77,15 +77,28 @@ import PlayerAttendance from './ParentDashboard/PlayerAttendance';
 import PlayerScore from './ParentDashboard/PlayerScore'
 import AddReviews from './PlayerReviews/AddReviews';
 import CheckoutForm from './Payment/CheckoutForm';
+<<<<<<< HEAD
 import Emergency  from './emergency/emergency';
+=======
+import PaymentPage from './Payment/PaymentPage';
+import StripePaymentForm from './Payment/StripePaymentForm';
+import Question from './website/Question';
+import Testimonial from './website/Testimonial';
+import PlayerInvoice from './sidebar/Invoice/PlayerInvoice';
+import SingalPlayerInvoice from './sidebar/Invoice/SingalPlayerInvoice';
+import ForgotEmail from './Auth/ForgotEmail';
+import TestComponent from './website/TestComponent';
+>>>>>>> 1a732653e5376c1acb0764a6feb52acbe67bea98
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
+
 function App() {
   const {id} = useParams();
   return (
     <>
       <Link to='/'></Link>
       <Routes>
+        <Route path='/test' element={<TestComponent />} />
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/signup' element={<Signup />} />
@@ -93,9 +106,12 @@ function App() {
         <Route path='/otp' element={<Otp />} />
         <Route path='/resetpassword/:id' element={<ResetPassword />} />
         <Route path='/forgotPass/:id' element={<ForgotOtp />} />
+        <Route path='/forgot_email' element={<ForgotEmail />} />
         <Route path='/coachpost' element={<CoachPost />} />
         <Route path='/page' element={<Page />} />
         <Route path='/contact' element={<Contact />} />
+        <Route path='/question' element={<Question />} />
+        <Route path='/testimonial' element={<Testimonial />} />
         <Route path='/schedule/:id' element={<Schedule />} />
         <Route path='/admin-profile' element={<AdminProfile />} />
         <Route path='/coachdetail/:id' element={<CoachDetail />} />
@@ -108,7 +124,11 @@ function App() {
 
 
         {/* Payment Form Checkout */}
-        <Route path='/checkoutform' element={<CheckoutForm />} />
+        <Route path="/checkoutform" element={<CheckoutForm />} />
+        <Route path="/payment" element={<PaymentPage />} />
+
+        <Route path="/stripepaymentform" element={<StripePaymentForm />} />
+
         {/* Payment Form Checkout */}
 
 
@@ -689,6 +709,28 @@ function App() {
             </Container>
           } 
         />
+
+
+          {/* Invoive Show in Payment */}
+          <Route
+          path='/invoice'
+          element={
+            <ProtectedRoute>
+              <PlayerInvoice />
+            </ProtectedRoute>
+          }
+        />
+
+          <Route
+          path='/singal_invoice'
+          element={
+            <ProtectedRoute>
+              <SingalPlayerInvoice />
+            </ProtectedRoute>
+          }
+        />
+          {/* Invoive Show in Payment */}
+
       </Routes>
     </>
   );

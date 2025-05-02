@@ -91,9 +91,9 @@ const Loginuser = async (data) => {
       localStorage.setItem('user_id', user.id);
 
       const email = localStorage.getItem('email');
-
+      const role = localStorage.getItem('role');
       // If the role is a player, store player-related info
-      if (user.role === "player") {
+      if (role === "player") {
           try {
             const profileResponse = await axios.get(`/profile-data/${user.id}/player`, {
                 headers: {
@@ -113,31 +113,33 @@ const Loginuser = async (data) => {
       }
 
       // If role is coach, fetch additional profile data to get coach_id
-      if (user.role === "coach") {
-          try {
-              const profileResponse = await axios.get(`/profile-data/${user.id}/coach`, {
-                  headers: {
-                      Authorization: `Bearer ${response.data.token}`,
-                  },
-              });
-
-              const profileData = profileResponse.data;
-              if (profileData && profileData.user && profileData.user.coach) {
-                if(profileData.user.coach.status === 'block'){
-                  localStorage.clear();
-                  navigate('/account_suspend');
-                return;
+      if (role === "coach") {
+        try {
+            const profileResponse = await axios.get(`/profile-data/${user.id}/coach`, {
+                headers: {
+                    Authorization: `Bearer ${response.data.token}`,
+                },
+            });
+    
+            const profile = profileResponse.data.user;
+    
+            if (profile && profile.coach) {
+                if (profile.coach.status === 'block') {
+                    localStorage.clear();
+                    navigate('/account_suspend');
+                    return;
                 }
-                  localStorage.setItem('coach_id', profileData.user.coach.id);
-                  localStorage.setItem('profile_location', profileData.profile_location);
-              }
+                localStorage.setItem('coach_id', profile.coach.id);
+                localStorage.setItem('profile_location', profile.profile_location);
+            }
+    
+        } catch (error) {
+            console.error("Error fetching coach profile data:", error);
+        }
+    }
+    
 
-          } catch (error) {
-              console.error("Error fetching coach profile data:", error);
-          }
-      }
-
-      if (user.role === "parent") {
+      if (role === "parent") {
         try {
           const response = await axios.get(`/getParent/${email}`);
       
@@ -186,33 +188,6 @@ const Loginuser = async (data) => {
   }
 };
 
-
-
-  const StoreinLocalStorage = async () => {
-    try{
-      setLoading(true);
-      const response = await axios.post(`/forgotOtp/${user_id}`)
-      setLoading(false);
-      // navigate();
-      if(response){
-        Swal.fire({
-          title: "Success!",
-          text: "Otp Send on Your Email",
-          icon: "success",
-          button: "OK",
-        });
-      }else{
-        Swal.fire({
-          title: "Error!",
-          text: "Something went wrong. Please try again later.",
-          icon: "error",
-          button: "OK",
-        });
-      }
-    }catch(error){
-      console.log(error);
-    }
-  }
   
 
   return (
@@ -336,7 +311,7 @@ const Loginuser = async (data) => {
                             Singup
                           </span>
                         </Link> &nbsp;
-                        <Link to={`/forgotPass/${user_id}`} onClick={StoreinLocalStorage}>
+                        <Link to={'/forgot_email'}>
                           <span className="text-blue-900 font-semibold">
                             Forget Password
                           </span>

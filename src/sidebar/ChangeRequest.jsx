@@ -8,13 +8,17 @@ import { Link } from 'react-router-dom';
 import { RotatingLines } from 'react-loader-spinner';
 import { useAppointments } from '../context/AppointmentContext';
 import { ToastContainer,toast } from 'react-toastify';
+import Chat from '../Chat/Chat';
 
 
 function ChangeRequest({id}) {
 
    
     const [loading,setLoading] = useState(false);
-    const player_id = localStorage.getItem('player_id');
+    // const player_id = localStorage.getItem('player_id');
+    const currentUser = JSON.parse(localStorage.getItem('user_id')); // where 'user' contains full user info
+
+    
     let role = localStorage.getItem('role');
     role = 'player'
     
@@ -183,12 +187,12 @@ function ChangeRequest({id}) {
           {
             accessorKey: 'status',
             header: 'Status',
-            size: 5,
+            size: 12,
             Cell: ({ row }) => {
               const item = row.original; // Extracting status from row data
           
               return (
-                <div style={{ display: 'flex', gap: '7px' }}>
+                <div style={{ display: 'flex', gap: '20px' }}>
                  {item.status === "processing" ? (
                   <div className="flex space-x-2">
                     <button
@@ -203,6 +207,7 @@ function ChangeRequest({id}) {
                     >
                       Decline
                     </button>
+                    <Chat currentUser={currentUser} receiverId={item.created_by}   />
                   </div>
                 ) : item.status === "booked" ? (
                   <button className="bg-green-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">
@@ -263,16 +268,26 @@ function ChangeRequest({id}) {
                     </div>
                       ) :
                       (
-                      <MaterialReactTable
+                        <MaterialReactTable
                           columns={columns}
                           data={data}
                           muiTableBodyCellProps={{
-                              style: { wordWrap: 'break-word', maxWidth: '200px' },
+                            style: { wordWrap: 'break-word', maxWidth: '200px' },
                           }}
                           muiTableContainerProps={{
-                              style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
+                            style: {
+                              overflowX: 'auto', // Enables horizontal scrolling for smaller screens
+                              position: 'relative', // Keeps the table's stacking context in check
+                              zIndex: 1, // Lower z-index to ensure it does not overlap the chat box
+                            },
                           }}
-                      />
+                          enablePagination={false} // Disables pagination
+                        />
+
+
+
+
+
                       )
                     }
 

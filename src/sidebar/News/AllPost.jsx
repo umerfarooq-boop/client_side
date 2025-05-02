@@ -15,18 +15,23 @@ function AllPost() {
     const [toggle,setToggle] = useState(true);
     const coach_id = localStorage.getItem('coach_id');
     const fetchData = async () => {
-        try {
+      try {
         const response = await axios.get(`ShowSignleCoachPost/${coach_id}`);
         if (response.data && response.data.post) {
-            setData(response.data.post); // Assuming `coach` contains an array of data
-            setLoading(false)
+          const postData = response.data.post;
+          setData(postData); // Set the posts data
         } else {
-            console.error("Unexpected API response format:", response.data);
+          console.error("Unexpected API response format:", response.data);
+          setData([]); // Set empty array if the data format isn't as expected
         }
-        } catch (error) {
+      } catch (error) {
         console.error("Error fetching data:", error);
-        }
+        setData([]); // Set empty array in case of error
+      } finally {
+        setLoading(false); // Ensure loading is stopped regardless of outcome
+      }
     };
+    
 
   // Handle status change
   const handleStatusChange = async (id) => {
@@ -143,35 +148,47 @@ function AllPost() {
     <Dashboard>
         <ToastContainer/>
         {
-            loading ? (
-              <div className="flex flex-col items-center justify-center h-screen">
-            <RotatingLines 
-              visible={true}
-              height="96"
-              width="96"
-              color="grey"
-              strokeWidth="5"
-              animationDuration="0.75"
-              ariaLabel="rotating-lines-loading"
-            />
-          </div>
-            ) :
-            (
-            <MaterialReactTable
-                columns={columns}
-                data={data}
-                muiTableBodyCellProps={{
-                    style: { wordWrap: 'break-word', maxWidth: '200px' },
-                }}
-                muiTableContainerProps={{
-                    style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
-                }}
-                renderTopToolbarCustomActions={() => (
-                  <Link to={'/AddPost'} className='focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 italic'>Add Post</Link>
-              )}
-            />
-            )
-          }
+  loading ? (
+    <div className="flex flex-col items-center justify-center h-screen">
+      <RotatingLines 
+        visible={true}
+        height="96"
+        width="96"
+        color="grey"
+        strokeWidth="5"
+        animationDuration="0.75"
+        ariaLabel="rotating-lines-loading"
+      />
+    </div>
+  ) : data.length > 0 ? (
+    <>
+      <MaterialReactTable
+        columns={columns}
+        data={data}
+        muiTableBodyCellProps={{
+          style: { wordWrap: 'break-word', maxWidth: '200px' },
+        }}
+        muiTableContainerProps={{
+          style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
+        }}
+        renderTopToolbarCustomActions={() => (
+          <Link
+            to="/AddPost"
+            className="focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 italic"
+          >
+            Add Post
+          </Link>
+        )}
+      />
+    </>
+  ) : (
+    <div>No Record Found
+      <Link to={'/AddPost'}>Add Post</Link>
+    </div>
+  )
+}
+
+
     </Dashboard>
   )
 }

@@ -55,7 +55,7 @@ function Schedule() {
           <Appoinment id={id} />
         </div>
       </div>
-      <MyCalendar />
+      <MyCalendar id={id} />
     </AppointmentProvider>
       </div>
     </>

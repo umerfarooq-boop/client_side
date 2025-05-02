@@ -38,6 +38,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import InfoIcon from "@mui/icons-material/Info";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import FeedbackIcon from "@mui/icons-material/Feedback";
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import axios from "../axios";
 import {
   usePopupState,
@@ -424,7 +425,7 @@ function Dashboard({ children }) {
               Profile
             </Link>
           </Typography>
-          
+                    
         </div>
       ) : role === "player" ? (
         <div className="gap-4 mb-2 block md:block sm:block xsm:block lg:flex xl:flex">
@@ -533,9 +534,11 @@ function Dashboard({ children }) {
       <Navbar className="mx-auto max-w-full px-4 py-2 lg:px-8 lg:py-4">
         <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
           <div className="text-center">
+            <Link to={'/'}>
             <h3 className="text-3xl sm:text-2xl leading-normal font-extrabold italic tracking-tight text-gray-900">
               Coach <span className="text-indigo-600">Selector</span>
             </h3>
+            </Link>
           </div>
 
           <div className="hidden lg:block">{navList}</div>
@@ -748,6 +751,7 @@ function Dashboard({ children }) {
                           />
                         </div>
                       </div>
+                      <h1>Umer Farooq</h1>
                     </div>
                   ) : role === "admin" ? (
                     <div key={index}>
@@ -781,6 +785,7 @@ function Dashboard({ children }) {
                   </MenuItem>
                   {status === "active" ? (
                     <div>
+                      <div>
                       <MenuItem>
                         <Link
                           to={`/dashboard/${login_id}`}
@@ -790,6 +795,13 @@ function Dashboard({ children }) {
                           Dashboard
                         </Link>
                       </MenuItem>
+                      <MenuItem>
+                      <Link to="/invoice" >
+                        <ReceiptLongIcon />
+                        Invoice
+                      </Link>
+                      </MenuItem>
+                      </div>
                       {role === "player" ? (
                         <div>
                           <MenuItem>
