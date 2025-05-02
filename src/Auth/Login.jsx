@@ -188,33 +188,6 @@ const Loginuser = async (data) => {
   }
 };
 
-
-
-  const StoreinLocalStorage = async () => {
-    try{
-      setLoading(true);
-      const response = await axios.post(`/forgotOtp/${user_id}`)
-      setLoading(false);
-      // navigate();
-      if(response){
-        Swal.fire({
-          title: "Success!",
-          text: "Otp Send on Your Email",
-          icon: "success",
-          button: "OK",
-        });
-      }else{
-        Swal.fire({
-          title: "Error!",
-          text: "Something went wrong. Please try again later.",
-          icon: "error",
-          button: "OK",
-        });
-      }
-    }catch(error){
-      console.log(error);
-    }
-  }
   
 
   return (
@@ -338,7 +311,7 @@ const Loginuser = async (data) => {
                             Singup
                           </span>
                         </Link> &nbsp;
-                        <Link to={`/forgotPass/${user_id}`} onClick={StoreinLocalStorage}>
+                        <Link to={'/forgot_email'}>
                           <span className="text-blue-900 font-semibold">
                             Forget Password
                           </span>

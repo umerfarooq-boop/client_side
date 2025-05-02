@@ -67,24 +67,14 @@ function PlayerBookedEquipment() {
     }
   };
 
-  // const handleDeleteChange = async (id) => {
-  //   const response = await axios.get(`/DeleteEquipmentRequest/${id}`);
-  //   if(response.data && response.data.message ===  201){
-  //     toast.success(response.data.message);
-  //   }
-  // }
-  
+
 
 
 
   // Define table columns
   const columns = useMemo(
     () => [
-    //   {
-    //     accessorKey: 'id',
-    //     header: 'Id',
-    //     size: 150,
-    //   },
+
       {
         accessorKey: 'player_name',
         header: 'Player Name',
@@ -204,7 +194,6 @@ function PlayerBookedEquipment() {
             ) :
             (
             <div>
-              <h1>Player</h1>
               <MaterialReactTable
                 columns={columns}
                 data={data}

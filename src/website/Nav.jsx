@@ -250,57 +250,6 @@ function Nav() {
         }
 
 
-        {/* {
-          role === 'player' ? (
-            <div style={{ display: 'inline-block', position: 'relative' }}>
-              <p
-                id="demo-positioned-button"
-                aria-controls={openanchor ? 'demo-positioned-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={openanchor ? 'true' : undefined}
-                onClick={handleCl}
-                className="font-medium mt-1 text-sm item-center text-black cursor-pointer"
-              >
-                Coach <ArrowDropDownIcon />
-              </p>
-              <Menu
-                id="demo-positioned-menu"
-                anchorEl={anchor}
-                open={openanchor}
-                onClose={handleC}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'center',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center',
-                }}
-                PaperProps={{
-                  style: {
-                    marginTop: '8px',
-                    borderRadius: '8px',
-                    minWidth: '200px',
-                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
-                  },
-                }}
-              >
-                <Link to={'/coachpost'}>
-                  <MenuItem onClick={handleC}>Coach</MenuItem>
-                </Link>
-                <Link>
-                  <MenuItem onClick={handleC}>Profile</MenuItem>
-                </Link>
-                <Link>
-                  <MenuItem onClick={handleC}>Profile</MenuItem>
-                </Link>
-              </Menu>
-            </div>
-          ) : role === 'coach' ? (
-            <h1 className="hidden">Umer</h1>
-          ) : null
-        } */}
-
         <Typography
           as="li"
           variant="small"
@@ -334,9 +283,11 @@ function Nav() {
        <Navbar className="mx-auto max-w-full px-4 py-2 lg:px-8 lg:py-4">
       <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
       <div className="text-center">
+            <Link to={'/'}>
             <h3 className="text-3xl sm:text-2xl leading-normal font-extrabold italic tracking-tight text-gray-900">
               Coach <span className="text-indigo-600">Selector</span>
             </h3>
+            </Link>
           </div>
 
         <div className="hidden lg:block">{navList}</div>
@@ -551,6 +502,7 @@ function Nav() {
                     <MenuItem><Link to={`/PlayerRequest/${player_id}/${role}`} onClick={handleClose}><BookmarkAddedIcon />Booking Request</Link></MenuItem>
                     <MenuItem><Link to={'/equipment_request/'} onClick={handleClose}><SportsCricketIcon />Equipment Request</Link></MenuItem>
                     <MenuItem><Link to={`/player_booked_equipment/${player_id}`} onClick={handleClose}><SportsCricketIcon />Booked Request</Link></MenuItem>
+                    <MenuItem><Link to={'/singal_invoice'} onClick={handleClose}><SportsCricketIcon />Invoice</Link></MenuItem>
                   </div>
                 ) : null
               }

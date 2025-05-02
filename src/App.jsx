@@ -81,6 +81,10 @@ import PaymentPage from './Payment/PaymentPage';
 import StripePaymentForm from './Payment/StripePaymentForm';
 import Question from './website/Question';
 import Testimonial from './website/Testimonial';
+import PlayerInvoice from './sidebar/Invoice/PlayerInvoice';
+import SingalPlayerInvoice from './sidebar/Invoice/SingalPlayerInvoice';
+import ForgotEmail from './Auth/ForgotEmail';
+import TestComponent from './website/TestComponent';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 
@@ -90,6 +94,7 @@ function App() {
     <>
       <Link to='/'></Link>
       <Routes>
+        <Route path='/test' element={<TestComponent />} />
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/signup' element={<Signup />} />
@@ -97,6 +102,7 @@ function App() {
         <Route path='/otp' element={<Otp />} />
         <Route path='/resetpassword/:id' element={<ResetPassword />} />
         <Route path='/forgotPass/:id' element={<ForgotOtp />} />
+        <Route path='/forgot_email' element={<ForgotEmail />} />
         <Route path='/coachpost' element={<CoachPost />} />
         <Route path='/page' element={<Page />} />
         <Route path='/contact' element={<Contact />} />
@@ -698,6 +704,28 @@ function App() {
             </Container>
           } 
         />
+
+
+          {/* Invoive Show in Payment */}
+          <Route
+          path='/invoice'
+          element={
+            <ProtectedRoute>
+              <PlayerInvoice />
+            </ProtectedRoute>
+          }
+        />
+
+          <Route
+          path='/singal_invoice'
+          element={
+            <ProtectedRoute>
+              <SingalPlayerInvoice />
+            </ProtectedRoute>
+          }
+        />
+          {/* Invoive Show in Payment */}
+
       </Routes>
     </>
   );

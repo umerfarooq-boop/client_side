@@ -25,6 +25,7 @@ const CheckoutForm = ({ amount }) => {
   const email = localStorage.getItem('email') || 'unknown@example.com';
   const coach_record = localStorage.getItem('coach_record');
   const user_id = localStorage.getItem('user_id');
+
   useEffect(() => {
     const fetchClientSecret = async () => {
       try {
@@ -73,19 +74,26 @@ const CheckoutForm = ({ amount }) => {
   
     if (paymentIntent.status === 'succeeded') {
       Swal.fire('Payment Successful', 'Your payment has been processed successfully!', 'success');
+    
+      if (!coach_userid || !coach_record) {
+        return Swal.fire('Error', 'Invalid coach information.', 'error');
+      }
+    
       try {
         await axios.post('http://localhost:8000/api/store-payment', {
           amount: amount,
           payment_id: paymentIntent.id,
           email: email,
-          coach_id: coach_userid,
-          user_id: user_id
+          coach_user_id: coach_userid, // from users table (correct)
+          user_id: user_id,
+          coach_id: coach_record,      // from coaches table (correct)
         });
-        // setTimeout(() => navigate(`/schedule/${coach_record}`), 2000);
       } catch (error) {
         console.error('Error storing payment info:', error);
+        Swal.fire('Error', 'There was an error storing payment information.', 'error');
       }
-    }
+    }   
+  
   };
   
 
