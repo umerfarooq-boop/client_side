@@ -77,6 +77,7 @@ import PlayerAttendance from './ParentDashboard/PlayerAttendance';
 import PlayerScore from './ParentDashboard/PlayerScore'
 import AddReviews from './PlayerReviews/AddReviews';
 import CheckoutForm from './Payment/CheckoutForm';
+import Emergency  from './emergency/emergency';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
@@ -111,6 +112,7 @@ function App() {
         {/* Payment Form Checkout */}
 
 
+        <Route path='/emergency' element={<Emergency />} />
         {/* Wrap the dashboard and other private routes with ProtectedRoute */}
         <Route
           path='/dashboard/:id/*'
