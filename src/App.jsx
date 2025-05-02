@@ -77,9 +77,7 @@ import PlayerAttendance from './ParentDashboard/PlayerAttendance';
 import PlayerScore from './ParentDashboard/PlayerScore'
 import AddReviews from './PlayerReviews/AddReviews';
 import CheckoutForm from './Payment/CheckoutForm';
-<<<<<<< HEAD
 import Emergency  from './emergency/emergency';
-=======
 import PaymentPage from './Payment/PaymentPage';
 import StripePaymentForm from './Payment/StripePaymentForm';
 import Question from './website/Question';
@@ -88,7 +86,6 @@ import PlayerInvoice from './sidebar/Invoice/PlayerInvoice';
 import SingalPlayerInvoice from './sidebar/Invoice/SingalPlayerInvoice';
 import ForgotEmail from './Auth/ForgotEmail';
 import TestComponent from './website/TestComponent';
->>>>>>> 1a732653e5376c1acb0764a6feb52acbe67bea98
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 
