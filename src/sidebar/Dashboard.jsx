@@ -40,6 +40,7 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import axios from "../axios";
+import ChatIcon from '@mui/icons-material/Chat';
 import {
   usePopupState,
   bindTrigger,
@@ -549,19 +550,33 @@ function Dashboard({ children }) {
               <div>
                 {profile.map((index, key) =>
                   role === "player" ? (
-                    <div key={key}>
-                      <img
-                        src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
-                        className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
-                        alt="Thumbnail"
-                        id="basic-button"
-                        aria-controls={open ? "basic-menu" : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? "true" : undefined}
-                        onClick={handleClick}
-                        loading="lazy"
-                      />
-                    </div>
+                    <div key={key} className="flex items-center gap-3 p-2">
+  {/* Notifications block (only for player) */}
+  {role === "player" && (
+    <div className="sm:block">
+      <Notifications fontSize="small" coachId={id} />
+    </div>
+  )}
+
+  {/* Chat link with icon */}
+  <Link to={`/ChatUi/${player_id}`} className="text-black">
+    <ChatIcon fontSize="small" />
+  </Link>
+
+  {/* Player image */}
+  <img
+    src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
+    className="w-10 h-10 rounded-full border-2 border-indigo-450 shadow-lg cursor-pointer object-cover"
+    alt="Thumbnail"
+    id="basic-button"
+    aria-controls={open ? "basic-menu" : undefined}
+    aria-haspopup="true"
+    aria-expanded={open ? "true" : undefined}
+    onClick={handleClick}
+    loading="lazy"
+  />
+</div>
+
                   ) : role === "admin" ? (
                     <div key={key}>
                       <img
@@ -581,28 +596,37 @@ function Dashboard({ children }) {
                       />
                     </div>
                   ) : role === "coach" ? (
-                    <div key={key}>
-                      <div className="grid lg:grid-cols-2 gap-4">
-                        <div className="hidden lg:block">
-                          {role === "coach" ? (
-                            <Notifications coachId={id} />
-                          ) : null}
-                        </div>
-                        <div>
-                          <img
-                            src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach.image}`}
-                            className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
-                            alt="Thumbnail"
-                            id="basic-button"
-                            aria-controls={open ? "basic-menu" : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? "true" : undefined}
-                            onClick={handleClick}
-                            loading="lazy"
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    <div key={key} className="flex items-center gap-4 p-2">
+  {/* Notifications block (only for coach) */}
+  {role === "coach" && (
+    <div>
+      <Notifications fontSize="small" coachId={id} />
+    </div>
+  )}
+
+  {/* Chat icon link */}
+  <div>
+    <Link to={`/ChatUi/${coach_id}`}>
+      <ChatIcon fontSize="small" style={{ color: 'black' }} />
+    </Link>
+  </div>
+
+  {/* Coach image */}
+  <div>
+    <img
+      src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach.image}`}
+      className="w-10 h-10 rounded-full border-2 border-indigo-450 shadow-lg cursor-pointer object-cover"
+      alt="Thumbnail"
+      id="basic-button"
+      aria-controls={open ? "basic-menu" : undefined}
+      aria-haspopup="true"
+      aria-expanded={open ? "true" : undefined}
+      onClick={handleClick}
+      loading="lazy"
+    />
+  </div>
+</div>
+
                   ) : null
                 )}
                 <Menu
@@ -715,6 +739,11 @@ function Dashboard({ children }) {
                 {profile.map((index, key) =>
                   role === "player" ? (
                     <div key={key}>
+                      <div className="block sm:block">
+                          {role === "player" ? (
+                            <Notifications coachId={id} />
+                          ) : null} 
+                        </div>
                       <img
                         src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
                         className="lg:block  w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"

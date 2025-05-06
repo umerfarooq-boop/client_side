@@ -203,75 +203,89 @@ function CoachDetail() {
           </div>
 
           {posts.length > 0 ? (
-            posts.map((post, key) => (
+            posts.map((post, key) => (  
               <div
-                key={key}
-                className="shadow-inherit grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-7 justify-center item-center lg:grid-cols-3 xl:grid-cols-3 mt-14 p-4"
-              >
-                <div>
-                  <img
-                    src={`http://127.0.0.1:8000/uploads/coach_posts/${post.post_image}`}
-                    alt="Image Not Show"
-                    className="object-contain xl:w-full xl:h-72 lg:w-72 lg:h-72 scale-95 hover:scale-75 duration-500"
-                  />
-                </div>
-                <div className="mt-5">
-                  <p className="font-medium text-2xl mb-2">{post.post_title}</p>
-                  <p className="text-base text-gray-700 mb-4">
-                    {post.post_description}
-                  </p>
-                  <div className="flex justify-between items-center border-t pt-2 mt-4">
-                    <div className="flex items-center space-x-1 text-gray-600">
-                      <AccessTimeIcon className="text-gray-500" />
-                      <p>
-                        {(() => {
-                          const postTime = new Date(post.post_time + " UTC");
-                          const timeDiff = Date.now() - postTime.getTime();
-                          const seconds = Math.floor(timeDiff / 1000);
-                          const minutes = Math.floor(seconds / 60);
-                          const hours = Math.floor(minutes / 60);
-                          const days = Math.floor(hours / 24);
-                          const weeks = Math.floor(days / 7);
-                          if (seconds < 60) return "Just now";
-                          if (minutes < 60)
-                            return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
-                          if (hours < 24)
-                            return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-                          if (days < 7)
-                            return `${days} day${days > 1 ? "s" : ""} ago`;
-                          return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
-                        })()}
-                      </p>
-                    </div>
-                    <div className="flex items-center space-x-1 text-gray-600">
-                      <LocationOnSharpIcon className="text-gray-500" />
-                      <p>{post.post_location.split(",")[0]}</p>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  {coordinates[post.id] ? (
-                    <Map
-                      initialViewState={{
-                        latitude: coordinates[post.id].latitude,
-                        longitude: coordinates[post.id].longitude,
-                        zoom: 10,
-                      }}
-                      style={{ width: "100%", height: "100%" }}
-                      mapStyle="mapbox://styles/mapbox/streets-v11"
-                      mapboxAccessToken="pk.eyJ1IjoidW1lcndhbGkiLCJhIjoiY20ycGM0aWRrMGxmYjJtc2N2eWRvZHNpNiJ9._eLwWDk871QbnYrq8lcOkw"
-                    >
-                      <Marker
-                        latitude={coordinates[post.id].latitude}
-                        longitude={coordinates[post.id].longitude}
-                        color="red"
-                      />
-                    </Map>
-                  ) : (
-                    <p>Location not available</p>
-                  )}
-                </div>
-              </div>
+  key={key}
+  className="bg-white shadow-lg rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-5 gap-6 p-6 mt-10 items-center"
+>
+  {/* Image - smaller/medium size */}
+  <div className="md:col-span-1 flex justify-center items-center">
+    <img
+      src={`http://127.0.0.1:8000/uploads/coach_posts/${post.post_image}`}
+      alt="Coach Post"
+      className="w-52 h-48 object-cover rounded-md"
+    />
+  </div>
+
+  {/* Text content */}
+  <div className="md:col-span-3 flex flex-col justify-between">
+    <div>
+      <h2 className="text-xl font-semibold mb-2">{post.post_title}</h2>
+      <p className="text-gray-700 text-sm mb-4">{post.post_description}</p>
+    </div>
+
+    <div className="flex justify-between items-center border-t pt-3 text-sm text-gray-600">
+      <div className="flex items-center space-x-1">
+        <AccessTimeIcon className="text-gray-500" fontSize="small" />
+        <span>
+          {(() => {
+            const postTime = new Date(post.post_time + " UTC");
+            const timeDiff = Date.now() - postTime.getTime();
+            const seconds = Math.floor(timeDiff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+            const weeks = Math.floor(days / 7);
+            if (seconds < 60) return "Just now";
+            if (minutes < 60)
+              return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+            if (hours < 24)
+              return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+            if (days < 7)
+              return `${days} day${days > 1 ? "s" : ""} ago`;
+            return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
+          })()}
+        </span>
+      </div>
+
+      <div className="flex items-center space-x-1">
+        <LocationOnSharpIcon className="text-gray-500" fontSize="small" />
+        <span>
+          {post.post_location
+            ? post.post_location.split(",")[0]
+            : "Location not available"}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  {/* Map - compact width but same height */}
+  <div className="md:col-span-1 h-40 w-full rounded-md overflow-hidden">
+    {coordinates[post.id] ? (
+      <Map
+        initialViewState={{
+          latitude: coordinates[post.id].latitude,
+          longitude: coordinates[post.id].longitude,
+          zoom: 10,
+        }}
+        style={{ width: "100%", height: "100%" }}
+        mapStyle="mapbox://styles/mapbox/streets-v11"
+        mapboxAccessToken="pk.eyJ1IjoidW1lcndhbGkiLCJhIjoiY20ycGM0aWRrMGxmYjJtc2N2eWRvZHNpNiJ9._eLwWDk871QbnYrq8lcOkw"
+      >
+        <Marker
+          latitude={coordinates[post.id].latitude}
+          longitude={coordinates[post.id].longitude}
+          color="red"
+        />
+      </Map>
+    ) : (
+      <p className="text-center text-sm text-gray-500 mt-6">
+        Location not available
+      </p>
+    )}
+  </div>
+</div>
+
             ))
           ) : (
             <p>No posts available</p>
@@ -311,13 +325,15 @@ function CoachDetail() {
                   <div className="flex text-yellow-400 mb-1">
                     {[1, 2, 3, 4, 5].map((num) => (
                       <StarIcon
-                        key={num}
-                        className={
-                          num <= averageRating
-                            ? "text-yellow-400"
-                            : "text-gray-300"
-                        }
-                      />
+                      key={num}
+                      className="h-2 w-2"
+                      fill={num <= averageRating ? "currentColor" : "none"}
+                      stroke="currentColor"
+                      strokeWidth="1"
+                      style={{
+                        color: num <= averageRating ? "#facc15" : "#d1d5db", // Tailwind colors for yellow and gray
+                      }}
+                    />
                     ))}
                   </div>
                   <div className="text-sm text-gray-600">

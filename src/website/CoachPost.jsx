@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { FilterList } from "@mui/icons-material";
 import back from '../../public/back.jpg'
 import Footer from './Footer'
-
+import StarIcon from "@mui/icons-material/StarBorder";
 function CoachPost() {
   const [loader, setLoader] = useState(true);
   const [post, setPost] = useState([]);
@@ -188,7 +188,7 @@ function CoachPost() {
     </div>
   </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-4 lg:gap-20 p-4">
+          {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-4 lg:gap-20 p-4">
             {filteredPosts.map((item) => (
               <div
                 key={item.id}
@@ -226,7 +226,7 @@ function CoachPost() {
                 </div>
 
                 <div className="p-4 border-t mx-8 mt-2">
-                  <Link to={`/coachdetail/${item.coach.id}`}>
+                  <Link to={`/coachdetail/${item.coach?.id}`}>
                     <button className="w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-500 transition-transform transform hover:scale-105">
                       View Details
                     </button>
@@ -234,7 +234,136 @@ function CoachPost() {
                 </div>
               </div>
             ))}
+          </div> */}
+
+<div className="grid grid-cols-1 gap-6 p-4">
+  {filteredPosts.map((item) => (
+    <div
+      key={item.id}
+      className="relative flex flex-col md:flex-row w-full bg-white shadow-sm border border-slate-200 rounded-lg "
+    >
+      <div className="relative w-full sm:w-6/12 md:w-4/12 lg:w-3/12 shrink-0 overflow-hidden mx-auto p-3">
+  <img
+    src={`http://127.0.0.1:8000/uploads/coach_image/${item.coach.image}`}
+    alt="card-image"
+    className="w-full h-auto rounded-2xl object-contain mt-10"
+  />
+</div>
+
+      <div className="p-6">
+        <h4 className=" text-slate-800 text-xl font-semibold">
+          {item.coach.name}
+        </h4>
+        <p className=" text-slate-600 leading-relaxed text-sm bg-gray-100 px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+          {item.post_description}
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+  {/* Coach Level */}
+  <div className="flex items-center justify-center">
+    <p
+    className={`inline-block text-sm font-semibold px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300 ${
+      item.coach.level === "level 1"
+        ? "bg-green-700 text-white border border-green-500"
+        : item.coach.level === "level 2"
+        ? "bg-yellow-400 text-gray-900 border border-yellow-500"
+        : "bg-red-400 text-white border border-red-500"
+    }`}
+  >
+    {item.coach.level === "level 1"
+      ? "Beginner (Level 1)"
+      : item.coach.level === "level 2"
+      ? "Intermediate (Level 2)"
+      : "Advanced (Level 3)"}
+  </p>
+
+  </div>
+
+  {/* Pricing */}
+  <div className="flex items-center justify-center">
+  <p className="inline-block bg-orange-500 text-white text-sm font-semibold px-6 py-2 rounded-full shadow-md hover:bg-orange-600 hover:shadow-lg transition-all duration-300">
+  {item.coach?.per_hour_charges}&nbsp;Rs
+</p>
+
+  </div>
+
+  {/* Rating and Reviews */}
+  <div>
+    {item.coach?.ratingreviews?.length ? (
+      (() => {
+        const totalRatings = item.coach.ratingreviews.reduce(
+          (sum, review) => sum + review.rating,
+          0
+        );
+        const averageRating =
+          totalRatings / item.coach.ratingreviews.length || 0;
+
+        return (
+          <div className="flex flex-col items-center">
+            {/* Stars and Reviews */}
+            <div className="flex items-center text-yellow-400 mt-2">
+              {[1, 2, 3, 4, 5].map((num) => (
+                <StarIcon
+                  key={num}
+                  className="h-5 w-5"
+                  fill={num <= averageRating ? "currentColor" : "none"}
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  style={{
+                    color: num <= averageRating ? "#facc15" : "#d1d5db",
+                  }}
+                />
+              ))}
+            </div>
+            <div className="text-sm text-gray-600">
+              {item.coach.ratingreviews.length} reviews
+            </div>
+            <div className="text-4xl font-bold text-gray-800">
+              {averageRating.toFixed(1)}
+            </div>
           </div>
+        );
+      })()
+    ) : (
+      <p className="text-center text-gray-600"></p>
+    )}
+  </div>
+</div>
+
+
+<div className=" rounded-lg">
+  {/* Academy Info */}
+  <div className="">
+    <h2 className="text-lg font-bold text-indigo-600 text-center sm:text-left">
+      {item.coach?.academy?.academy_name} (Academy)
+    </h2>
+    <p className="text-sm text-gray-700 text-center sm:text-left">
+      {item.coach?.academy?.address}
+    </p>
+  </div>
+
+  {/* Book Now Button with Animation */}
+  <div className="relative flex justify-center sm:justify-end">
+    <Link
+      to={`/coachdetail/${item.coach?.id}`}
+      className="relative px-4 py-3 text-white bg-indigo-800 rounded-lg shadow-lg hover:bg-indigo-700 transition-all duration-300"
+    >
+      Book Now
+      <span className="absolute top-0 right-0 inline-flex h-3 w-3 animate-ping rounded-full bg-indigo-500 opacity-75"></span>
+      <span className="absolute top-0 right-0 inline-flex h-3 w-3 rounded-full bg-indigo-500"></span>
+    </Link>
+  </div>
+</div>
+
+
+
+      </div>
+    </div>
+  ))}
+</div>
+
+
+
             <div className="m-4 flex justify-end">{renderPaginationLinks()}</div>
 
           </div>
@@ -243,7 +372,7 @@ function CoachPost() {
 
       )}
       <div>
-        {/* <Footer /> */}
+        <Footer />
       </div>
     </>
   );

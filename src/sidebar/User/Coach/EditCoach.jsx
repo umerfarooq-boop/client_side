@@ -61,6 +61,7 @@ function EditCoach() {
     formData.append('academy_location', data.academy_location);
     formData.append('address', data.address);
     formData.append('academy_phonenumber', data.academy_phonenumber);
+    formData.append('per_hour_charges', data.per_hour_charges);
   
     // Append files conditionally
     if (data.image[0]) {
@@ -286,34 +287,27 @@ function EditCoach() {
                   } rounded py-3 px-4`}
                 />
               </div>
-
-              {/* Coach Image Upload */}
               <div className="md:w-1/2 px-3">
                 <label
                   className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                  htmlFor="image"
+                  htmlFor="location"
                 >
-                  Coach Image
+                  Session Charges
                 </label>
                 <input
-                  type="file"
-                  {...register("image")}
-                  id="image"
-                  onChange={handleImageChange}
-                  className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+                  type="text"
+                  defaultValue={index.per_hour_charges}
+                  id="location"
+                  placeholder="Coach Location"
+                  {...register("per_hour_charges")}
+                  className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
+                    errors.per_hour_charges ? "border-red-500" : "border-grey-lighter"
+                  } rounded py-3 px-4`}
                 />
+              </div>
 
-                {/* Coach Image Preview */}
-                {index.image && (
-                  <div className="flex items-center mt-2">
-                    <img
-                      src={`http://127.0.0.1:8000/uploads/coach_image/${index.image}`}
-                      alt="Coach"
-                      className="w-16 h-16 rounded border border-gray-300 p-1"
-                    />
-                  </div>
-                )}
-  </div>
+              {/* Coach Image Upload */}
+              
                 </div>
 
 
@@ -356,7 +350,34 @@ function EditCoach() {
       </a>
     </div>
   )}
-</div>
+                </div>
+
+                <div className="md:w-1/2 px-3">
+                <label
+                  className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                  htmlFor="image"
+                >
+                  Coach Image
+                </label>
+                <input
+                  type="file"
+                  {...register("image")}
+                  id="image"
+                  onChange={handleImageChange}
+                  className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+                />
+
+                {/* Coach Image Preview */}
+                {index.image && (
+                  <div className="flex items-center mt-2">
+                    <img
+                      src={`http://127.0.0.1:8000/uploads/coach_image/${index.image}`}
+                      alt="Coach"
+                      className="w-16 h-16 rounded border border-gray-300 p-1"
+                    />
+                  </div>
+                )}
+  </div>
 
               </div>
 

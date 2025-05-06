@@ -86,11 +86,14 @@ import PlayerInvoice from './sidebar/Invoice/PlayerInvoice';
 import SingalPlayerInvoice from './sidebar/Invoice/SingalPlayerInvoice';
 import ForgotEmail from './Auth/ForgotEmail';
 import TestComponent from './website/TestComponent';
+import useInactivityLogout from './hooks/useInactivityLogout';
+import ChatUi from './Messenger/ChatUi';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 
 function App() {
   const {id} = useParams();
+  useInactivityLogout(50 * 60 * 1000);
   return (
     <>
       <Link to='/'></Link>
@@ -119,6 +122,9 @@ function App() {
         <Route path='/parent_player_attendance/:id' element={<PlayerAttendance />} />
         <Route path='/parent_player_score/:id' element={<PlayerScore />} />
 
+        {/* Chat UI */}
+        <Route path='/ChatUi/:id' element={<ChatUi />} />
+        {/* Chat UI */}
 
         {/* Payment Form Checkout */}
         <Route path="/checkoutform" element={<CheckoutForm />} />

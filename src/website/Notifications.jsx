@@ -34,20 +34,31 @@ const Notifications = ({ coachId }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
-
+  const role = localStorage.getItem('role');
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await axios.get(`/Getnotifications/${coachId}`);
-        setNotifications(response.data.notifications);
-        setUnreadCount(response.data.notifications.filter((n) => !n.is_read).length);
+        let response;
+        // if (role === 'coach') {
+          response = await axios.get(`/Getnotifications/${coachId}`);
+        // } else if (role === 'player') {
+        //   response = await axios.get(`/getNotificationsPlayer/${coachId}`);
+        // }
+  
+        if (response && response.data.status) {
+          setNotifications(response.data.notifications);
+          setUnreadCount(
+            response.data.notifications.filter((n) => !n.is_read).length
+          );
+        }
       } catch (error) {
         console.error("Error fetching notifications:", error);
       }
     };
-
+  
     fetchNotifications();
-  }, [coachId]);
+  }, [role, coachId]);
+  
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,6 +67,8 @@ const Notifications = ({ coachId }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  
 
   const markAsRead = async (id) => {
     try {
@@ -105,64 +118,80 @@ const Notifications = ({ coachId }) => {
             Notifications
           </Typography>
           <List sx={{ p: 0 }}>
-            {notifications.map((notification) => (
-              <ListItem key={notification.id} sx={{ p: 2 }}>
-                <StyledCard
-                  onClick={() => markAsRead(notification.id)}
-                  sx={{
-                    width: "100%",
-                    bgcolor: notification.is_read ? "inherit" : "action.hover",
-                  }}
-                >
-                  <CardContent>
-                    <Stack direction="row" spacing={2} alignItems="center">
-                      <Avatar src={`http://127.0.0.1:8000/uploads/player_image/${notification.player?.image}` || ""} />
-                      <Box sx={{ flexGrow: 1 }}>
-                        <Typography variant="subtitle1" component="div">
-                          {notification.message}
-                        </Typography>
-                        <Stack
-                          direction="row"
-                          spacing={1}
-                          alignItems="center"
-                          sx={{ mt: 1 }}
-                        >
-                          <AccessTimeIcon size={16} />
-                          <Typography variant="caption" color="text.secondary">
-                            {new Intl.DateTimeFormat('en-PK', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                              second: '2-digit',
-                              timeZone: 'Asia/Karachi',
-                            }).format(new Date(notification.created_at))}
-                          </Typography>
+  {notifications.length > 0 ? (
+    notifications.map((notification) => (
+      <ListItem key={notification.id} sx={{ p: 2 }}>
+        <StyledCard
+          onClick={() => markAsRead(notification.id)}
+          sx={{
+            width: "100%",
+            bgcolor: notification.is_read ? "inherit" : "action.hover",
+          }}
+        >
+          <CardContent>
+            <Stack direction="row" spacing={2} alignItems="center">
+              {/* {role === "player" ? (
+                <Avatar
+                  src={`http://127.0.0.1:8000/uploads/coach_image/${notification.coach?.image || "default.jpg"}`}
+                  alt={notification.coach?.name || "Coach"}
+                />
+              ) : role === "coach" ? ( */}
+                <Avatar
+                  src={`http://127.0.0.1:8000/uploads/player_image/${notification.player?.image || "default.jpg"}`}
+                  alt={notification.player?.name || "Player"}
+                />
+              {/* ) : null} */}
 
-                          {notification.is_read ? (
-                            <CheckCircleIcon
-                            fontSize="small"
-                            color="success"
-                            style={{ marginLeft: "auto" }}
-                            />
-                          ) : (
-                            <RadioButtonUncheckedOutlinedIcon
-                            fontSize="small"
-                            color="success"
-                            style={{ marginLeft: "auto" }}
-                            />
-                          )
-                            
-                        }
-                        </Stack>
-                      </Box>
-                    </Stack>
-                  </CardContent>
-                </StyledCard>
-              </ListItem>
-            ))}
-          </List>
+              <Box sx={{ flexGrow: 1 }}>
+                <Typography variant="subtitle1" component="div">
+                  {notification.message}
+                </Typography>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  alignItems="center"
+                  sx={{ mt: 1 }}
+                >
+                  <AccessTimeIcon size={16} />
+                  <Typography variant="caption" color="text.secondary">
+                    {new Intl.DateTimeFormat("en-PK", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                      timeZone: "Asia/Karachi",
+                    }).format(new Date(notification.created_at))}
+                  </Typography>
+
+                  {notification.is_read ? (
+                    <CheckCircleIcon
+                      fontSize="small"
+                      color="success"
+                      style={{ marginLeft: "auto" }}
+                    />
+                  ) : (
+                    <RadioButtonUncheckedOutlinedIcon
+                      fontSize="small"
+                      color="success"
+                      style={{ marginLeft: "auto" }}
+                    />
+                  )}
+                </Stack>
+              </Box>
+            </Stack>
+          </CardContent>
+        </StyledCard>
+      </ListItem>
+    ))
+  ) : (
+    <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+      No notifications available.
+    </Typography>
+  )}
+</List>
+
         </Box>
       </Popover>
     </Box>
