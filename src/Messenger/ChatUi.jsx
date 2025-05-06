@@ -21,8 +21,6 @@ function ChatUi() {
     getsidedata();
   }, [id]);
 
-  
-
   const [selectedContact, setSelectedContact] = useState(null);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -39,19 +37,34 @@ function ChatUi() {
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
-    try {
-      await axios.post("/send-message", {
-        sender_id: id,
-        receiver_id: reciever,
-        message: inputValue,
-      });
+    let coach_id = "";
+    let player_id = "";
 
-      setMessages((prev) => [...prev, { sender: "user", text: inputValue }]);
-      setInputValue("");
-    } catch (error) {
-      console.error("Sending failed", error);
+    if (role === 'coach') {
+        coach_id = localStorage.getItem('coach_id');
+        player_id = reciever;
+    } else if (role === 'player') {
+        player_id = localStorage.getItem('player_id');
+        coach_id = reciever; // Fix: receiver is the coach
     }
-  };
+
+    try {
+        await axios.post("/send-message", {
+            sender_id: id,
+            receiver_id: reciever,
+            message: inputValue,
+            coach_id: coach_id,
+            player_id: player_id,
+            role:role
+        });
+
+        setMessages((prev) => [...prev, { sender: "user", text: inputValue }]);
+        setInputValue("");
+    } catch (error) {
+        console.error("Sending failed", error);
+    }
+};
+
 
   const messagesEndRef = useRef(null);
   useEffect(() => {
@@ -63,7 +76,7 @@ function ChatUi() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
+  // const role = localStorage
   useEffect(() => {
     const fetchMessages = async () => {
       if (!selectedContact) return;
@@ -85,7 +98,7 @@ function ChatUi() {
    
     
     
-
+// 
     fetchMessages(); // initial call
     const interval = setInterval(fetchMessages, 3000); // poll every 3s
 
@@ -245,22 +258,17 @@ function ChatUi() {
                 </div>
               </div>
               <div className="flex-1 overflow-y-auto p-2 border rounded bg-gray-100">
-                {messages.map((msg, index) => (
-                  <div
-                    key={index}
-                    className={`mb-2 ${msg.sender === "user" ? "text-right" : "text-left"}`}
-                  >
-                    <div
-                      className={`inline-block px-3 py-2 rounded-lg max-w-xs ${msg.sender === "user" ? "bg-indigo-500 text-white" : "bg-gray-300 text-black"}`}
-                    >
-                      {msg.text}
-                    </div>
-                    <div className="text-xs text-gray-500">
-      {msg.created_at} {/* Display the formatted date */}
+  {messages.map((msg, index) => (
+    <div key={index} className={`mb-2 ${msg.sender === "user" ? "text-right" : "text-left"}`}>
+      <div className={`inline-block px-3 py-2 rounded-lg max-w-xs ${msg.sender === "user" ? "bg-indigo-500 text-white" : "bg-gray-300 text-black"}`}>
+        {msg.text}
+      </div>
+      <div className="text-xs text-gray-500">{msg.created_at}</div>
     </div>
-                  </div>
-                ))}
-              </div>
+  ))}
+  <div ref={messagesEndRef} /> {/* 👈 Scroll anchor */}
+</div>
+
               <div className="flex mt-4">
                 <input
                   type="text"

@@ -17,6 +17,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import SportsCricketIcon from '@mui/icons-material/SportsCricket';
 import ChatIcon from '@mui/icons-material/Chat';
+import Badge from "@mui/material/Badge";
 
 function Nav() {
     const [openNav, setOpenNav] = useState(false);
@@ -278,22 +279,9 @@ function Nav() {
       </ul>
     );
    
-    const [unreadCount, setUnreadCount] = useState(0);
 
-const fetchUnreadCount = async () => {
-  try {
-    const response = await axios.get(`/unread-count/${player_id}`);
-    setUnreadCount(response.data.unread);
-  } catch (error) {
-    console.error("Failed to fetch unread count", error);
-  }
-};
-
-useEffect(() => {
-  fetchUnreadCount();
-  const interval = setInterval(fetchUnreadCount, 5000); // Update every 5s
-  return () => clearInterval(interval);
-}, [player_id]);
+    
+    
 
   return (
     <>
@@ -320,17 +308,9 @@ useEffect(() => {
         profile.map((index, key) => (
           role === 'player' ? (
             <div key={key} className="flex items-center gap-5">
-  <div className="flex items-center justify-center">
-  <Link to={`/ChatUi/${player_id}`}>
-  <ChatIcon className="text-white" />
-  {unreadCount > 0 && (
-    <span className="absolute top-0 right-0 bg-red-600 text-white rounded-full text-xs px-1">
-      {unreadCount}
-    </span>
-  )}
-  </Link>
-  </div>
+
   <div>
+    
     <img 
       src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
       className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
@@ -361,6 +341,7 @@ useEffect(() => {
             </div>
           ) : role === 'coach' ? (
             <div key={key}>
+              
               <img 
                 src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach.image}`}
                 className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
@@ -372,6 +353,7 @@ useEffect(() => {
                 onClick={handleClick}
                 loading="lazy"
               />
+
             </div>
           ) : null
         ))

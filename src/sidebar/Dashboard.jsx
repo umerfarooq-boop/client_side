@@ -551,7 +551,6 @@ function Dashboard({ children }) {
                 {profile.map((index, key) =>
                   role === "player" ? (
                     <div key={key} className="flex items-center gap-3 p-2">
-  {/* Notifications block (only for player) */}
   {role === "player" && (
     <div className="sm:block">
       <Notifications fontSize="small" coachId={id} />

@@ -39,11 +39,11 @@ const Notifications = ({ coachId }) => {
     const fetchNotifications = async () => {
       try {
         let response;
-        // if (role === 'coach') {
+         if (role === 'coach') {
           response = await axios.get(`/Getnotifications/${coachId}`);
-        // } else if (role === 'player') {
-        //   response = await axios.get(`/getNotificationsPlayer/${coachId}`);
-        // }
+         } else if (role === 'player') {
+           response = await axios.get(`/getNotificationsPlayer/${coachId}`);
+         }
   
         if (response && response.data.status) {
           setNotifications(response.data.notifications);
