@@ -573,7 +573,9 @@ function Appoinment() {
                           {...register("event_name", {
                             required: "Event Name is required",
                           })}
+                          booking slot
                           className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                        
                         />
                       </div>
                     </div>
@@ -588,6 +590,7 @@ function Appoinment() {
                           })}
                           className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         >
+                          <option value="">Select Category</option>
                           {category.map((index) => (
                             <option key={index.id} value={index.id}>
                               {index.name}

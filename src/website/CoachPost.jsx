@@ -240,7 +240,7 @@ function CoachPost() {
   {filteredPosts.map((item) => (
     <div
       key={item.id}
-      className="relative flex flex-col md:flex-row w-full bg-white shadow-sm border border-slate-200 rounded-lg "
+      className="relative flex flex-col md:flex-row w-full bg-white shadow-2x1 border border-slate-200 rounded-lg "
     >
       <div className="relative w-full sm:w-6/12 md:w-4/12 lg:w-3/12 shrink-0 overflow-hidden mx-auto p-3">
   <img
