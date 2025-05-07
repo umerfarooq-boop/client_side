@@ -88,6 +88,8 @@ import ForgotEmail from './Auth/ForgotEmail';
 import TestComponent from './website/TestComponent';
 import useInactivityLogout from './hooks/useInactivityLogout';
 import ChatUi from './Messenger/ChatUi';
+import EmergencyPlayersRecord from './emergency/EmergencyPlayersRecord';
+import EmergencyModule from './emergency/emergency';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 
@@ -135,7 +137,24 @@ function App() {
         {/* Payment Form Checkout */}
 
 
-        <Route path='/emergency' element={<Emergency />} />
+        {/* Emergency Module */}
+        <Route
+          path='/player_emergency/:id/*'
+          element={
+            <ProtectedRoute>
+              <EmergencyPlayersRecord />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/emergency/:id/*'
+          element={
+            <ProtectedRoute>
+              <EmergencyModule />
+            </ProtectedRoute>
+          }
+        />
+        {/* Emergency Module */}
         {/* Wrap the dashboard and other private routes with ProtectedRoute */}
         <Route
           path='/dashboard/:id/*'

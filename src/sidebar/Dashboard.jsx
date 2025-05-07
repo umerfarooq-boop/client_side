@@ -41,6 +41,8 @@ import FeedbackIcon from "@mui/icons-material/Feedback";
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import axios from "../axios";
 import ChatIcon from '@mui/icons-material/Chat';
+import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
+
 import {
   usePopupState,
   bindTrigger,
@@ -425,8 +427,7 @@ function Dashboard({ children }) {
             >
               Profile
             </Link>
-          </Typography>
-                    
+          </Typography> 
         </div>
       ) : role === "player" ? (
         <div className="gap-4 mb-2 block md:block sm:block xsm:block lg:flex xl:flex">
@@ -532,11 +533,11 @@ function Dashboard({ children }) {
 
   return (
     <>
-      <Navbar className="mx-auto max-w-full px-4 py-2 lg:px-8 lg:py-4">
+      <Navbar className="mx-auto max-w-full px-2 py-2 lg:px-5 lg:py-2">
         <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
-          <div className="text-center">
+          <div className="text-start">
             <Link to={'/'}>
-            <h3 className="text-3xl sm:text-2xl leading-normal font-extrabold italic tracking-tight text-gray-900">
+            <h3 className="text-xl sm:text-xl leading-normal font-extrabold italic tracking-tight text-gray-900">
               Coach <span className="text-indigo-600">Selector</span>
             </h3>
             </Link>
@@ -595,26 +596,26 @@ function Dashboard({ children }) {
                       />
                     </div>
                   ) : role === "coach" ? (
-                    <div key={key} className="flex items-center gap-4 p-2">
+<div key={key} className="hidden sm:flex items-center justify-end gap-4 p-2 text-sm">
   {/* Notifications block (only for coach) */}
   {role === "coach" && (
-    <div>
+    <div className="flex-shrink-0">
       <Notifications fontSize="small" coachId={id} />
     </div>
   )}
 
   {/* Chat icon link */}
-  <div>
+  <div className="flex-shrink-0">
     <Link to={`/ChatUi/${coach_id}`}>
       <ChatIcon fontSize="small" style={{ color: 'black' }} />
     </Link>
   </div>
 
   {/* Coach image */}
-  <div>
+  <div className="flex-shrink-0">
     <img
       src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach.image}`}
-      className="w-10 h-10 rounded-full border-2 border-indigo-450 shadow-lg cursor-pointer object-cover"
+      className="w-10 h-10 rounded-full border border-indigo-450 shadow cursor-pointer object-cover"
       alt="Thumbnail"
       id="basic-button"
       aria-controls={open ? "basic-menu" : undefined}
@@ -625,6 +626,7 @@ function Dashboard({ children }) {
     />
   </div>
 </div>
+
 
                   ) : null
                 )}
@@ -827,6 +829,12 @@ function Dashboard({ children }) {
                       <Link to="/invoice" >
                         <ReceiptLongIcon />
                         Invoice
+                      </Link>
+                      </MenuItem>
+                      <MenuItem>
+                      <Link to={`/player_emergency/${coach_id}`} >
+                        <ContactEmergencyIcon />
+                        Emergency
                       </Link>
                       </MenuItem>
                       </div>
