@@ -1,34 +1,44 @@
-import React, { useState } from 'react';
 
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from '../axios'
+import ReportIcon from '@mui/icons-material/Report';
+import Dashboard from '../sidebar/Dashboard';
 const EmergencyModule = () => {
   const [emergencyType, setEmergencyType] = useState('');
   const [cricketInjury, setCricketInjury] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const {register,handleSubmit,reset} = useForm();
+  const {id} = useParams();
+  const navigate = useNavigate();  
 
-    const reportData = {
-      emergencyType,
-      description,
-      reportedAt: new Date().toISOString(),
-    };
-
-    if (emergencyType === 'Injury') {
-      reportData.injuryType = cricketInjury;
+  const Complaint = async (data) => {
+    try {
+      const response = await axios.post('/send_emergency', {
+        emergencyType: emergencyType,
+        subemergencyType: cricketInjury,
+        description: description,
+        player_id: id, // assuming this comes from useParams
+        parent_id: id // replace with actual parent ID (or fetch it dynamically)
+      });
+  
+      if (response.data.success) {
+        alert('Email Sent and Emergency Recorded');
+        setIsSubmitted(true);
+        reset();
+        navigate(-1);
+      } else {
+        alert('Something went wrong.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Failed to send emergency report.');
     }
-
-    console.log('Emergency Reported:', reportData);
-
-    // Reset form and show confirmation
-    setEmergencyType('');
-    setCricketInjury('');
-    setDescription('');
-    setIsSubmitted(true);
-
-    setTimeout(() => setIsSubmitted(false), 3000); // hide confirmation after 3s
   };
+  
 
   const cricketInjuryOptions = [
     'Hamstring Strain',
@@ -42,58 +52,106 @@ const EmergencyModule = () => {
   ];
 
   return (
-    <div style={styles.page}>
+    <Dashboard>
+      <div style={styles.page}>
       <div style={styles.container}>
-        <h2 style={styles.heading}>Emergency Report Module</h2>
+      <div className="text-center">
+            <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
+              Emergency <span className="text-indigo-600">Complaint</span>
+            </h3>
+          </div><br /><br />
         {isSubmitted && <div style={styles.success}>Emergency Reported Successfully!</div>}
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <label>
-            Emergency Type:
-            <select
-              value={emergencyType}
-              onChange={(e) => setEmergencyType(e.target.value)}
-              style={styles.input}
-              required
-            >
-              <option value="">Select Type</option>
-              <option value="Injury">Injury</option>
-              <option value="Health Issue">Health Issue</option>
-              <option value="Harassment">Harassment</option>
-              <option value="Other">Other</option>
-            </select>
-          </label>
+        <form onSubmit={handleSubmit(Complaint)} style={styles.form}>
+        <div className="md:w-full px-3 mb-6 md:mb-0">
+  <label
+    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+    htmlFor="emergency_type"
+  >
+    Emergency Type
+  </label>
+  <select
+    id="emergency_type"
+    value={emergencyType}
+    onChange={(e) => setEmergencyType(e.target.value)}
+    className={`appearance-none block w-full bg-white text-gray-700 border ${
+      !emergencyType ? 'border-red-500' : 'border-gray-300'
+    } rounded py-3 px-4 mb-1 leading-tight focus:outline-none focus:bg-white`}
+    required
+  >
+    <option value="">Select Type</option>
+    <option value="Injury">Injury</option>
+    <option value="Health Issue">Health Issue</option>
+    <option value="Harassment">Harassment</option>
+    <option value="Other">Other</option>
+  </select>
+  {!emergencyType && (
+    <p className="text-red-500 text-xs italic">Emergency Type is required</p>
+  )}
+</div>
 
-          {emergencyType === 'Injury' && (
-            <label>
-              Select Injury Type:
-              <select
-                value={cricketInjury}
-                onChange={(e) => setCricketInjury(e.target.value)}
-                style={styles.input}
-                required
-              >
-                <option value="">Select Injury</option>
-                {cricketInjuryOptions.map((injury, index) => (
-                  <option key={index} value={injury}>{injury}</option>
-                ))}
-              </select>
-            </label>
-          )}
+{emergencyType === 'Injury' && (
+  <div className="md:w-full px-3 mb-6 md:mb-0">
+    <label
+      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+      htmlFor="injury_type"
+    >
+      Select Injury Type
+    </label>
+    <select
+      id="injury_type"
+      value={cricketInjury}
+      onChange={(e) => setCricketInjury(e.target.value)}
+      className={`appearance-none block w-full bg-white text-gray-700 border ${
+        !cricketInjury ? 'border-red-500' : 'border-gray-300'
+      } rounded py-3 px-4 mb-1 leading-tight focus:outline-none focus:bg-white`}
+      required
+    >
+      <option value="">Select Injury</option>
+      {cricketInjuryOptions.map((injury, index) => (
+        <option key={index} value={injury}>
+          {injury}
+        </option>
+      ))}
+    </select>
+    {!cricketInjury && (
+      <p className="text-red-500 text-xs italic">Injury Type is required</p>
+    )}
+  </div>
+)}
 
-          <label>
-            Description:
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              style={{ ...styles.input, height: 100 }}
-              required
-            />
-          </label>
 
-          <button type="submit" style={styles.button}>Report Emergency</button>
-        </form>
+<div className="md:w-full px-3 mb-6 md:mb-0">
+  <label
+    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+    htmlFor="description"
+  >
+    Description
+  </label>
+  <textarea
+    id="description"
+    value={description}
+    onChange={(e) => setDescription(e.target.value)}
+    className={`appearance-none block w-full bg-white text-gray-700 border ${
+      !description ? 'border-red-500' : 'border-gray-300'
+    } rounded py-3 px-4 mb-1 leading-tight focus:outline-none focus:bg-white`}
+    style={{ height: 100 }}
+    required
+  />
+  {!description && (
+    <p className="text-red-500 text-xs italic">Description is required</p>
+  )}
+</div>
+
+
+  <button type="submit" style={styles.button}>
+    Report Emergency &nbsp;
+  <ReportIcon style={{ color: 'red' }} />
+  </button>
+</form>
+
       </div>
     </div>
+    </Dashboard>
   );
 };
 
@@ -106,9 +164,9 @@ const styles = {
     backgroundColor: '#f0f2f5',
   },
   container: {
-    padding: 20,
+    padding:  50,
     width: '100%',
-    maxWidth: 400,
+    maxWidth: 700,
     backgroundColor: '#f9f9f9',
     borderRadius: 10,
     boxShadow: '0 0 10px rgba(0,0,0,0.1)',
@@ -131,7 +189,7 @@ const styles = {
   },
   button: {
     padding: 10,
-    backgroundColor: '#ff4444',
+    backgroundColor: '#3F00FF',
     color: '#fff',
     border: 'none',
     borderRadius: 5,
