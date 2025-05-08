@@ -27,41 +27,6 @@ function AcceptEquipmentRequest() {
     fetchReturnEquipment();
   }, [id]);
 
-//   const handleReturnEquipment = async (data) => {
-//     try {
-//       setServerErrors(null);
-
-//       // Store return record
-//       const storeResponse = await axios.post("/return_equipment", data);
-//       if (storeResponse.status !== 201) {
-//         throw new Error("Failed to save return record");
-//       }
-
-//       // Update assigned and request tables
-//       const returnResponse = await axios.post(`/ReturnEquipment/${id}`, {
-//         equipment_quantity: data.quantity,
-//       });
-
-//       if (returnResponse.status === 200) {
-//         toast.success("Equipment Returned Successfully");
-//         reset();
-//         navigate(-1);
-//       } else {
-//         toast.error(returnResponse.data.message || "Failed to return equipment");
-//       }
-//     } catch (error) {
-//       if (error.response?.data?.errors) {
-//         setServerErrors(error.response.data.errors);
-//         Object.keys(error.response.data.errors).forEach((field) => {
-//           setError(field, { type: "server", message: error.response.data.errors[field][0] });
-//         });
-//       } else {
-//         toast.error("Failed to return equipment");
-//         console.error("Error:", error);
-//       }
-//     }
-//   };
-
 const AcceptNewEquipmentRequest = async (data) => {
     try {
       const response = await axios.post(`/AcceptEquipmentRequest/${id}`, data);

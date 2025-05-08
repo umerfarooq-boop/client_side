@@ -157,10 +157,10 @@ function AddPost() {
 
           <div className="-mx-3 md:flex mb-6">
             {/* Post Description */}
-            <div className="md:w-1/2 px-3 mb-6 md:mb-0">
+            <div className="md:w-full px-3 mb-6 md:mb-0">
               <label className="block text-gray-700 text-xs font-bold mb-2">Post Description</label>
               <textarea
-                rows={5}
+                rows={3}
                 {...register('post_description', {
                   required: "Post Description is required",
                   validate: (value) =>
@@ -175,6 +175,10 @@ function AddPost() {
             </div>
 
             {/* Post Image */}
+            
+          </div>
+          <div className="-mx-3 md:flex mb-6">
+            {/* Post Description */}
             <div className="md:w-1/2 px-3 mb-6 md:mb-0">
               <label className="block text-gray-700 text-xs font-bold mb-2">Post Image</label>
               <input
@@ -197,6 +201,9 @@ function AddPost() {
                 <p className="text-red-500 text-xs italic">{errors.post_image.message}</p>
               )}
             </div>
+
+            {/* Post Image */}
+            
           </div>
 
           {/* Hidden Fields */}
@@ -204,10 +211,10 @@ function AddPost() {
           <input type="hidden" {...register('coach_id')} value={coach_id} />
 
           {/* Submit Button */}
-          <div className="flex justify-end">
+          <div className="flex justify-start">
             <button
               type="submit"
-              className="mt-5 tracking-wide font-semibold bg-blue-900 text-white py-4 px-8 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out"
+              className="mt-5 tracking-wide font-semibold bg-blue-900 text-white py-4 px-28 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out"
             >
               Submit
             </button>

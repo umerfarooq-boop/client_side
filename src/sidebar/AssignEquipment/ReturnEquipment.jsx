@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from '../../axios';
+import Dashboard from '../Dashboard'
+import { RotatingLines } from 'react-loader-spinner';
 import { ToastContainer, toast } from 'react-toastify';
 
 function ReturnEquipment() {
+  const [loading, setLoading] = useState(true);
   const { handleSubmit, register, reset, watch, formState: { errors }, setError } = useForm();
   const { id } = useParams();
   const [equipment, setEquipment] = useState([]);
@@ -17,6 +20,7 @@ function ReturnEquipment() {
         const response = await axios.get(`/show_return_equipment/${id}`);
         if (response.data && Array.isArray(response.data.equipment_return)) {
           setEquipment(response.data.equipment_return);
+          setLoading(false)
         } else if (response.data && response.data.equipment_return) {
           setEquipment([response.data.equipment_return]);
         }
@@ -65,11 +69,30 @@ function ReturnEquipment() {
   const location = useLocation();
 
   return (
-    <>
-      <ToastContainer />
-      <div className='justify-center items-center flex  border-l-pink-600 shadow-2xl shadow-slate-900'>
-        <div className='w-1/3'>
-        {equipment.map((item, index) => (
+    <Dashboard>
+{/* {
+  loading ? (
+    <div className="flex flex-col items-center justify-center h-screen">
+              <RotatingLines
+                visible={true}
+                height="96"
+                width="96"
+                color="grey"
+                strokeWidth="5"
+                animationDuration="0.75"
+                ariaLabel="rotating-lines-loading"
+              />
+            </div>
+          ) :( */}
+
+          <>
+
+          <ToastContainer />
+<div className="min-h-screen p-4">
+  <div className="w-full max-w-4xl mx-auto">
+    {equipment.map((item, index) => (
+
+
     <form 
       key={index} 
       onSubmit={handleSubmit(handleReturnEquipment)} 
@@ -185,10 +208,13 @@ function ReturnEquipment() {
       </div>
     </form>
   ))}
+  
         </div>
       </div>
-
-    </>
+      </>
+      {/* )} */}
+      </Dashboard>
+    
   );
 }
 

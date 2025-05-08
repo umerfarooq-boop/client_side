@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../../axios";
 import Dashboard from "../../Dashboard";
+import { RotatingLines } from 'react-loader-spinner';
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css";
 
 function EditCoach() {
+  const [loading, setLoading] = useState(true);
   const { id } = useParams(); // Get the coach ID from URL parameters
   const navigation = useNavigate();
   const {
@@ -34,6 +36,7 @@ function EditCoach() {
       try {
         const response = await axios.get(`/coach/${id}`);
         setData(response.data.coach_record); // Assuming this contains coach details
+        setLoading(false)
       } catch (error) {
         console.log(error);
       }
@@ -113,6 +116,22 @@ function EditCoach() {
   return (
     <>
       <Dashboard>
+         {
+                    loading ? (
+                      <div className="flex flex-col items-center justify-center h-screen">
+                    <RotatingLines 
+                      visible={true}
+                      height="96"
+                      width="96"
+                      color="grey"
+                      strokeWidth="5"
+                      animationDuration="0.75"
+                      ariaLabel="rotating-lines-loading"
+                    />
+                  </div>
+                    ): (
+                      <>
+                    
         <ToastContainer />
         <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
           <div className="text-center mb-4">
@@ -620,6 +639,8 @@ function EditCoach() {
 
 
         </div>
+        </>
+        )}
       </Dashboard>
     </>
   );

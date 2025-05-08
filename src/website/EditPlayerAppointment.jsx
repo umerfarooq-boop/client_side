@@ -515,13 +515,14 @@ function EditPlayerAppointment() {
                           {...register('booking_slot', { required: 'Booking Slot is required' })} 
                           className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" 
                         >
+                          <option value="">Select Category</option>
                           {
                             category.map((index)=>(
                              <option key={index.id} value={index.id}>{index.name}</option> 
                             ))
                           }
                           </select> 
-                      </div>
+                      </div>  
                     </div>
                   </div>
                 </div>
