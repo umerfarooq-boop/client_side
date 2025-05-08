@@ -157,10 +157,10 @@ function AddPost() {
 
           <div className="-mx-3 md:flex mb-6">
             {/* Post Description */}
-            <div className="md:w-1/2 px-3 mb-6 md:mb-0">
+            <div className="md:w-svw px-3 mb-6 md:mb-0">
               <label className="block text-gray-700 text-xs font-bold mb-2">Post Description</label>
               <textarea
-                rows={5}
+                rows={3}
                 {...register('post_description', {
                   required: "Post Description is required",
                   validate: (value) =>
@@ -191,7 +191,7 @@ function AddPost() {
                     return true;
                   },
                 })}
-                className="w-full py-3 px-4 border border-gray-300 rounded"
+                className="w-full py-7 px-4 border border-gray-300 rounded"
               />
               {errors.post_image && (
                 <p className="text-red-500 text-xs italic">{errors.post_image.message}</p>
@@ -207,7 +207,7 @@ function AddPost() {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="mt-5 tracking-wide font-semibold bg-blue-900 text-white py-4 px-8 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out"
+              className="mt-5 tracking-wide font-semibold bg-blue-900 text-white py-4 px-28 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out"
             >
               Submit
             </button>
