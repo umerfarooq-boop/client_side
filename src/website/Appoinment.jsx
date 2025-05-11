@@ -58,9 +58,6 @@ function Appoinment() {
     }, [from_date, id]);
 
 
-
- 
-
   const isTimeSlotDisabled = (timeValue) => {
     const playwith = localStorage.getItem("playwith"); // "team" or "individual"
     if (!bookedSlots || bookedSlots.length === 0) return false;
@@ -111,7 +108,8 @@ function Appoinment() {
         const response = await axios.post("/coachschedule", eventData);
         if (response.status === 201) {
           toast.success("Schedule Created Successfully");
-          reset()
+          reset();
+          localStorage.setItem('isPaid',false);
           const firstCoach = response.data.coach;
 
           if (firstCoach) {
@@ -228,6 +226,7 @@ function Appoinment() {
                       />
                     </div>
                   </div>
+
                   <div className="w-full px-3 sm:w-1/2">
                     <div className="mb-5">
                       <label
@@ -309,7 +308,9 @@ function Appoinment() {
                       ) : null}
                     </div>
                   </div>
+
                 </div>
+
                 <div className="-mx-3 flex flex-wrap">
                   <div className="w-full px-3 sm:w-1/2">
                     <div className="mb-5">
@@ -413,6 +414,7 @@ function Appoinment() {
                     </div>
                   </div>
                 </div>
+
                 <div className="mb-5 pt-3">
                   <div className="-mx-3 flex flex-wrap">
                     <div className="w-full px-3 sm:w-1/2">

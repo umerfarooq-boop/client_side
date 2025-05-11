@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { Stepper, Step, StepLabel, Button, Box, Typography } from '@mui/material';
+import { Stepper, Step, StepLabel, Button, Box, Typography,Container } from '@mui/material';
 import Main from './Main';
 import PlayerProfile from './PlayerProfile';
 import CoachProfile from './CoachProfile';
 import axios from '../axios';
 import ParentDetailsForm from './ParentDetailsForm';
+import Nav from '../website/Nav'
 import AcademyDetailsForm from './AcademyDetailsForm';
 import Swal from "sweetalert2";
 import { RotatingLines } from 'react-loader-spinner';
@@ -112,75 +113,79 @@ const Profile = () => {
 
   return (
     <>
-      {loading ? (
-        <div className="flex flex-col items-center justify-center h-screen">
-          <RotatingLines
-            visible={true}
-            height="96"
-            width="96"
-            color="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            ariaLabel="rotating-lines-loading"
-          />
-        </div>
-      ) : (
-        <FormProvider {...methods}>
-          <Box
-            sx={{
-              width: '80%',
-              margin: 'auto',
-              mt: 4,
-              p: 4,
-              backgroundColor: '#fff',
-              borderRadius: 4,
-              boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-            }}
-          >
-            <Stepper activeStep={activeStep} alternativeLabel>
-              {steps.map((label) => (
-                <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
+  <Nav />
 
-            {activeStep === steps.length ? (
-              <Typography variant="h6" align="center">
-                All steps completed - you're finished
-              </Typography>
-            ) : (
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <Box sx={{ mt: 2 }}>{getStepContent(activeStep)}</Box>
+  {loading ? (
+    <div className="flex flex-col items-center justify-center h-screen">
+      <RotatingLines
+        visible={true}
+        height="96"
+        width="96"
+        color="grey"
+        strokeWidth="5"
+        animationDuration="0.75"
+        ariaLabel="rotating-lines-loading"
+      />
+    </div>
+  ) : (
+    <FormProvider {...methods}>
+      <Box
+        sx={{
+          width: '80%',
+          margin: 'auto',
+          mt: 4,
+          p: 4,
+          backgroundColor: '#fff',
+          borderRadius: 4,
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        <Stepper activeStep={activeStep} alternativeLabel>
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
 
-                <Box sx={{ display: 'flex', justifyContent: 'center', gap: '20px', mt: 3 }}>
-                  <Button
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                    variant="contained"
-                    color="secondary"
-                    sx={{ width: '50px' }}
-                  >
-                    Back
-                  </Button>
+        {activeStep === steps.length ? (
+          <Typography variant="h6" align="center">
+            All steps completed - you're finished
+          </Typography>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Box sx={{ mt: 2 }}>{getStepContent(activeStep)}</Box>
 
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={activeStep === steps.length - 1 ? handleSubmit(onSubmit) : handleNext}
-                    disabled={!isValid} // Disable the "Next" button if form is not valid
-                    sx={{ width: '80px' }}
-                  >
-                    {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
-                  </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: '20px', mt: 3 }}>
+              <Button
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                variant="contained"
+                color="secondary"
+                sx={{ width: '50px' }}
+              >
+                Back
+              </Button>
 
-                </Box>
-              </form>
-            )}
-          </Box>
-        </FormProvider>
-      )}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={activeStep === steps.length - 1 ? handleSubmit(onSubmit) : handleNext}
+                disabled={!isValid}
+                sx={{ width: '80px' }}
+              >
+                {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
+              </Button>
+            </Box>
+          </form>
+        )}
+      </Box>
+    </FormProvider>
+  )}
+{/* </Box> */}
+
     </>
+    
   );
 };
 

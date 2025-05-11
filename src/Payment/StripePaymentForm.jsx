@@ -25,14 +25,15 @@ const CheckoutForm = ({ amount }) => {
   const email = localStorage.getItem('email') || 'unknown@example.com';
   const coach_record = localStorage.getItem('coach_record');
   const user_id = localStorage.getItem('user_id');
-
+  const role = localStorage.getItem('role');
+  const player_id = localStorage.getItem('player_id');
   useEffect(() => {
     const fetchClientSecret = async () => {
       try {
         const response = await axios.post('http://localhost:8000/api/create-payment-intent', {
           amount: amount * 100,
           coach_id: coach_userid, // ensure this is the coach ID
-      });
+      }); 
       
           setClientSecret(response.data.clientSecret);
       } catch (error) {
@@ -72,6 +73,33 @@ const CheckoutForm = ({ amount }) => {
       return;
     }
   
+    // if (paymentIntent.status === 'succeeded') {
+    //   Swal.fire('Payment Successful', 'Your payment has been processed successfully!', 'success');
+    //   const isPaid = localStorage.setItem('isPaid',true);
+    //   setTimeout(()=>{
+    //     navigate('/PlayerRequest/${player_id}/${role}')
+    //   },1000)
+    
+    //   if (!coach_userid || !coach_record) {
+    //     return Swal.fire('Error', 'Invalid coach information.', 'error');
+    //   }
+    
+    //   try {
+    //     await axios.post('http://localhost:8000/api/store-payment', {
+    //       amount: amount,
+    //       payment_id: paymentIntent.id,
+    //       email: email,
+    //       coach_user_id: coach_userid, // from users table (correct)
+    //       user_id: user_id,
+    //       coach_id: coach_record,      // from coaches table (correct)
+    //     });
+    //   } catch (error) {
+    //     console.error('Error storing payment info:', error);
+    //     Swal.fire('Error', 'There was an error storing payment information.', 'error');
+    //   }
+    // }   
+    const isEditPaid = localStorage.getItem('isEditPaid');
+    const isPaid = localStorage.getItem('isPaid');
     if (paymentIntent.status === 'succeeded') {
       Swal.fire('Payment Successful', 'Your payment has been processed successfully!', 'success');
     
@@ -84,20 +112,34 @@ const CheckoutForm = ({ amount }) => {
           amount: amount,
           payment_id: paymentIntent.id,
           email: email,
-          coach_user_id: coach_userid, // from users table (correct)
+          coach_user_id: coach_userid, // from users table
           user_id: user_id,
-          coach_id: coach_record,      // from coaches table (correct)
+          coach_id: coach_record,      // from coaches table
         });
+        // reset()
+    
+        if (isPaid === 'false' || isPaid === null) {
+          localStorage.setItem('isPaid', 'true'); // use string 'true'
+          navigate(`/PlayerRequest/${player_id}/${role}`);
+        } else if (isEditPaid === 'false' || isEditPaid === null) {
+          localStorage.setItem('isEditPaid', 'true'); // use string 'true'
+          navigate(`/editplayer_appointment_table/${player_id}`);
+        }
+    
       } catch (error) {
         console.error('Error storing payment info:', error);
         Swal.fire('Error', 'There was an error storing payment information.', 'error');
       }
-    }   
-  
+    }
+     
+    
+    
+
   };
   
 
   return (
+    <>
     <div className="min-h-screen bg-white flex items-center justify-center px-4">
       <div className="w-full max-w-lg bg-white shadow-xl rounded-2xl p-8">
         <div className="flex justify-between items-center mb-6">
@@ -125,6 +167,7 @@ const CheckoutForm = ({ amount }) => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 
