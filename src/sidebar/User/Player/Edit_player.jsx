@@ -179,11 +179,11 @@ function Edit_player() {
                    (
                     <>
         <ToastContainer />
-        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
-          <div className="text-center mb-4">
-            <h1 className="text-2xl xl:text-4xl font-bold text-blue-900">
-              Edit Player
-            </h1>
+         <div className="text-center mb-16 mt-16">
+              <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
+                Edit{" "}
+                <span className="text-indigo-600">Player</span>
+              </h3>
           </div>
           {data.map((index, key) => (
             <form
@@ -334,11 +334,12 @@ function Edit_player() {
                 </div>
               </div>
 
-              <div className="text-center mb-4">
-                <h1 className="text-2xl xl:text-4xl font-bold text-blue-900">
-                  Edit Parent Record
-                </h1>
-              </div>
+              <div className="text-center mb-16 mt-16">
+              <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
+                Edit{" "}
+                <span className="text-indigo-600">Player Parent</span>
+              </h3>
+          </div>
 
               {
   index.player_parent.map((parent, key) => (
@@ -418,20 +419,29 @@ function Edit_player() {
 
               {/* Certificate Accademy */}
 
-              <button
-                type="submit"
-                className="mt-5 tracking-wide font-semibold bg-blue-900 text-white py-4 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center"
-              >
-                Submit
-              </button>
+             <button
+  type="submit"
+  className="mt-5 tracking-wide font-semibold bg-indigo-600 text-white py-4 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out flex items-center justify-center"
+>
+  Submit
+</button>
+
+{/* <button
+  type="submit"
+  className="mt-5 w-fit px-6 text-sm tracking-wide font-semibold bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition duration-300 ease-in-out"
+>
+  Submit
+</button> */}
+
             </form>
           ))}
 
-          <div >
-              <div className="text-center mb-4 mt-10">
-          <h1 className="text-2xl xl:text-4xl font-bold text-blue-900">
-            Update Password
-          </h1>
+<div className="text-center mb-16 mt-16">
+              <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
+                Update{" "}
+                <span className="text-indigo-600">Password</span>
+              </h3>
+          </div>
           <div className="border p-4 max-w-md mx-auto mt-4 rounded shadow">
             <form onSubmit={handleSubmit(onSubmit)}>
               <input
@@ -449,18 +459,17 @@ function Edit_player() {
                 required
               />
               <button
-                type="submit"
-                className="w-full mt-2 tracking-wide font-semibold bg-blue-900 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out"
-              >
-                Update Password
-              </button>
+  type="submit"
+  className="w-full mt-2 tracking-wide font-semibold bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out"
+>
+  Update Password
+</button>
+
             </form>
           </div>
-        </div>
-          </div>
 
 
-        </div>
+        
         </>
         )}      </Dashboard>
     </>

@@ -157,7 +157,7 @@ function AddPost() {
 
           <div className="-mx-3 md:flex mb-6">
             {/* Post Description */}
-            <div className="md:w-1/2 px-3 mb-6 md:mb-0">
+            <div className="md:w-full px-3 mb-6 md:mb-0">
               <label className="block text-gray-700 text-xs font-bold mb-2">Post Description</label>
               <textarea
                 rows={3}
@@ -179,7 +179,7 @@ function AddPost() {
           </div>
           <div className="-mx-3 md:flex mb-6">
             {/* Post Description */}
-            <div className="md:w-1/2 px-3 mb-6 md:mb-0">
+            <div className="md:w-1/3 px-3 mb-6 md:mb-0">
               <label className="block text-gray-700 text-xs font-bold mb-2">Post Image</label>
               <input
                 type="file"
@@ -195,7 +195,7 @@ function AddPost() {
                     return true;
                   },
                 })}
-                className="w-full py-7 px-4 border border-gray-300 rounded"
+                className="w-full py-3 px-4 border border-gray-300 rounded"
               />
               {errors.post_image && (
                 <p className="text-red-500 text-xs italic">{errors.post_image.message}</p>

@@ -308,7 +308,7 @@ const Loginuser = async (data) => {
                         Already have an account?{" "}
                         <Link to={'/signup'}>
                           <span className="text-blue-900 font-semibold">
-                            Singup
+                            Sign-up
                           </span>
                         </Link> &nbsp;
                         <Link to={'/forgot_email'}>

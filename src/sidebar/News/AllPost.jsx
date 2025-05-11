@@ -282,6 +282,7 @@ function AllPost() {
     {
       accessorKey: 'post_image',
       header: 'Image',
+      size: 100,
       Cell: ({ cell, row }) =>
         row.original.placeholder ? (
           ''
@@ -292,7 +293,6 @@ function AllPost() {
             style={{ width: '50px', height: '50px', borderRadius: '5px' }}
           />
         ),
-      size: 100,
     },
     {
       accessorKey: 'post_status',
@@ -351,36 +351,50 @@ function AllPost() {
           />
         </div>
       ) : (
-        <MaterialReactTable
-        columns={columns}
-        data={data.length > 0 ? data : []}
-        muiTableBodyProps={{
-          children: data.length === 0 ? (
-            <tr>
-              <td colSpan={columns.length} style={{ textAlign: 'center', padding: '20px', fontStyle: 'italic', color: 'gray' }}>
-                No posts found
-              </td>
-            </tr>
-          ) : undefined,
-        }}
-        muiTableBodyCellProps={{
-          style: {
-            textAlign: 'center',
-          },
-        }}
-        muiTableContainerProps={{
-          style: { overflowX: 'auto' },
-        }}
-        renderTopToolbarCustomActions={() => (
-          <Link
-            to="/AddPost"
-            className="focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 italic"
-          >
-            Add Post
-          </Link>
-        )}
-      />
-
+        <>
+          <div className="text-center mb-6">
+            <h3 className="text-2xl font-bold text-gray-900">
+              All <span className="text-indigo-600">Posts</span>
+            </h3>
+          </div>
+          <MaterialReactTable
+            columns={columns}
+            data={data.length > 0 ? data : []}
+            muiTableBodyProps={{
+              children: data.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={columns.length}
+                    style={{
+                      textAlign: 'center',
+                      padding: '20px',
+                      fontStyle: 'italic',
+                      color: 'gray',
+                    }}
+                  >
+                    No posts found
+                  </td>
+                </tr>
+              ) : undefined,
+            }}
+            muiTableBodyCellProps={{
+              style: {
+                textAlign: 'center',
+              },
+            }}
+            muiTableContainerProps={{
+              style: { overflowX: 'auto' },
+            }}
+            renderTopToolbarCustomActions={() => (
+              <Link
+                to="/AddPost"
+                className="focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 italic"
+              >
+                Add Post
+              </Link>
+            )}
+          />
+        </>
       )}
     </Dashboard>
   );

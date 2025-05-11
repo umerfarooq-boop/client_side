@@ -18,7 +18,7 @@ import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import SportsCricketIcon from '@mui/icons-material/SportsCricket';
 import ChatIcon from '@mui/icons-material/Chat';
 import Badge from "@mui/material/Badge";
-
+import _logo from '../../public/StepContent/ali.jpg'
 function Nav() {
     const [openNav, setOpenNav] = useState(false);
     
@@ -288,12 +288,12 @@ function Nav() {
        <Navbar className="mx-auto max-w-full px-4 py-2 lg:px-8 lg:py-4">
       <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
       <div className="text-center">
-            <Link to={'/'}>
-            <h3 className="text-3xl sm:text-2xl leading-normal font-extrabold italic tracking-tight text-gray-900">
-              Coach <span className="text-indigo-600">Selector</span>
-            </h3>
-            </Link>
-          </div>
+      {/* <div className="w-[90px] h-[10px] overflow-hidden"> */}
+  <a href="/" className="block w-full h-full">
+    <img src={_logo} alt="Logo" className="w-16  object-contain" />
+  </a>
+{/* </div> */}
+</div>
 
         <div className="hidden lg:block">{navList}</div>
         <div className="flex items-center gap-x-1">

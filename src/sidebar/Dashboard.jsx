@@ -42,6 +42,7 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import axios from "../axios";
 import ChatIcon from '@mui/icons-material/Chat';
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
+import _logo from '../../public/StepContent/ali.jpg'
 
 import {
   usePopupState,
@@ -536,12 +537,10 @@ function Dashboard({ children }) {
       <Navbar className="mx-auto max-w-full px-2 py-2 lg:px-5 lg:py-2">
         <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
           <div className="text-start">
-            <Link to={'/'}>
-            <h3 className="text-xl sm:text-xl leading-normal font-extrabold italic tracking-tight text-gray-900">
-              Coach <span className="text-indigo-600">Selector</span>
-            </h3>
-            </Link>
-          </div>
+  <Link to="/" className="block w-full h-full">
+    <img src={_logo} alt="Logo" className="w-16 object-contain" />
+  </Link>
+</div>
 
           <div className="hidden lg:block">{navList}</div>
           <div className="flex items-center gap-x-1">

@@ -275,7 +275,7 @@ localStorage.removeItem('profile_location');
                         Already have an account?{" "}
                         <Link to={'/login'}>
                           <span className="text-blue-900 font-semibold">
-                            Login
+                            Log-in
                           </span>
                         </Link> &nbsp;
                         <Link to={'/'}>
