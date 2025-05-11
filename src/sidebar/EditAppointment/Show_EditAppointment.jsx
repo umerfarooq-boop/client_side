@@ -44,22 +44,21 @@ function Show_EditAppointment() {
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await axios.get(`/edit_appointment/${id}`);
-        if (response.data?.showAppointment) {
-          const scheduleData = Array.isArray(response.data.showAppointment)
-            ? response.data.showAppointment
-            : [response.data.showAppointment];
-          setData(scheduleData);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
+  const getData = async () => {
+    try {
+      const response = await axios.get(`/edit_appointment/${id}`);
+      if (response.data?.showAppointment) {
+        const scheduleData = Array.isArray(response.data.showAppointment)
+          ? response.data.showAppointment
+          : [response.data.showAppointment];
+        setData(scheduleData);
+        setLoading(false);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
     getData();
   }, [id]);
 
@@ -67,6 +66,7 @@ function Show_EditAppointment() {
     try {
       const response = await axios.get(`/AcceptEditAppointment/${playerid}`);
       if (response) {
+        getData();
         toast.success("Appointment Updated Successfully");
       } else {
         toast.error("Something Went Wrong");
@@ -208,7 +208,7 @@ function Show_EditAppointment() {
                   />
                 </div>
               ) : (
-                <p className="text-center">No appointment requests available.</p>
+                <p className="text-center"></p>
               )}
             </div>
           )}

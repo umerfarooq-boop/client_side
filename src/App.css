@@ -19,6 +19,18 @@ body{
   background-color: rgb(67 56 202 / var(--tw-bg-opacity))
 }
 
+.css-1dgpa8w-MuiContainer-root {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box !important;
+}
+
+
+
   
 
 

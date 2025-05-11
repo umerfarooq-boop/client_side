@@ -90,6 +90,7 @@ import useInactivityLogout from './hooks/useInactivityLogout';
 import ChatUi from './Messenger/ChatUi';
 import EmergencyPlayersRecord from './emergency/EmergencyPlayersRecord';
 import EmergencyModule from './emergency/emergency';
+import EditAppointmentTable from './sidebar/EditAppointment/EditAppointmentTable';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 
@@ -129,7 +130,7 @@ function App() {
         {/* Chat UI */}
 
         {/* Payment Form Checkout */}
-        <Route path="/checkoutform" element={<CheckoutForm />} />
+        <Route path="/checkoutform/:id" element={<CheckoutForm />} />
         <Route path="/payment" element={<PaymentPage />} />
 
         <Route path="/stripepaymentform" element={<StripePaymentForm />} />
@@ -168,6 +169,17 @@ function App() {
         /**
         * ! Edit Player Appointment
         */
+        <Route
+          path='/editplayer_appointment_table/:id'
+          element={
+            <ProtectedRoute>
+              <AppointmentProvider id={id}>
+                <EditAppointmentTable id={id}/>
+              </AppointmentProvider>
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path='/editplayer_appointment/:id'
           element={

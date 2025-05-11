@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import axios from '../axios';
+import axios from '../../axios';
 import ReactPaginate from "react-paginate";
-import Nav from './Nav';
+import Nav from '../../website/Nav';
 import { MaterialReactTable } from 'material-react-table';
 import { format } from 'date-fns';
 import { Link, useParams } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { RotatingLines } from 'react-loader-spinner';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function PlayerRequest() {
+function EditAppointmentTable() {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage] = useState(5);
   const [orderBy, setOrderBy] = useState("name");
@@ -51,11 +51,11 @@ function PlayerRequest() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(`/SinglePlayerRequest/${player_id}/${role}`);
-        if (response.data?.SinglePlayerRequest) {
-          const scheduleData = Array.isArray(response.data.SinglePlayerRequest)
-            ? response.data.SinglePlayerRequest
-            : [response.data.SinglePlayerRequest];
+        const response = await axios.get(`/get_edit_appointment/${player_id}`);
+        if (response.data?.editappointment) {
+          const scheduleData = Array.isArray(response.data.editappointment)
+            ? response.data.editappointment
+            : [response.data.editappointment];
           setData(scheduleData);
           setLoading(false);
         }
@@ -67,9 +67,7 @@ function PlayerRequest() {
     getData();
   }, [player_id, role]);
 
-  const isPaid = localStorage.getItem('isPaid')
-
-  
+  const isEditPaid = localStorage.getItem('isEditPaid');
 
   const columns = useMemo(() => [
     {
@@ -94,10 +92,12 @@ function PlayerRequest() {
       },
     },
     {
-      accessorKey: 'sport_category.name',
-      header: 'Sport',
-      size: 150,
-    },
+        accessorFn: (row) => row.player?.sport_category?.name || 'N/A',
+        id: 'sport',
+        header: 'Sport',
+        size: 150,
+      },
+      
     {
       header: 'Time',
       size: 150,
@@ -126,30 +126,65 @@ function PlayerRequest() {
       },
     },
     {
-      accessorKey: 'status',
-      header: 'Status',
-      size: 5,
-      Cell: ({ row }) => {
-        const status = row.original.status;
-        return (
-          <div style={{ display: 'flex', gap: '10px', marginRight: '60px' }}>
-          {/* Processing Status */}
-          {status === 'processing' && isPaid === 'false' && (
-            <div className="flex flex-wrap gap-2 items-center">
-              <button
-                className="bg-yellow-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300"
-              >
-                Processing
-              </button>
-              <Link
-                to={`/checkoutform/${row?.original?.player_id}`}
-                className="bg-yellow-600 text-black font-semibold py-1.5 px-4 rounded shadow hover:bg-orange-500 transition duration-300"
-              >
-                First
-              </Link>
-            </div>
-          )}
-          {status === 'processing' && isPaid === 'true' && (
+        accessorKey: 'status',
+        header: 'Status',
+        size: 5,
+        Cell: ({ row }) => {
+          const status = row.original.status;
+          return (
+            <div style={{ display: 'flex', gap: '10px', marginRight: '60px' }}>
+            {/* Processing Status */}
+            {status === 'processing' && isEditPaid === 'false' && (
+              <div className="flex flex-wrap gap-2 items-center">
+                <button
+                  className="bg-yellow-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300"
+                >
+                  Processing
+                </button>
+                <Link
+                  to={`/checkoutform/${row?.original?.player_id}`}
+                  className="bg-yellow-600 text-black font-semibold py-1.5 px-4 rounded shadow hover:bg-orange-500 transition duration-300"
+                >
+                  First
+                </Link>
+              </div>
+            )}
+          
+            {/* Booked and Not Paid */}
+            {status === 'booked' && isEditPaid === 'false' && (
+              <div className="flex flex-wrap gap-2 items-center">
+                <button
+                  className="bg-blue-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-blue-500 transition duration-300"
+                >
+                  Booked (Unpaid)
+                </button>
+                <Link
+                  to={`/checkoutform/${row?.original?.player_id}`}
+                  className="bg-yellow-600 text-black font-semibold py-1.5 px-4 rounded shadow hover:bg-orange-500 transition duration-300"
+                >
+                  First
+                </Link>
+              </div>
+            )}
+          
+            {/* Booked and Paid */}
+            {status === 'booked' && isEditPaid === 'true' && (
+              <div className="flex flex-wrap gap-2 items-center">
+                <button
+                  className="bg-green-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-green-500 transition duration-300"
+                >
+                  Booked (Paid)
+                </button>
+                <Link
+                  to={`/editplayer_appointment/${row?.original?.id}`}
+                  className="bg-yellow-600 text-black font-semibold py-1.5 px-4 rounded shadow hover:bg-orange-500 transition duration-300"
+                >
+                  Edit Appointment
+                </Link>
+              </div>
+            )}
+
+            {status === 'processing' && isEditPaid === 'true' && (
             <div className="flex flex-wrap gap-2 items-center">
               <button
                 className="bg-yellow-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300"
@@ -158,57 +193,23 @@ function PlayerRequest() {
               </button>
               
             </div>
-          )}
-        
-          {/* Booked and Not Paid */}
-          {status === 'booked' && isPaid === 'false' && (
-            <div className="flex flex-wrap gap-2 items-center">
+            )}
+          
+            {/* Rejected Status */}
+            {status === 'reject' && isEditPaid === 'true' && (
               <button
-                className="bg-blue-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-blue-500 transition duration-300"
+                className="bg-red-600 text-black font-semibold py-1 px-5 rounded shadow hover:bg-red-500 transition duration-300"
               >
-                Booked (Unpaid)
+                Rejected
               </button>
-              <Link
-                to={`/checkoutform/${row?.original?.player_id}`}
-                className="bg-yellow-600 text-black font-semibold py-1.5 px-4 rounded shadow hover:bg-orange-500 transition duration-300"
-              >
-                First
-              </Link>
-            </div>
-          )}
-        
-          {/* Booked and Paid */}
-          {status === 'booked' && isPaid === 'true' && (
-            <div className="flex flex-wrap gap-2 items-center">
-              <button
-                className="bg-green-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-green-500 transition duration-300"
-              >
-                Booked (Paid)
-              </button>
-              <Link
-                to={`/editplayer_appointment/${row?.original?.id}`}
-                className="bg-yellow-600 text-black font-semibold py-1.5 px-4 rounded shadow hover:bg-orange-500 transition duration-300"
-              >
-                Edit Appointment
-              </Link>
-            </div>
-          )}
-        
-          {/* Rejected Status */}
-          {status === 'reject' && isPaid === 'true' && (
-            <button
-              className="bg-red-600 text-black font-semibold py-1 px-5 rounded shadow hover:bg-red-500 transition duration-300"
-            >
-              Rejected
-            </button>
-          )}
-        </div>
-        
-
-
-        );
+            )}
+          </div>
+          
+  
+  
+          );
+        },
       },
-    },
   ], []);
 
   return (
@@ -219,7 +220,7 @@ function PlayerRequest() {
           <div>
             <div className="text-center">
               <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
-                Your{" "}
+                Edit{" "}
                 <span className="text-indigo-600">Booking</span>
               </h3>
           </div>
@@ -288,4 +289,4 @@ function PlayerRequest() {
   
 }
 
-export default PlayerRequest;
+export default EditAppointmentTable

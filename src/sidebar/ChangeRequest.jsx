@@ -31,36 +31,37 @@ function ChangeRequest({id}) {
       const { updateStatus,fetchAppointments } = useAppointments();   
   
   
+      // const getData = async () => {
+      //   try {
+      //     const response = await axios.get(`/PlayerRequests/${id}`);
+      //     if (response.data?.CoachSchedule) {
+      //       const scheduleData = Array.isArray(response.data.CoachSchedule)
+      //         ? response.data.CoachSchedule
+      //         : [response.data.CoachSchedule];
+      //     }
+      //   } catch (error) {
+      //     console.error("Error fetching data:", error);
+      //   }
+      // };
   
-   useEffect(() => {
-          const getData = async () => {
-            try {
-              const response = await axios.get(`/PlayerRequests/${id}`);
-              if (response.data?.CoachSchedule) {
-                const scheduleData = Array.isArray(response.data.CoachSchedule)
-                  ? response.data.CoachSchedule
-                  : [response.data.CoachSchedule];
-              }
-            } catch (error) {
-              console.error("Error fetching data:", error);
-            }
-          };
-          getData();
-        }, [id,setData]);
-  
+      //    useEffect(() => {
           
+      //     getData();
+      //   }, [id,setData]);
+  
+      const getData = async () => {
+        try {
+          const response = await axios.get(`/PlayerRequests/${id}`);
+          if (response.data?.CoachSchedule) {
+            setData(response.data.CoachSchedule);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
         
           useEffect(() => {
-            const getData = async () => {
-              try {
-                const response = await axios.get(`/PlayerRequests/${id}`);
-                if (response.data?.CoachSchedule) {
-                  setData(response.data.CoachSchedule);
-                }
-              } catch (error) {
-                console.error("Error fetching data:", error);
-              }
-            };
+            
         
             getData();
           }, [id]);
@@ -82,7 +83,7 @@ function ChangeRequest({id}) {
             
                 if (response.status === 200 || response.status === 201) {
                   toast.success(`Status updated to '${newStatus}'`);
-                  
+                  getData();
                   updateStatus(aid, newStatus); // Update the calendar context
                   fetchAppointments(); // Refetch appointments to ensure the calendar is accurate
                 } else {
@@ -207,7 +208,6 @@ function ChangeRequest({id}) {
                     >
                       Decline
                     </button>
-                    <Chat currentUser={currentUser} receiverId={item.created_by}   />
                   </div>
                 ) : item.status === "booked" ? (
                   <button className="bg-green-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300">

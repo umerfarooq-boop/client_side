@@ -13,4 +13,4 @@ window.Echo = new Echo({
 });
 
 
-export default echo;
+export default Echo;

@@ -117,6 +117,9 @@ function Nav() {
     }else if(role === 'admin'){
     login_id = localStorage.getItem('admin_id');
   }
+
+  const isEditPaid = localStorage.getItem('isEditPaid');
+
   // Ensure you store and use user_id
 
   // console.log(`Login id is: ${login_id}`);
@@ -512,6 +515,12 @@ function Nav() {
                 role === 'player' ? (
                   <div>
                     <MenuItem><Link to={`/PlayerRequest/${player_id}/${role}`} onClick={handleClose}><BookmarkAddedIcon />Booking Request</Link></MenuItem>
+                    {
+                      isEditPaid === 'false' ? (
+                        <MenuItem><Link to={`/editplayer_appointment_table/${player_id}`} onClick={handleClose}><BookmarkAddedIcon />Edit Booking Request</Link></MenuItem>
+                        
+                      ) : null
+                    }
                     <MenuItem><Link to={'/equipment_request/'} onClick={handleClose}><SportsCricketIcon />Equipment Request</Link></MenuItem>
                     <MenuItem><Link to={`/player_booked_equipment/${player_id}`} onClick={handleClose}><SportsCricketIcon />Booked Request</Link></MenuItem>
                     <MenuItem><Link to={'/singal_invoice'} onClick={handleClose}><SportsCricketIcon />Invoice</Link></MenuItem>
