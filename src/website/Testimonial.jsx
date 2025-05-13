@@ -55,7 +55,7 @@ function Testimonial() {
   return (
     <>
       <Nav />
-      <section className="mt-20 mb-5">
+      <section className="mt-12 mb-12">
         <div className="text-center mb-16 mt-16">
           <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
             What Our{" "}
