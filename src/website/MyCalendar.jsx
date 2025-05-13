@@ -107,13 +107,7 @@ function MyCalendar({ id }) {   // ✅ receive id here
               }}
             />
 
-            <div className="mt-4">
-              {
-                id && currentUser && (
-                  <Chat  currentUser={currentUser} receiverId={coach_userid}/>
-                )
-              }
-            </div>
+
 
           </div>
         )

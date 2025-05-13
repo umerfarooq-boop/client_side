@@ -88,56 +88,60 @@ function EditPlayerAppointment() {
       }, [from_date, id]);
     }
 
-
-const isTimeSlotDisabled = (timeValue) => {
-  const playwith = localStorage.getItem("playwith"); // team or individual
-  if (!bookedSlots || bookedSlots.length === 0) return false;
-
-  const [inputHour, inputMin] = timeValue.split(":").map(Number);
-  const inputMinutes = inputHour * 60 + inputMin;
-
-  // Current user's appointment time in minutes
-  const [myStartHour, myStartMin] = appointment?.start_time?.split(":")?.map(Number) || [];
-  const [myEndHour, myEndMin] = appointment?.end_time?.split(":")?.map(Number) || [];
-
-  const myStartMinutes = myStartHour * 60 + myStartMin;
-  const myEndMinutes = myEndHour * 60 + myEndMin;
-
-  // ✅ If the selected time is within the user's original booking slot, allow it
-  const isMySlot = inputMinutes >= myStartMinutes && inputMinutes < myEndMinutes;
-  if (isMySlot) return false;
-
-  // ❌ Disable if any other slot overlaps this time
-  for (const slot of bookedSlots) {
-    // Ignore this user's appointment slot completely
-    const isSameAsMyAppointment =
-      slot.id === appointment?.id ||
-      (
-        slot.start_time === appointment?.start_time &&
-        slot.end_time === appointment?.end_time &&
-        slot.from_date === appointment?.from_date
-      );
-
-    if (isSameAsMyAppointment) continue;
-
-    const [startHour, startMin] = slot.start_time.split(":").map(Number);
-    const [endHour, endMin] = slot.end_time.split(":").map(Number);
-
-    const startMinutes = startHour * 60 + startMin;
-    const endMinutes = endHour * 60 + endMin;
-
-    const overlaps = inputMinutes >= startMinutes && inputMinutes < endMinutes;
-
-    if (overlaps) return true; // Disable this time slot
-  }
-
-  // ✅ Time is available
-  return false;
-};
-
-
-
-
+    const isTimeSlotDisabled = (timeValue) => {
+      const playwith = localStorage.getItem("playwith"); // "team" or "individual"
+      if (!bookedSlots || bookedSlots.length === 0) return false;
+    
+      const [inputHour, inputMin] = timeValue.split(":").map(Number);
+      const inputMinutes = inputHour * 60 + inputMin;
+    
+      // Get the current user's appointment time
+      const [myStartHour, myStartMin] = appointment[0]?.start_time?.split(":").map(Number) || [];
+      const [myEndHour, myEndMin] = appointment[0]?.end_time?.split(":").map(Number) || [];
+    
+      const myStartMinutes = myStartHour * 60 + myStartMin;
+      const myEndMinutes = myEndHour * 60 + myEndMin;
+    
+      // ✅ If this time is inside user's original booking, allow it
+      const isCurrentUserSlot = inputMinutes >= myStartMinutes && inputMinutes < myEndMinutes;
+      if (isCurrentUserSlot) return false;
+    
+      let teamBookingCount = 0;
+      let hasIndividualBooking = false;
+    
+      for (const slot of bookedSlots) {
+        const [startHour, startMin] = slot.start_time.split(":").map(Number);
+        const [endHour, endMin] = slot.end_time.split(":").map(Number);
+    
+        const startMinutes = startHour * 60 + startMin;
+        const endMinutes = endHour * 60 + endMin;
+    
+        const overlaps = inputMinutes >= startMinutes && inputMinutes < endMinutes;
+    
+        // 💡 Ignore current user's own slot
+        const isSameSlot =
+          slot.id === appointment[0]?.id ||
+          (
+            slot.start_time === appointment[0]?.start_time &&
+            slot.end_time === appointment[0]?.end_time &&
+            slot.from_date === appointment[0]?.from_date
+          );
+    
+        if (isSameSlot) continue;
+    
+        if (overlaps) {
+          if (slot.playwith === "individual") hasIndividualBooking = true;
+          if (slot.playwith === "team") teamBookingCount += slot.bookings;
+        }
+      }
+    
+      if (hasIndividualBooking) return true;
+      if (playwith === "team" && teamBookingCount >= 2) return true;
+      if (playwith === "individual" && teamBookingCount > 0) return true;
+    
+      return false;
+    };
+    
 
   const onSubmit = async (data) => {
     try {
@@ -301,7 +305,7 @@ const isTimeSlotDisabled = (timeValue) => {
       )}
     />
   </div>
-) : null}
+          ) : null}
 
 
 

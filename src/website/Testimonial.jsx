@@ -15,7 +15,7 @@ function Testimonial() {
     dots: false,
     infinite: true,
     speed: 1000,
-    slidesToShow: 1,
+    slidesToShow: 3,
     slidesToScroll: 1,
     beforeChange: (current, next) => {
       setOldSlide(current);
@@ -55,7 +55,7 @@ function Testimonial() {
   return (
     <>
       <Nav />
-      <section className="mt-20 mb-5">
+      <section className="mt-12 mb-12">
         <div className="text-center mb-16 mt-16">
           <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
             What Our{" "}
@@ -63,177 +63,329 @@ function Testimonial() {
           </h3>
         </div>
 
-        <div className="slider-container">
+        <div className="slider-container w-full px-10 sm:px-6 lg:px-8">
           <Slider {...settings}>
-            {/* Slide 1 */}
-            <div className="shadow-sm rounded-xl p-20">
-              <blockquote className="overflow-hidden h-full flex flex-col bg-white shadow rounded-xl">
-                <header className="p-6 space-y-4 flex flex-col flex-1">
-                  <p className="text-xl">
-                    "Choosing this platform was the best decision I made! It has streamlined our operations, saved time, and has been super easy to integrate into our workflow. Highly recommended!"
-                  </p>
-                  <p className="text-xl">“A must-have tool for modern businesses!”</p>
-                </header>
+            {/* Slide 1 - Ahmed Ali */}
 
-                <footer className="flex items-center px-6 py-4 space-x-4 text-white bg-gradient-to-br from-indigo-700 to-indigo-500">
+            <div style={{
+              padding: '20px',
+              height: '100%', // Ensure all cards same height
+              boxSizing: 'border-box'
+            }}>
+              <div style={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: 'white',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                borderRadius: '12px',
+                overflow: 'hidden'
+              }}>
+                {/* Nameplate - Top */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '16px',
+                  gap: '12px',
+                  color: 'white',
+                  background: 'linear-gradient(135deg, #4338CA, #3730A3)'
+                }}>
                   <img
-                    className="w-10 h-10 rounded-full ring-2 ring-white"
-                    loading="lazy"
                     src="https://picsum.photos/200"
-                    alt="User 1"
-                    width="460"
-                    height="460"
+                    alt="User"
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      border: '2px solid white'
+                    }}
                   />
                   <div>
-                    <p className="text-lg font-bold">Ahmed Ali</p>
-                    <a
-                      href=""
-                      rel="noopener"
-                      className="text-sm text-blue-200"
-                    >
+                    <p style={{ margin: 0, fontSize: '1rem', fontWeight: 'bold' }}>
+                      Ahmed Ali
+                    </p>
+                    <p style={{
+                      margin: 0,
+                      fontSize: '0.875rem',
+                      color: 'rgba(255, 255, 255, 0.8)'
+                    }}>
                       CEO, TechPioneers
-                    </a>
+                    </p>
                   </div>
-                </footer>
-              </blockquote>
+                </div>
+
+                {/* Text Content - Bottom */}
+                <div style={{
+                  padding: '16px',
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center'
+                }}>
+                  <p style={{
+                    margin: '0 0 12px 0',
+                    fontSize: '1rem',
+                    lineHeight: 1.5
+                  }}>
+                    "Choosing this platform was the best decision I made! It has streamlined our operations."
+                  </p>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '1rem',
+                    lineHeight: 1.5,
+                    fontWeight: '500'
+                  }}>
+                    "A must-have tool for businesses!"
+                  </p>
+                </div>
+              </div>
             </div>
 
-            {/* Slide 2 */}
-            <div className="shadow-sm rounded-xl p-20">
-              <blockquote className="overflow-hidden h-full flex flex-col bg-white shadow rounded-xl">
-                <header className="p-6 space-y-4 flex flex-col flex-1">
-                  <p className="text-xl">
-                    "I’ve been using this system for several months, and it has dramatically improved how we collaborate and manage our team. The integration was smooth, and the support team was fantastic!"
-                  </p>
-                  <p className="text-xl">“Excellent service and support!”</p>
-                </header>
-
-                <footer className="flex items-center px-6 py-4 space-x-4 text-white bg-gradient-to-br from-indigo-700 to-indigo-500">
+            {/* Slide 2 - Fatima Khan */}
+            <div style={{
+              padding: '12px',
+              height: '100%',
+              boxSizing: 'border-box'
+            }}>
+              <div style={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: 'white',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                borderRadius: '12px',
+                overflow: 'hidden'
+              }}>
+                {/* Nameplate - Top */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '16px',
+                  gap: '12px',
+                  color: 'white',
+                  background: 'linear-gradient(135deg, #4338CA, #3730A3)'
+                }}>
                   <img
-                    className="w-10 h-10 rounded-full ring-2 ring-white"
-                    loading="lazy"
                     src="https://picsum.photos/200"
-                    alt="User 2"
-                    width="460"
-                    height="460"
+                    alt="User"
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      border: '2px solid white'
+                    }}
                   />
                   <div>
-                    <p className="text-lg font-bold">Fatima Khan</p>
-                    <a
-                      href=""
-                      rel="noopener"
-                      className="text-sm text-blue-200"
-                    >
+                    <p style={{ margin: 0, fontSize: '1rem', fontWeight: 'bold' }}>
+                      Fatima Khan
+                    </p>
+                    <p style={{
+                      margin: 0,
+                      fontSize: '0.875rem',
+                      color: 'rgba(255, 255, 255, 0.8)'
+                    }}>
                       Product Manager, InnovateTech
-                    </a>
+                    </p>
                   </div>
-                </footer>
-              </blockquote>
+                </div>
+
+                {/* Text Content - Bottom */}
+                <div style={{
+                  padding: '16px',
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center'
+                }}>
+                  <p style={{
+                    margin: '0 0 12px 0',
+                    fontSize: '1rem',
+                    lineHeight: 1.5
+                  }}>
+                    "This system has dramatically improved how we collaborate and manage our team."
+                  </p>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '1rem',
+                    lineHeight: 1.5,
+                    fontWeight: '500'
+                  }}>
+                    "Excellent service and support!"
+                  </p>
+                </div>
+              </div>
             </div>
 
-            {/* Slide 3 */}
-            <div className="shadow-sm rounded-xl p-20">
-              <blockquote className="overflow-hidden h-full flex flex-col bg-white shadow rounded-xl">
-                <header className="p-6 space-y-4 flex flex-col flex-1">
-                  <p className="text-xl">
-                    "This platform has helped us reduce our operational costs significantly. It is so intuitive, easy to use, and has made our workflow seamless. The best part? The amazing customer service!"
-                  </p>
-                  <p className="text-xl">“This tool is a game changer for small businesses!”</p>
-                </header>
-
-                <footer className="flex items-center px-6 py-4 space-x-4 text-white bg-gradient-to-br from-indigo-700 to-indigo-500">
+            {/* Slide 3 - Usman Shah */}
+            <div style={{
+              padding: '12px',
+              height: '100%',
+              boxSizing: 'border-box'
+            }}>
+              <div style={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: 'white',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                borderRadius: '12px',
+                overflow: 'hidden'
+              }}>
+                {/* Nameplate - Top */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '16px',
+                  gap: '12px',
+                  color: 'white',
+                  background: 'linear-gradient(135deg, #4338CA, #3730A3)'
+                }}>
                   <img
-                    className="w-10 h-10 rounded-full ring-2 ring-white"
-                    loading="lazy"
                     src="https://picsum.photos/200"
-                    alt="User 3"
-                    width="460"
-                    height="460"
+                    alt="User"
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      border: '2px solid white'
+                    }}
                   />
                   <div>
-                    <p className="text-lg font-bold">Usman Shah</p>
-                    <a
-                      href=""
-                      rel="noopener"
-                      className="text-sm text-blue-200"
-                    >
+                    <p style={{ margin: 0, fontSize: '1rem', fontWeight: 'bold' }}>
+                      Usman Shah
+                    </p>
+                    <p style={{
+                      margin: 0,
+                      fontSize: '0.875rem',
+                      color: 'rgba(255, 255, 255, 0.8)'
+                    }}>
                       CEO, Green Innovators
-                    </a>
+                    </p>
                   </div>
-                </footer>
-              </blockquote>
+                </div>
+
+                {/* Text Content - Bottom */}
+                <div style={{
+                  padding: '16px',
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center'
+                }}>
+                  <p style={{
+                    margin: '0 0 12px 0',
+                    fontSize: '1rem',
+                    lineHeight: 1.5
+                  }}>
+                    "Helped us reduce operational costs significantly with intuitive workflow."
+                  </p>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '1rem',
+                    lineHeight: 1.5,
+                    fontWeight: '500'
+                  }}>
+                    "A game changer for small businesses!"
+                  </p>
+                </div>
+              </div>
             </div>
 
-            {/* Slide 4 */}
-            <div className="shadow-sm rounded-xl p-20">
-              <blockquote className="overflow-hidden h-full flex flex-col bg-white shadow rounded-xl">
-                <header className="p-6 space-y-4 flex flex-col flex-1">
-                  <p className="text-xl">
-                    "I absolutely love this platform. It’s easy to use, flexible, and has allowed our team to collaborate more effectively. It’s an investment I would make again and again!"
-                  </p>
-                  <p className="text-xl">“Transforms the way teams work!”</p>
-                </header>
-
-                <footer className="flex items-center px-6 py-4 space-x-4 text-white bg-gradient-to-br from-indigo-700 to-indigo-500">
+            {/* Slide 4 - Ayesha Iqbal */}
+            <div style={{
+              padding: '12px',
+              height: '100%',
+              boxSizing: 'border-box'
+            }}>
+              <div style={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: 'white',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                borderRadius: '12px',
+                overflow: 'hidden'
+              }}>
+                {/* Nameplate - Top */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '16px',
+                  gap: '12px',
+                  color: 'white',
+                  background: 'linear-gradient(135deg, #4338CA, #3730A3)'
+                }}>
                   <img
-                    className="w-10 h-10 rounded-full ring-2 ring-white"
-                    loading="lazy"
                     src="https://picsum.photos/200"
-                    alt="User 4"
-                    width="460"
-                    height="460"
+                    alt="User"
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      border: '2px solid white'
+                    }}
                   />
                   <div>
-                    <p className="text-lg font-bold">Ayesha Iqbal</p>
-                    <a
-                      href=""
-                      rel="noopener"
-                      className="text-sm text-blue-200"
-                    >
+                    <p style={{ margin: 0, fontSize: '1rem', fontWeight: 'bold' }}>
+                      Ayesha Iqbal
+                    </p>
+                    <p style={{
+                      margin: 0,
+                      fontSize: '0.875rem',
+                      color: 'rgba(255, 255, 255, 0.8)'
+                    }}>
                       Operations Head, Smart Solutions
-                    </a>
+                    </p>
                   </div>
-                </footer>
-              </blockquote>
-            </div>
+                </div>
 
-            {/* Add more slides as needed */}
-            {/* ... */}
+                {/* Text Content - Bottom */}
+                <div style={{
+                  padding: '16px',
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center'
+                }}>
+                  <p style={{
+                    margin: '0 0 12px 0',
+                    fontSize: '1rem',
+                    lineHeight: 1.5
+                  }}>
+                    "Easy to use, flexible, and has allowed our team to collaborate more effectively."
+                  </p>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '1rem',
+                    lineHeight: 1.5,
+                    fontWeight: '500'
+                  }}>
+                    "Transforms the way teams work!"
+                  </p>
+                </div>
+              </div>
+            </div>
           </Slider>
 
-          {/* Custom styles for the slider */}
+          {/* Slider Container Styles */}
           <style jsx>{`
-            .slider-container {
-              width: 100%;
-              max-width: 1920px;
-              margin: 0 auto;
-            }
-
-            .slider-image {
-              width: 100%;
-              height: auto;
-            }
-
-            @media (max-width: 1200px) {
-              .slider-image {
-                height: auto;
-              }
-            }
-
-            @media (max-width: 768px) {
-              .slider-image {
-                height: auto;
-                max-height: 300px; /* Reduce height for smaller screens */
-              }
-            }
-
-            @media (max-width: 480px) {
-              .slider-image {
-                height: auto;
-                max-height: 200px; /* Further reduce height for very small screens */
-              }
-            }
-          `}</style>
+    .slider-container {
+      width: 100%;
+      max-width: 1600px;
+      gap:2px
+      padding: 20px;
+    }
+    
+    /* Ensure all slides have equal height */
+    .slick-slide > div {
+      height: 100%;
+    }
+    
+    /* Card height - adjust as needed */
+    .slick-slide {
+      height: 320px;
+    }
+  `}</style>
         </div>
       </section>
 

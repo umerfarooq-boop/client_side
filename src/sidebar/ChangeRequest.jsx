@@ -134,6 +134,11 @@ function ChangeRequest({id}) {
             size: 150,
           },
           {
+            accessorKey: 'playwith',
+            header: 'Play with',
+            size: 150,
+          },
+          {
             header: 'Time',
             size: 150,
             cell: ({ row }) => {

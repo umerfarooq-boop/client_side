@@ -25,6 +25,8 @@ function ShowAttendance() {
         }
         } catch (error) {
         console.error("Error fetching data:", error);
+        }finally {
+          setLoading(false); // Always set loading to false, even if there's an error
         }
     };
 
@@ -41,10 +43,32 @@ function ShowAttendance() {
     }
   };
 
+  
+  
+
   // Fetch data on component mount
   useEffect(() => {
     fetchData();
   }, []);
+
+
+  const EditAttendance = async (id) => {
+    try {
+      const response = await axios.get(`/edit_attendance/${id}`);
+  
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setLoading(true);
+        await fetchData();
+        setLoading(false);
+      } else {
+        toast.error('Failed to update attendance.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while updating attendance.');
+      console.error(error);
+    }
+  };
 
   // Define table columns
   const columns = useMemo(
@@ -75,7 +99,6 @@ function ShowAttendance() {
           const currentTime = new Date();
           const fifteenMinutesPassed = (currentTime - sessionStart) / (1000 * 60) > 15;
           const sessionNotStarted = currentTime < sessionStart;
-      
           const markAttendance = async (status) => {
             try {
               const response = await axios.post(
@@ -96,7 +119,7 @@ function ShowAttendance() {
               {attendanceStatus ? (
                 <button
                   className="font-medium text-white bg-green-400 border-green-400 border rounded-full w-8 h-8"
-                  disabled
+                  onDoubleClick={() => EditAttendance(row.original.id)}
                 >
                   {attendanceStatus}
                 </button>
@@ -130,6 +153,8 @@ function ShowAttendance() {
           );
         },
       }
+
+      
     ],
     []
   );

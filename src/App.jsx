@@ -1,4 +1,5 @@
 import './App.css';
+
 import Signup from './Auth/Signup';
 import Login from './Auth/Login';
 import Otp from './Auth/Otp';
@@ -68,6 +69,7 @@ import AllAppointment from './sidebar/EditAppointment/AllAppointment';
 import NewEquipmentRequest from './sidebar/AssignEquipment/NewEquipmentRequest';
 import EquipmentStock from './sidebar/AssignEquipment/EquipmentStock';
 import AllEquipments from './sidebar/AssignEquipment/AllEquipments';
+import FormDialog from './sidebar/AssignEquipment/FormDialog';
 import ReturnEquipment from './sidebar/AssignEquipment/ReturnEquipment';
 import AcceptEquipmentRequest from './sidebar/AssignEquipment/AcceptEquipmentRequest';
 import PageNotFound from './website/PageNotFound';
@@ -107,8 +109,8 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
         <Route path='/otp' element={<Otp />} />
-        <Route path='/resetpassword/:id' element={<ResetPassword />} />
-        <Route path='/forgotPass/:id' element={<ForgotOtp />} />
+        <Route path='/resetpassword' element={<ResetPassword />} />
+        <Route path='/forgotPass' element={<ForgotOtp />} />
         <Route path='/forgot_email' element={<ForgotEmail />} />
         <Route path='/coachpost' element={<CoachPost />} />
         <Route path='/page' element={<Page />} />
@@ -675,6 +677,7 @@ function App() {
         {/* Equipment Stock */}
 
         {/* All Equipments */}
+        {/* All Equipments */}
         <Route
           path='/all_equipment/:id'
           element={
@@ -683,7 +686,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* All Equipments */}
+        <Route
+          path='/popup'
+          element={
+            <ProtectedRoute>
+              <FormDialog />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path='/player_booked_equipment/:id'

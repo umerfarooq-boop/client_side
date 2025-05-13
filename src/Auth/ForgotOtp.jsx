@@ -24,11 +24,11 @@ function ForgotOtp() {
         setLoading(true);
 
         try {
-        const response = await axios.post(`/verifyForgotOtp/${user_id}`, submissionData);
+        const response = await axios.post(`/verifyForgotOtp`, submissionData);
         toast.success('OTP is Verified');
         // alert("Found");
         reset();
-        navigate(`/resetpassword/${user_id}`);
+        navigate(`/resetpassword`);
         reset();
         } catch (error) {
         toast.error('Invalid OTP or Time Over');

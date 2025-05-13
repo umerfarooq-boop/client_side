@@ -188,7 +188,7 @@
 
 //         {/* Testimonials Section */}
 //         {/* Testimonials Section */}
-       
+
 //       </div>
 
 //       <Footer />
@@ -219,6 +219,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import About_Section_Mission from "./About_Section_Mission";
+import Service from "./Service";
 
 function About() {
   // Testimonials
@@ -283,7 +284,7 @@ function About() {
   return (
     <>
       <Nav />
-      <div className="p-6">
+      <div className="p-1">
         {/* <h1 className="text-3xl font-bold text-center mb-8">About Us</h1> */}
 
         {/* Mission Statement */}
@@ -310,36 +311,39 @@ function About() {
           </p>
         </section> */}
 
-        <div className="flex flex-1 items-center rounded-3xl shadow-inner justify-center">
+
+        <div className="flex flex-1 items-center justify-center rounded-3xl  bg-white">
           <About_Section_Mission />
         </div>
 
         {/* Team Section */}
-        <section className="mb-12">
-  <div className="text-center mb-16 mt-16">
-    <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
-      Team <span className="text-indigo-600">Members</span>
-    </h3>
-  </div>
-
-  <div className="max-w-full px-4 sm:px-6 lg:px-8">
-    <Slider {...fax}>
-      {coaches.map((coach, index) => (
-        <div key={index} className="px-3"> {/* <-- Added horizontal padding here */}
-          <div className="bg-white p-6 shadow rounded-lg flex flex-col items-center justify-center">
-            <img
-              src={`http://127.0.0.1:8000/uploads/coach_image/${coach.image}`}
-              alt={`${coach.name}`}
-              className="w-24 h-24 rounded-full mb-4 object-cover"
-            />
-            <h3 className="font-semibold text-center">{coach.name}</h3>
-            <p className="text-gray-600 font-medium text-center">Members</p>
+        <section >
+          <div className="text-center mb-12 mt-12">
+            <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
+              Our Best <span className="text-indigo-600">Coaches</span>
+            </h3>
           </div>
-        </div>
-      ))}
-    </Slider>
-  </div>
-</section>
+
+          <div className="max-w-full px-4 sm:px-6 lg:px-8">
+            <div className="flex space-x-4 overflow-x-auto scrollbar-hide py-4">
+              {coaches.map((coach, index) => (
+                <div
+                  key={index}
+                  className="min-w-[250px] bg-white p-6 shadow rounded-lg flex flex-col items-center justify-center"
+                >
+                  <img
+                    src={`http://127.0.0.1:8000/uploads/coach_image/${coach.image}`}
+                    alt={`${coach.name}`}
+                    className="w-24 h-24 rounded-full mb-4 object-cover"
+                  />
+                  <h3 className="font-semibold text-center">{coach.name}</h3>
+                  <p className="text-gray-600 font-medium text-center">Members</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </section>
 
         {/* FAQ */}
 
@@ -347,13 +351,14 @@ function About() {
         {/* FAQ */}
 
         {/* Services Section */}
-        <section className="mt-20">
-        <div className="text-center mb-16 mt-16">
+        <div className="mb-12" > <Service /></div>
+        {/* <section className="mt-20">
+          <div className="text-center mb-16 mt-16">
             <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
               What we{" "}
               <span className="text-indigo-600">Offer</span>
             </h3>
-        </div>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             <div className="bg-gray-100 p-4 flex flex-col items-center rounded-lg">
               <FitnessCenterIcon
@@ -378,11 +383,11 @@ function About() {
               <h3 className="mt-2 font-semibold">Payments & Invoicing</h3>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Testimonials Section */}
         {/* Testimonials Section */}
-       
+
       </div>
 
       <Footer />
