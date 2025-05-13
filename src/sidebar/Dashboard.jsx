@@ -428,7 +428,7 @@ function Dashboard({ children }) {
             >
               Profile
             </Link>
-          </Typography> 
+          </Typography>
         </div>
       ) : role === "player" ? (
         <div className="gap-4 mb-2 block md:block sm:block xsm:block lg:flex xl:flex">
@@ -486,7 +486,7 @@ function Dashboard({ children }) {
               to={`/add_reviews`}
               className="flex items-center text-black"
             >
-              Reviews 
+              Reviews
             </Link>
           </Typography>
         </div>
@@ -537,10 +537,10 @@ function Dashboard({ children }) {
       <Navbar className="mx-auto max-w-full px-2 py-2 lg:px-5 lg:py-2">
         <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
           <div className="text-start">
-  <Link to="/" className="block w-full h-full">
-    <img src={_logo} alt="Logo" className="w-16 object-contain" />
-  </Link>
-</div>
+            <Link to="/" className="block w-full h-full">
+              <img src={_logo} alt="Logo" className="w-16 object-contain" />
+            </Link>
+          </div>
 
           <div className="hidden lg:block">{navList}</div>
           <div className="flex items-center gap-x-1">
@@ -551,30 +551,30 @@ function Dashboard({ children }) {
                 {profile.map((index, key) =>
                   role === "player" ? (
                     <div key={key} className="flex items-center gap-3 p-2">
-  {role === "player" && (
-    <div className="sm:block">
-      <Notifications fontSize="small" coachId={id} />
-    </div>
-  )}
+                      {role === "player" && (
+                        <div className="sm:block">
+                          <Notifications fontSize="small" coachId={id} />
+                        </div>
+                      )}
 
-  {/* Chat link with icon */}
-  <Link to={`/ChatUi/${player_id}`} className="text-black">
-    <ChatIcon fontSize="small" />
-  </Link>
+                      {/* Chat link with icon */}
+                      <Link to={`/ChatUi/${player_id}`} className="text-black">
+                        <ChatIcon fontSize="small" />
+                      </Link>
 
-  {/* Player image */}
-  <img
-    src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
-    className="w-10 h-10 rounded-full border-2 border-indigo-450 shadow-lg cursor-pointer object-cover"
-    alt="Thumbnail"
-    id="basic-button"
-    aria-controls={open ? "basic-menu" : undefined}
-    aria-haspopup="true"
-    aria-expanded={open ? "true" : undefined}
-    onClick={handleClick}
-    loading="lazy"
-  />
-</div>
+                      {/* Player image */}
+                      <img
+                        src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
+                        className="w-10 h-10 rounded-full border-2 border-indigo-450 shadow-lg cursor-pointer object-cover"
+                        alt="Thumbnail"
+                        id="basic-button"
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={handleClick}
+                        loading="lazy"
+                      />
+                    </div>
 
                   ) : role === "admin" ? (
                     <div key={key}>
@@ -595,36 +595,36 @@ function Dashboard({ children }) {
                       />
                     </div>
                   ) : role === "coach" ? (
-<div key={key} className="hidden sm:flex items-center justify-end gap-4 p-2 text-sm">
-  {/* Notifications block (only for coach) */}
-  {role === "coach" && (
-    <div className="flex-shrink-0">
-      <Notifications fontSize="small" coachId={id} />
-    </div>
-  )}
+                    <div key={key} className="hidden sm:flex items-center justify-end gap-4 p-2 text-sm">
+                      {/* Notifications block (only for coach) */}
+                      {role === "coach" && (
+                        <div className="flex-shrink-0">
+                          <Notifications fontSize="small" coachId={id} />
+                        </div>
+                      )}
 
-  {/* Chat icon link */}
-  <div className="flex-shrink-0">
-    <Link to={`/ChatUi/${coach_id}`}>
-      <ChatIcon fontSize="small" style={{ color: 'black' }} />
-    </Link>
-  </div>
+                      {/* Chat icon link */}
+                      <div className="flex-shrink-0">
+                        <Link to={`/ChatUi/${coach_id}`}>
+                          <ChatIcon fontSize="small" style={{ color: 'black' }} />
+                        </Link>
+                      </div>
 
-  {/* Coach image */}
-  <div className="flex-shrink-0">
-    <img
-      src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach.image}`}
-      className="w-10 h-10 rounded-full border border-indigo-450 shadow cursor-pointer object-cover"
-      alt="Thumbnail"
-      id="basic-button"
-      aria-controls={open ? "basic-menu" : undefined}
-      aria-haspopup="true"
-      aria-expanded={open ? "true" : undefined}
-      onClick={handleClick}
-      loading="lazy"
-    />
-  </div>
-</div>
+                      {/* Coach image */}
+                      <div className="flex-shrink-0">
+                        <img
+                          src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach.image}`}
+                          className="w-10 h-10 rounded-full border border-indigo-450 shadow cursor-pointer object-cover"
+                          alt="Thumbnail"
+                          id="basic-button"
+                          aria-controls={open ? "basic-menu" : undefined}
+                          aria-haspopup="true"
+                          aria-expanded={open ? "true" : undefined}
+                          onClick={handleClick}
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
 
 
                   ) : null
@@ -657,7 +657,7 @@ function Dashboard({ children }) {
                     </MenuItem>
                   )}
                   <MenuItem>
-                    <Link to={"/signup"} onClick={handleClose}>
+                    <Link to={"/login"} onClick={handleClose}>
                       <LogoutIcon /> Logout
                     </Link>
                   </MenuItem>
@@ -680,7 +680,7 @@ function Dashboard({ children }) {
                 ) : (
                   <MenuItem>
                     <Link
-                      to="/signup"
+                      to="/login"
                       onClick={handleClose}
                       className="text-black hidden lg:inline-block"
                     >
@@ -740,10 +740,10 @@ function Dashboard({ children }) {
                   role === "player" ? (
                     <div key={key}>
                       <div className="block sm:block">
-                          {role === "player" ? (
-                            <Notifications coachId={id} />
-                          ) : null} 
-                        </div>
+                        {role === "player" ? (
+                          <Notifications coachId={id} />
+                        ) : null}
+                      </div>
                       <img
                         src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
                         className="lg:block  w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
@@ -784,17 +784,17 @@ function Dashboard({ children }) {
                     </div>
                   ) : role === "admin" ? (
                     <div key={index}>
-                    <img
-                            src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach.image}`}
-                            className="block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
-                            alt="Thumbnail"
-                            id="basic-button"
-                            aria-controls={open ? "basic-menu" : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? "true" : undefined}
-                            onClick={handleClick}
-                            loading="lazy"
-                          />
+                      <img
+                        src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach.image}`}
+                        className="block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
+                        alt="Thumbnail"
+                        id="basic-button"
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={handleClick}
+                        loading="lazy"
+                      />
                       {/* <h1 className="text-black">King</h1> */}
                     </div>
                   ) : null
@@ -815,27 +815,27 @@ function Dashboard({ children }) {
                   {status === "active" ? (
                     <div>
                       <div>
-                      <MenuItem>
-                        <Link
-                          to={`/dashboard/${login_id}`}
-                          onClick={handleClose}
-                        >
-                          <SpaceDashboardIcon />
-                          Dashboard
-                        </Link>
-                      </MenuItem>
-                      <MenuItem>
-                      <Link to="/invoice" >
-                        <ReceiptLongIcon />
-                        Invoice
-                      </Link>
-                      </MenuItem>
-                      <MenuItem>
-                      <Link to={`/player_emergency/${coach_id}`} >
-                        <ContactEmergencyIcon />
-                        Emergency
-                      </Link>
-                      </MenuItem>
+                        <MenuItem>
+                          <Link
+                            to={`/dashboard/${login_id}`}
+                            onClick={handleClose}
+                          >
+                            <SpaceDashboardIcon />
+                            Dashboard
+                          </Link>
+                        </MenuItem>
+                        <MenuItem>
+                          <Link to="/invoice" >
+                            <ReceiptLongIcon />
+                            Invoice
+                          </Link>
+                        </MenuItem>
+                        <MenuItem>
+                          <Link to={`/player_emergency/${coach_id}`} >
+                            <ContactEmergencyIcon />
+                            Emergency
+                          </Link>
+                        </MenuItem>
                       </div>
                       {role === "player" ? (
                         <div>
@@ -870,7 +870,7 @@ function Dashboard({ children }) {
                   )}
 
                   <MenuItem>
-                    <Link to={"/signup"} onClick={handleClose}>
+                    <Link to={"/login"} onClick={handleClose}>
                       <LogoutIcon /> Logout
                     </Link>
                   </MenuItem>

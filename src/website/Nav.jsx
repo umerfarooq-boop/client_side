@@ -320,7 +320,7 @@ function Nav() {
                     <h1 className="text-black oswald-font text-md">Coach Info</h1>
                   ) : (
                     <Link
-                      to="/signup"
+                      to="/login"
                       onClick={handleClose}
                       className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out flex items-center gap-x-1 p-1 font-medium text-gray-700 hover:text-[#3d307d]"
                     >
@@ -464,7 +464,7 @@ function Nav() {
                         <MenuItem><Link to={''} onClick={handleClose}><RemoveCircleIcon />Not Active</Link></MenuItem>
                       )
                     }
-                    <MenuItem><Link to={'/signup'} onClick={handleClose}><LogoutIcon /> Logout</Link></MenuItem>
+                    <MenuItem><Link to={'/login'} onClick={handleClose}><LogoutIcon /> Logout</Link></MenuItem>
                   </Menu>
                 </div>
               ) : (
