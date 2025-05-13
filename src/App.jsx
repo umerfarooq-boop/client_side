@@ -68,6 +68,7 @@ import AllAppointment from './sidebar/EditAppointment/AllAppointment';
 import NewEquipmentRequest from './sidebar/AssignEquipment/NewEquipmentRequest';
 import EquipmentStock from './sidebar/AssignEquipment/EquipmentStock';
 import AllEquipments from './sidebar/AssignEquipment/AllEquipments';
+import FormDialog from './sidebar/AssignEquipment/FormDialog';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
 function App() {
@@ -599,6 +600,7 @@ function App() {
         {/* Equipment Stock */}
 
         {/* All Equipments */}
+        {/* All Equipments */}
         <Route
           path='/all_equipment/:id'
           element={
@@ -607,7 +609,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* All Equipments */}
+        <Route
+          path='/popup'
+          element={
+            <ProtectedRoute>
+              <FormDialog />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path='/player_booked_equipment/:id'
