@@ -55,9 +55,9 @@ function Coach_Profile() {
 
   return (
     <>
-      <div className="text-center mb-5 mt-16">
+      <div className="text-center mb-12 mt-12">
         <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
-          Player <span className="text-indigo-600">Sessions</span>
+          PLAYERS <span className="text-indigo-600">SESSIONS </span>
         </h3>
       </div>
 
@@ -74,27 +74,38 @@ function Coach_Profile() {
           />
         </div>
       ) : (
-        <div className="slider-container max-w-full px-4 sm:px-6 lg:px-8">
+        <div className="slider-container max-w-full px-10 sm:px-6 lg:px-8">
           <Slider {...settings}>
             {videos.length > 0 ? (
               videos.map((video, index) => {
                 const videoUrl = `http://127.0.0.1:8000/uploads/vedio_home_page/${video.vedio}`;
-                console.log("Video URL:", videoUrl);
                 return (
-                  <div key={index} className="relative p-2">
-                    <video
-                      className="w-[300px] h-[200px] sm:w-[400px] sm:h-[225px] md:w-[500px] md:h-[250px] mx-auto"
-                      autoPlay
-                      loop
-                      muted // Optional: To ensure autoplay works in most browsers, mute the video.
-                    >
-                      <source src={videoUrl} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
+                  <div key={index} className="px-2"> {/* Spacing between cards */}
+                    <div className="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 group h-full">
+                      {/* Video container */}
+                      <div className="overflow-hidden rounded-t-lg">
+                        <video
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          style={{
+                            height: '400px',
+                            '@media (min-width: 640px)': { height: '225px' },
+                            '@media (min-width: 768px)': { height: '250px' }
+                          }}
+                          autoPlay
+                          loop
+                          muted
+                        >
+                          <source src={videoUrl} type="video/mp4" />
+                        </video>
+                      </div>
 
-                    {/* <h3 className="absolute bottom-0 left-0 w-full bg-white  text-white text-center text-sm md:text-base font-semibold py-1">
-                  {video.vedio_title}
-                </h3> */}
+                      {/* Title container (appears below video on hover) */}
+                      <div className="max-h-0 overflow-hidden group-hover:max-h-20 transition-all duration-300 bg-white">
+                        <h3 className="text-gray-800 text-center text-sm md:text-base font-semibold p-3">
+                          {video.vedio_title}
+                        </h3>
+                      </div>
+                    </div>
                   </div>
                 );
               })

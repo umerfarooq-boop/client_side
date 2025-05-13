@@ -134,36 +134,70 @@ function Nav() {
 
   const navList = (
     <ul className="mt-2 mb-4 flex flex-col gap-3 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 oswald-font text-[15px]">
-      <li className="flex items-center gap-x-1 p-1 font-medium">
-        <HomeOutlinedIcon sx={{ fontSize: 20, color: 'black' }} />
-        <Link to="/" className="text-black">Home</Link>
+      <li className="flex items-center gap-x-1 p-1 font-medium hover:text-[indigo]">
+        <Link
+          to="/"
+          className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out flex items-center gap-x-1 p-1 font-medium text-gray-700 hover:text-[darkblue]"
+        >
+          <HomeOutlinedIcon
+            className="cursor-pointer"
+            sx={{ fontSize: 20, color: 'inherit' }}  // Inherits color from parent Link
+          />
+          <span>Home</span>
+        </Link>
       </li>
 
-      <li className="flex items-center gap-x-1 p-1 font-medium">
-        <ContactPageOutlinedIcon sx={{ fontSize: 20, color: 'black' }} />
-        <Link to="/about" className="text-black">About</Link>
+
+      <li className="flex items-center">
+        <Link
+          to="/about"
+          className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out flex items-center gap-x-1 p-1 font-medium text-gray-700 hover:text-[darkblue]"
+        >
+          <ContactPageOutlinedIcon sx={{ fontSize: 20, color: 'inherit' }} />
+          <span>About</span>
+        </Link>
       </li>
 
-      <li className="flex items-center gap-x-1 p-1 font-medium">
-        <SupportAgentOutlinedIcon sx={{ fontSize: 20, color: 'black' }} />
-        <Link to="/question" className="text-black">Question</Link>
+      <li className="flex items-center">
+        <Link
+          to="/question"
+          className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out flex items-center gap-x-1 p-1 font-medium text-gray-700 hover:text-[darkblue]"
+        >
+          <SupportAgentOutlinedIcon sx={{ fontSize: 20, color: 'inherit' }} />
+          <span>Question</span>
+        </Link>
       </li>
 
-      <li className="flex items-center gap-x-1 p-1 font-medium">
-        <ReviewsOutlinedIcon sx={{ fontSize: 20, color: 'black' }} />
-        <Link to="/testimonial" className="text-black">Testimonial</Link>
+      <li className="flex items-center">
+        <Link
+          to="/testimonial"
+          className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out flex items-center gap-x-1 p-1 font-medium text-gray-700 hover:text-[darkblue]"
+        >
+          <ReviewsOutlinedIcon sx={{ fontSize: 20, color: 'inherit' }} />
+          <span>Testimonial</span>
+        </Link>
       </li>
 
       {(role === 'player' || role === 'admin' || role === '') && (
-        <li className="flex items-center gap-x-1 p-1 font-medium">
-          <GroupsOutlinedIcon sx={{ fontSize: 30, color: 'black' }} />
-          <Link to="/coachpost" className="text-black">Coaches</Link>
+        <li className="flex items-center">
+          <Link
+            to="/coachpost"
+            className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out flex items-center gap-x-1 p-1 font-medium text-gray-700 hover:text-[darkblue]"
+          >
+            <GroupsOutlinedIcon sx={{ fontSize: 30, color: 'inherit' }} />
+            <span>Coaches</span>
+          </Link>
         </li>
       )}
 
-      <li className="flex items-center gap-x-1 p-1 font-medium">
-        <EmailOutlinedIcon sx={{ fontSize: 20, color: 'black' }} />
-        <Link to="/contact" className="text-black">Contact Us</Link>
+      <li className="flex items-center">
+        <Link
+          to="/contact"
+          className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out flex items-center gap-x-1 p-1 font-medium text-gray-700 hover:text-[darkblue]"
+        >
+          <EmailOutlinedIcon sx={{ fontSize: 20, color: 'inherit' }} />
+          <span>Contact Us</span>
+        </Link>
       </li>
     </ul>
 
@@ -275,7 +309,7 @@ function Nav() {
                   {/* Login Button */}
                   <Link
                     to="/login"
-                    className="text-black hover:text-[indigo] oswald-font-medium text-md hidden lg:flex items-center gap-x-2"
+                    className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out flex items-center gap-x-1 p-1 font-medium text-gray-700 hover:text-[darkblue]"
                   >
                     <PersonAddAltOutlinedIcon className="text-base" />
                     Login
@@ -288,7 +322,7 @@ function Nav() {
                     <Link
                       to="/signup"
                       onClick={handleClose}
-                      className="text-black hover:text-[darkgrey] oswald-font-medium text-md hidden lg:flex items-center gap-x-1"
+                      className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out flex items-center gap-x-1 p-1 font-medium text-gray-700 hover:text-[#3d307d]"
                     >
                       <LogoutIcon className="w-4 h-4 text-base" />
                       Signup
