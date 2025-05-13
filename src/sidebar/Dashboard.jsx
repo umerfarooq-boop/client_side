@@ -24,6 +24,10 @@ import EastIcon from "@mui/icons-material/East";
 import WestIcon from "@mui/icons-material/West";
 import WebIcon from "@mui/icons-material/Web";
 import React, { useEffect, useState } from "react";
+import LeaderboardOutlinedIcon from '@mui/icons-material/LeaderboardOutlined';
+import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
 import DescriptionIcon from "@mui/icons-material/Description";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
@@ -431,65 +435,63 @@ function Dashboard({ children }) {
           </Typography>
         </div>
       ) : role === "player" ? (
-        <div className="gap-4 mb-2 block md:block sm:block xsm:block lg:flex xl:flex">
-          <Typography
-            as="li"
-            variant="small"
-            color="blue-gray"
-            className="flex items-center gap-x-2 p-1 font-medium"
-          >
-            <EmojiEventsIcon className="text-[#90A4AE]" fontSize="small" />
+        <ul className="gap-4 mb-2 flex flex-col md:flex-col sm:flex-col xsm:flex-col lg:flex-row xl:flex-row oswald-font text-[15px]">
+          {/* Score */}
+          <li className="flex items-center p-1 font-medium">
             <Link
               to={`/showscore/${player_id}`}
-              className="flex items-center text-black"
+              className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out flex items-center gap-x-1 p-1 font-medium text-gray-700 hover:text-indigo-600"
             >
-              Score
+              <LeaderboardOutlinedIcon
+                sx={{ fontSize: 20, color: 'inherit' }}
+                className="cursor-pointer"
+              />
+              <span>Score</span>
             </Link>
-          </Typography>
+          </li>
 
-          <Typography
-            as="li"
-            variant="small"
-            color="blue-gray"
-            className="flex items-center gap-x-2 p-1 font-medium"
-          >
-            <EventNoteIcon className="text-[#90A4AE]" fontSize="small" />
+          {/* Attendance */}
+          <li className="flex items-center p-1 font-medium">
             <Link
               to={`/studentattendance/${player_id}`}
-              className="flex items-center text-black"
+              className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out flex items-center gap-x-1 p-1 font-medium text-gray-700 hover:text-indigo-600"
             >
-              Attendance
+              <EventAvailableOutlinedIcon
+                sx={{ fontSize: 20, color: 'inherit' }}
+                className="cursor-pointer"
+              />
+              <span>Attendance</span>
             </Link>
-          </Typography>
-          <Typography
-            as="li"
-            variant="small"
-            color="blue-gray"
-            className="flex items-center gap-x-2 p-1 font-medium"
-          >
-            <AccountCircleIcon className="text-[#90A4AE]" fontSize="small" />
+          </li>
+
+          {/* Profile */}
+          <li className="flex items-center p-1 font-medium">
             <Link
               to={`/edit_player/${player_id}`}
-              className="flex items-center text-black"
+              className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out flex items-center gap-x-1 p-1 font-medium text-gray-700 hover:text-indigo-600"
             >
-              Profile
+              <AccountCircleOutlinedIcon
+                sx={{ fontSize: 20, color: 'inherit' }}
+                className="cursor-pointer"
+              />
+              <span>Profile</span>
             </Link>
-          </Typography>
-          <Typography
-            as="li"
-            variant="small"
-            color="blue-gray"
-            className="flex items-center gap-x-2 p-1 font-medium"
-          >
-            <RateReviewIcon className="text-[#90A4AE]" fontSize="small" />
+          </li>
+
+          {/* Reviews */}
+          <li className="flex items-center p-1 font-medium">
             <Link
               to={`/add_reviews`}
-              className="flex items-center text-black"
+              className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out flex items-center gap-x-1 p-1 font-medium text-gray-700 hover:text-indigo-600"
             >
-              Reviews
+              <RateReviewOutlinedIcon
+                sx={{ fontSize: 20, color: 'inherit' }}
+                className="cursor-pointer"
+              />
+              <span>Reviews</span>
             </Link>
-          </Typography>
-        </div>
+          </li>
+        </ul>
       ) : role === "parent" ? (
         <div className="gap-4 mb-2 block md:block sm:block xsm:block lg:flex xl:flex">
           <Typography
