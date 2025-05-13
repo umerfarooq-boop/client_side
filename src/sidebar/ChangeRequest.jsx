@@ -10,7 +10,6 @@ import { useAppointments } from '../context/AppointmentContext';
 import { ToastContainer,toast } from 'react-toastify';
 import Chat from '../Chat/Chat';
 
-
 function ChangeRequest({id}) {
 
    
@@ -51,7 +50,9 @@ function ChangeRequest({id}) {
   
       const getData = async () => {
         try {
+          setLoading(true);
           const response = await axios.get(`/PlayerRequests/${id}`);
+          setLoading(false);
           if (response.data?.CoachSchedule) {
             setData(response.data.CoachSchedule);
           }
@@ -61,8 +62,6 @@ function ChangeRequest({id}) {
       };
         
           useEffect(() => {
-            
-        
             getData();
           }, [id]);
         
@@ -236,8 +235,20 @@ function ChangeRequest({id}) {
 
   return (
     <>
-        {/* <Nav /> */}
-             <div>
+           {loading ? (
+                   <div className="flex flex-col items-center justify-center h-screen">
+                     <RotatingLines
+                       visible={true}
+                       height="96"
+                       width="96"
+                       color="grey"
+                       strokeWidth="5"
+                       animationDuration="0.75"
+                       ariaLabel="rotating-lines-loading"
+                     />
+                   </div>
+           ):(
+            <div>
         <div className="p-6 rounded-md shadow-lg bg-white text-black">
         <div className="text-center">
                     <h3 className="text-3xl sm:text-2xl leading-normal font-extrabold italic tracking-tight text-gray-900">
@@ -306,6 +317,8 @@ function ChangeRequest({id}) {
 
           </div>
             </div>
+          )
+        }
     </>
   )
 }
