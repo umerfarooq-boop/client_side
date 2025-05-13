@@ -88,49 +88,56 @@ function EditPlayerAppointment() {
       }, [from_date, id]);
     }
 
-    const isTimeSlotDisabled = (timeValue) => {
-      const playwith = localStorage.getItem("playwith"); // "team" or "individual"
-      if (!bookedSlots || bookedSlots.length === 0) return false;
-    
-      const [inputHour, inputMin] = timeValue.split(":").map(Number);
-      const inputMinutes = inputHour * 60 + inputMin;
-    
-      let teamBookingCount = 0;
-      let hasIndividualBooking = false;
-    
-      for (const slot of bookedSlots) {
-        const [startHour, startMin] = slot.start_time.split(":").map(Number);
-        const [endHour, endMin] = slot.end_time.split(":").map(Number);
-    
-        const startMinutes = startHour * 60 + startMin;
-        const endMinutes = endHour * 60 + endMin;
-    
-        const inRange = inputMinutes >= startMinutes && inputMinutes < endMinutes;
-    
-        if (inRange) {
-          if (slot.playwith === "individual") {
-            hasIndividualBooking = true;
-          } else if (slot.playwith === "team") {
-            teamBookingCount += slot.bookings; // Assuming bookings = 1 per record
-          }
-        }
-      }
-    
-      // If any individual booked, block this slot for everyone
-      if (hasIndividualBooking) return true;
-    
-      // If current user wants to book as team
-      if (playwith === "team") {
-        return teamBookingCount >= 2; // Block if 2 team bookings already done
-      }
-    
-      // If current user wants to book as individual and team booking already exists
-      if (playwith === "individual" && teamBookingCount > 0) {
-        return true; // Block individual if a team already booked
-      }
-    
-      return false; // Otherwise allow
-    };
+
+const isTimeSlotDisabled = (timeValue) => {
+  const playwith = localStorage.getItem("playwith"); // team or individual
+  if (!bookedSlots || bookedSlots.length === 0) return false;
+
+  const [inputHour, inputMin] = timeValue.split(":").map(Number);
+  const inputMinutes = inputHour * 60 + inputMin;
+
+  // Current user's appointment time in minutes
+  const [myStartHour, myStartMin] = appointment?.start_time?.split(":")?.map(Number) || [];
+  const [myEndHour, myEndMin] = appointment?.end_time?.split(":")?.map(Number) || [];
+
+  const myStartMinutes = myStartHour * 60 + myStartMin;
+  const myEndMinutes = myEndHour * 60 + myEndMin;
+
+  // ✅ If the selected time is within the user's original booking slot, allow it
+  const isMySlot = inputMinutes >= myStartMinutes && inputMinutes < myEndMinutes;
+  if (isMySlot) return false;
+
+  // ❌ Disable if any other slot overlaps this time
+  for (const slot of bookedSlots) {
+    // Ignore this user's appointment slot completely
+    const isSameAsMyAppointment =
+      slot.id === appointment?.id ||
+      (
+        slot.start_time === appointment?.start_time &&
+        slot.end_time === appointment?.end_time &&
+        slot.from_date === appointment?.from_date
+      );
+
+    if (isSameAsMyAppointment) continue;
+
+    const [startHour, startMin] = slot.start_time.split(":").map(Number);
+    const [endHour, endMin] = slot.end_time.split(":").map(Number);
+
+    const startMinutes = startHour * 60 + startMin;
+    const endMinutes = endHour * 60 + endMin;
+
+    const overlaps = inputMinutes >= startMinutes && inputMinutes < endMinutes;
+
+    if (overlaps) return true; // Disable this time slot
+  }
+
+  // ✅ Time is available
+  return false;
+};
+
+
+
+
 
   const onSubmit = async (data) => {
     try {
