@@ -27,7 +27,7 @@ function EditPlayerAppointment() {
   const from_date = watch("from_date");
   const to_date = watch("to_date");
   const [bookedSlots, setBookedSlots] = useState([]);
-
+  const coach_record = localStorage.getItem('coach_record');
 
   useEffect(() => {
     const fetchAppointment = async () => {
@@ -58,7 +58,7 @@ function EditPlayerAppointment() {
         const fetchBookedSlots = async () => {
           if (from_date) {
             try {
-              const response = await axios.get(`/fetchBookedSlots/${id}?date=${from_date}`);
+              const response = await axios.get(`/fetchBookedSlots/${coach_record}?date=${from_date}`);
               setBookedSlots(response.data.bookedSlots || []);
             } catch (error) {
               console.error("Error fetching booked slots:", error);
@@ -76,7 +76,7 @@ function EditPlayerAppointment() {
         const fetchBookedSlots = async () => {
           if (from_date) {
             try {
-              const response = await axios.get(`/fetchBookedSlots/${id}?date=${from_date}`);
+              const response = await axios.get(`/fetchBookedSlots/${coach_record}?date=${from_date}`);
               setBookedSlots(response.data.bookedSlots || []);
             } catch (error) {
               console.error("Error fetching booked slots:", error);
@@ -88,35 +88,66 @@ function EditPlayerAppointment() {
       }, [from_date, id]);
     }
 
-  const isTimeDisabled = (time) => {
-    const [inputHour, inputMin] = time.split(":").map(Number);
-    const inputMinutes = inputHour * 60 + inputMin;
-  
-    return bookedSlots.some((slot) => {
-      const { start_time, end_time, from_date, to_date } = slot;
-  
-      const [startHour, startMin] = start_time.split(":").map(Number);
-      const [endHour, endMin] = end_time.split(":").map(Number);
-  
-      const startMinutes = startHour * 60 + startMin;
-      const endMinutes = endHour * 60 + endMin;
-  
-      const selectedDate = new Date(from_date).toISOString().split("T")[0];
-      const selectedEndDate = new Date(to_date).toISOString().split("T")[0];
-  
-      // Check if the selected date falls within the booked date range
-      if (from_date <= from_date && from_date <= selectedEndDate) {
-        // Check if the time falls within the booked time slot
-        return inputMinutes >= startMinutes && inputMinutes <= endMinutes;
+    const isTimeSlotDisabled = (timeValue) => {
+      const playwith = localStorage.getItem("playwith"); // "team" or "individual"
+      if (!bookedSlots || bookedSlots.length === 0) return false;
+    
+      const [inputHour, inputMin] = timeValue.split(":").map(Number);
+      const inputMinutes = inputHour * 60 + inputMin;
+    
+      // Get the current user's appointment time
+      const [myStartHour, myStartMin] = appointment[0]?.start_time?.split(":").map(Number) || [];
+      const [myEndHour, myEndMin] = appointment[0]?.end_time?.split(":").map(Number) || [];
+    
+      const myStartMinutes = myStartHour * 60 + myStartMin;
+      const myEndMinutes = myEndHour * 60 + myEndMin;
+    
+      // ✅ If this time is inside user's original booking, allow it
+      const isCurrentUserSlot = inputMinutes >= myStartMinutes && inputMinutes < myEndMinutes;
+      if (isCurrentUserSlot) return false;
+    
+      let teamBookingCount = 0;
+      let hasIndividualBooking = false;
+    
+      for (const slot of bookedSlots) {
+        const [startHour, startMin] = slot.start_time.split(":").map(Number);
+        const [endHour, endMin] = slot.end_time.split(":").map(Number);
+    
+        const startMinutes = startHour * 60 + startMin;
+        const endMinutes = endHour * 60 + endMin;
+    
+        const overlaps = inputMinutes >= startMinutes && inputMinutes < endMinutes;
+    
+        // 💡 Ignore current user's own slot
+        const isSameSlot =
+          slot.id === appointment[0]?.id ||
+          (
+            slot.start_time === appointment[0]?.start_time &&
+            slot.end_time === appointment[0]?.end_time &&
+            slot.from_date === appointment[0]?.from_date
+          );
+    
+        if (isSameSlot) continue;
+    
+        if (overlaps) {
+          if (slot.playwith === "individual") hasIndividualBooking = true;
+          if (slot.playwith === "team") teamBookingCount += slot.bookings;
+        }
       }
+    
+      if (hasIndividualBooking) return true;
+      if (playwith === "team" && teamBookingCount >= 2) return true;
+      if (playwith === "individual" && teamBookingCount > 0) return true;
+    
       return false;
-    });
-  };
+    };
+    
 
   const onSubmit = async (data) => {
     try {
       setLoading(true);
       const response = await axios.post(`/updateAppointmentData/${id}`, data);
+      localStorage.setItem('isEditPaid',false);
       if (response.status === 200) {
         toast.success("Appointment updated successfully!");
         const updatedEvent = {
@@ -128,7 +159,7 @@ function EditPlayerAppointment() {
         };
         
         fetchAppointments(); // Refresh the appointments
-        navigate(- 1);
+        navigate(`/editplayer_appointment_table/${player_id}`);
       }
     } catch (error) {
       toast.error("Failed to update the appointment.");
@@ -178,50 +209,6 @@ function EditPlayerAppointment() {
       ) : (
         <div>
           <ToastContainer />
-          {/* <div className="flex items-center justify-center mt-10">
-            <div className="mx-auto w-full max-w-[550px] bg-white shadow-lg p-8 rounded-lg">
-              <h1 className="text-xl font-semibold mb-4">Edit Appointment</h1>
-              {appointment.map((data, key) => (
-                <form key={key} onSubmit={handleSubmit(onSubmit)}>
-                  <div className="mb-4">
-                  <label
-                      htmlFor="from_date"
-                      className="block text-base font-medium text-gray-700"
-                    >
-                      From Date
-                    </label>
-                    <input
-                      type="date"
-                      defaultValue={data.from_date || ""}
-                      {...register("from_date", { required: true })}
-                      className="w-full mt-2 p-2 border rounded"
-                    />
-                  </div>
-                  <div className="mb-4">
-                  <label
-                      htmlFor="to_date"
-                      className="block text-base font-medium text-gray-700"
-                    >
-                      To Date
-                    </label>
-                    <input
-                      type="date"
-                      defaultValue={data.to_date || ""}
-                      {...register("to_date", { required: true })}
-                      className="w-full mt-2 p-2 border rounded"
-                    />
-                    </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                  >
-                    Update Appointment
-                  </button>
-                </form>
-              ))}
-            </div>
-          </div> */}
-
             <div className="text-center mt-9">
               <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
                 Edit{"   "}
@@ -261,105 +248,65 @@ function EditPlayerAppointment() {
                         disabled={!from_date}
                         list="start-time-options"
                       /> */}
-                      {
-                        playwith === 'individual' ? (
-                          <div>
-                            <Controller
-                        name="start_time"
-                        control={control}
-                        defaultValue={data.start_time || ''}
-                        {...register("start_time", {
-                          required: "Start Time is required",
-                          validate: (value) => {
-                            const selectedDateTime = new Date(`${from_date}T${value}`);
-                            const currentDateTime = new Date();
+                      {playwith === "individual" || playwith === "team" ? (
+  <div>
+    <Controller
+      name="start_time"
+      control={control}
+      {...register("start_time", {
+        required: "Start Time is required",
+        validate: (value) => {
+          const selectedDateTime = new Date(`${from_date}T${value}`);
+          const currentDateTime = new Date();
+          if (selectedDateTime < currentDateTime) {
+            return "Please select a time in the future.";
+          }
+          return true;
+        },
+      })}
+      render={({ field, fieldState }) => (
+        <>
+          <select
+            {...field}
+            className={`w-full rounded-md border bg-white py-3 px-6 text-base ${
+              fieldState.error ? "border-red-500" : "border-gray-300"
+            }`}
+            disabled={!from_date}
+          >
+            <option value="" disabled selected>
+              ⏰ Select Start time
+            </option>
+            {[...Array(16).keys()].map((index) => {
+              const hour = index + 7; // Morning 7 AM to night 10 PM
+              const isPM = hour >= 12;
+              const displayHour = hour > 12 ? hour - 12 : hour; // Convert to 12-hour format
+              const timeLabel = `${displayHour.toString().padStart(2, "0")}:00 ${
+                isPM ? "PM" : "AM"
+              }`;
+              const timeValue = `${hour.toString().padStart(2, "0")}:00`; // 24-hour format value
 
-                            if (selectedDateTime < currentDateTime) {
-                              return "Please select a time in the future.";
-                            }
-                            return true;
-                          },
-                        })}
-                        render={({ field, fieldState }) => (
-                          <>
-                            <select
-                              {...field}
-                              className={`w-full rounded-md border bg-white py-3 px-6 text-base ${
-                                fieldState.error ? "border-red-500" : "border-gray-300"
-                              }`}
-                              disabled={!from_date}
-                            >
-                              <option value="" disabled selected>⏰ Select Start time</option>
-                              {[...Array(16).keys()].map((index) => {
-                                const hour = index + 7; // Morning 7 AM to night 10 PM
-                                const isPM = hour >= 12;
-                                const displayHour = hour > 12 ? hour - 12 : hour; // Convert to 12-hour format
-                                const timeLabel = `${displayHour.toString().padStart(2, "0")}:00 ${isPM ? "PM" : "AM"}`;
-                                const timeValue = `${hour.toString().padStart(2, "0")}:00`; // 24-hour format value
-
-                                return (
-                                  <option key={timeValue} value={timeValue} disabled={isTimeDisabled(timeValue)}>
-                                    {timeLabel}
-                                  </option>
-                                );
-                              })}
-                            </select>
-                            {fieldState.error && <p className="text-red-500 text-sm mt-2">{fieldState.error.message}</p>}
-                          </>
-                        )}
-                      />
-                          </div>
-                        ) : playwith === 'team' ? (
-                            <div>
-                               <Controller
-          name="start_time"
-          control={control}
-          defaultValue={data.start_time || ''}
-          {...register("start_time", {
-            required: "Start Time is required",
-            validate: (value) => {
-              const selectedDateTime = new Date(`${from_date}T${value}`);
-              const currentDateTime = new Date();
-
-              if (selectedDateTime < currentDateTime) {
-                return "Please select a time in the future.";
-              }
-              return true;
-            },
-          })}
-          render={({ field, fieldState }) => (
-            <>
-              <select
-                {...field}
-                className={`w-full rounded-md border bg-white py-3 px-6 text-base ${
-                  fieldState.error ? "border-red-500" : "border-gray-300"
-                }`}
-                disabled={!from_date}
-              >
-                <option value="" disabled selected>
-                  ⏰ Select Start time
+              return (
+                <option
+                  key={timeValue}
+                  value={timeValue}
+                  disabled={isTimeSlotDisabled(timeValue)} // Use the same function to handle time disabling
+                >
+                  {timeLabel}
                 </option>
-                {[...Array(16).keys()].map((index) => {
-                  const hour = index + 7; // Morning 7 AM to night 10 PM
-                  const isPM = hour >= 12;
-                  const displayHour = hour > 12 ? hour - 12 : hour; // Convert to 12-hour format
-                  const timeLabel = `${displayHour.toString().padStart(2, "0")}:00 ${isPM ? "PM" : "AM"}`;
-                  const timeValue = `${hour.toString().padStart(2, "0")}:00`; // 24-hour format value
-
-                  return (
-                    <option key={timeValue} value={timeValue} disabled={DisableTime(timeValue)}>
-                      {timeLabel}
-                    </option>
-                  );
-                })}
-              </select>
-              {fieldState.error && <p className="text-red-500 text-sm mt-2">{fieldState.error.message}</p>}
-            </>
+              );
+            })}
+          </select>
+          {fieldState.error && (
+            <p className="text-red-500 text-sm mt-2">
+              {fieldState.error.message}
+            </p>
           )}
-        />
-                            </div>
-                        ) : null
-                      }
+        </>
+      )}
+    />
+  </div>
+          ) : null}
+
 
 
                     </div>
@@ -392,103 +339,65 @@ function EditPlayerAppointment() {
                         className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" 
                       /> */}
                       
-                      {
-                        playwith === 'individual' ? (<div>
-                          <Controller
-                        name="end_time"
-                        control={control}
-                        defaultValue={data.end_time || ''}
-                        {...register("end_time", {
-                          required: "End Time is required",
-                          validate: (value) => {
-                            const selectedDateTime = new Date(`${from_date}T${value}`);
-                            const currentDateTime = new Date();
-
-                            if (selectedDateTime < currentDateTime) {
-                              return "Please select a time in the future.";
-                            }
-                            return true;
-                          },
-                        })}
-                        render={({ field, fieldState }) => (
-                          <>
-                            <select
-                              {...field}
-                              className={`w-full rounded-md border bg-white py-3 px-6 text-base ${
-                                fieldState.error ? "border-red-500" : "border-gray-300"
-                              }`}
-                              disabled={!from_date}
-                            >
-                              <option value="" disabled selected>⏰ Select End time</option>
-                              {[...Array(16).keys()].map((index) => {
-                                const hour = index + 7; // Morning 7 AM to night 10 PM
-                                const isPM = hour >= 12;
-                                const displayHour = hour > 12 ? hour - 12 : hour; // Convert to 12-hour format
-                                const timeLabel = `${displayHour.toString().padStart(2, "0")}:00 ${isPM ? "PM" : "AM"}`;
-                                const timeValue = `${hour.toString().padStart(2, "0")}:00`; // 24-hour format value
-
-                                return (
-                                  <option key={timeValue} value={timeValue} disabled={isTimeDisabled(timeValue)}>
-                                    {timeLabel}
-                                  </option>
-                                );
-                              })}
-                            </select>
-                            {fieldState.error && <p className="text-red-500 text-sm mt-2">{fieldState.error.message}</p>}
-                          </>
-                        )}
-                      />
-                        </div>) : playwith === 'team' ? (
+                      {playwith === "individual" || playwith === "team" ? (
                         <div>
-                           <Controller
-          name="end_time"
-          control={control}
-          defaultValue={data.end_time || ''}
-          {...register("end_time", {
-            required: "End Time is required",
-            validate: (value) => {
-              const selectedDateTime = new Date(`${from_date}T${value}`);
-              const currentDateTime = new Date();
+                          <Controller
+                            name="end_time"
+                            control={control}
+                            {...register("end_time", {
+                              required: "End Time is required",
+                              validate: (value) => {
+                                const selectedDateTime = new Date(`${from_date}T${value}`);
+                                const currentDateTime = new Date();
+                                if (selectedDateTime < currentDateTime) {
+                                  return "Please select a time in the future.";
+                                }
+                                return true;
+                              },
+                            })}
+                            render={({ field, fieldState }) => (
+                              <>
+                                <select
+                                  {...field}
+                                  className={`w-full rounded-md border bg-white py-3 px-6 text-base ${
+                                    fieldState.error ? "border-red-500" : "border-gray-300"
+                                  }`}
+                                  disabled={!from_date}
+                                >
+                                  <option value="" disabled selected>
+                                    ⏰ Select End time
+                                  </option>
+                                  {[...Array(16).keys()].map((index) => {
+                                    const hour = index + 7; // Morning 7 AM to night 10 PM
+                                    const isPM = hour >= 12;
+                                    const displayHour = hour > 12 ? hour - 12 : hour; // Convert to 12-hour format
+                                    const timeLabel = `${displayHour.toString().padStart(2, "0")}:00 ${
+                                      isPM ? "PM" : "AM"
+                                    }`;
+                                    const timeValue = `${hour.toString().padStart(2, "0")}:00`; // 24-hour format value
 
-              if (selectedDateTime < currentDateTime) {
-                return "Please select a time in the future.";
-              }
-              return true;
-            },
-          })}
-          render={({ field, fieldState }) => (
-            <>
-              <select
-                {...field}
-                className={`w-full rounded-md border bg-white py-3 px-6 text-base ${
-                  fieldState.error ? "border-red-500" : "border-gray-300"
-                }`}
-                disabled={!from_date}
-              >
-                <option value="" disabled selected>
-                  ⏰ Select Ennd time
-                </option>
-                {[...Array(16).keys()].map((index) => {
-                  const hour = index + 7; // Morning 7 AM to night 10 PM
-                  const isPM = hour >= 12;
-                  const displayHour = hour > 12 ? hour - 12 : hour; // Convert to 12-hour format
-                  const timeLabel = `${displayHour.toString().padStart(2, "0")}:00 ${isPM ? "PM" : "AM"}`;
-                  const timeValue = `${hour.toString().padStart(2, "0")}:00`; // 24-hour format value
-
-                  return (
-                    <option key={timeValue} value={timeValue} disabled={DisableTime(timeValue)}>
-                      {timeLabel}
-                    </option>
-                  );
-                })}
-              </select>
-              {fieldState.error && <p className="text-red-500 text-sm mt-2">{fieldState.error.message}</p>}
-            </>
-          )}
-        />
+                                    return (
+                                      <option
+                                        key={timeValue}
+                                        value={timeValue}
+                                        disabled={isTimeSlotDisabled(timeValue)}
+                                      >
+                                        {timeLabel}
+                                      </option>
+                                    );
+                                  })}
+                                </select>
+                                {fieldState.error && (
+                                  <p className="text-red-500 text-sm mt-2">
+                                    {fieldState.error.message}
+                                  </p>
+                                )}
+                              </>
+                            )}
+                          />
                         </div>
-                        ) : null  
-                      }
+                      ) : null}
+
 
                     </div>
                   </div>
@@ -515,13 +424,14 @@ function EditPlayerAppointment() {
                           {...register('booking_slot', { required: 'Booking Slot is required' })} 
                           className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" 
                         >
+                          <option value="">Select Category</option>
                           {
                             category.map((index)=>(
                              <option key={index.id} value={index.id}>{index.name}</option> 
                             ))
                           }
                           </select> 
-                      </div>
+                      </div>  
                     </div>
                   </div>
                 </div>

@@ -8,7 +8,20 @@ import mainlogo from '../../public/mainlogo.png'
 import signup from '../../public/Auth_Images/signup.png'
 
 function Signup() {
-  localStorage.clear();
+  // localStorage.clear();
+  // localStorage.removeItem('coach_record');
+localStorage.removeItem('email');
+localStorage.removeItem('role');
+localStorage.removeItem('coach_id');
+localStorage.removeItem('token');
+// localStorage.removeItem('user_id');
+localStorage.removeItem('mapbox.eventData.uuid:dW1lcndhbGk=');
+localStorage.removeItem('mapbox.eventData:dW1lcndhbGk=');
+localStorage.removeItem('name');
+localStorage.removeItem('player_id');
+localStorage.removeItem('playwith');
+localStorage.removeItem('profile_location');
+
   const {
     register,
     handleSubmit,
@@ -20,7 +33,7 @@ function Signup() {
   const [loading, setLoading] = useState(false);
   const Signupuser = async (data) => {
     // localStorage.removeItem('email');
-    localStorage.removeItem('token');
+    // localStorage.removeItem('token');
     // localStorage.removeItem('role');
     // localStorage.removeItem('name');
 
@@ -262,7 +275,7 @@ function Signup() {
                         Already have an account?{" "}
                         <Link to={'/login'}>
                           <span className="text-blue-900 font-semibold">
-                            Login
+                            Log-in
                           </span>
                         </Link> &nbsp;
                         <Link to={'/'}>

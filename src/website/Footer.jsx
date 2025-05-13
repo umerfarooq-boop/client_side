@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from '../../public/logo.png'
+import logo from '../../public/StepContent/coachselector.png'
 function Footer() {
   return (
     <>
@@ -11,11 +11,10 @@ function Footer() {
                     <div className='flex'>
                     <div className='relative'>
                     <a href="/"  class="flex justify-center  lg:justify-start">
-                        <img src={logo} alt="" className='w-40' />
+                        <img src={logo} alt="" className='w-32' />
                     </a>
                     </div>
                     <div className='relative '>
-                    <p className='text-red-600 text-2xl italic font-medium mt-14'>Coach Selector</p>
                     </div>
                     </div>
                     <p class="py-8 text-sm text-gray-500 lg:max-w-xs text-center lg:text-left">Trusted in more than 100 countries & 5 million customers. Have any query ?</p>

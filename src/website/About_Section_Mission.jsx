@@ -15,29 +15,30 @@ import team from '../../public/StepContent/team.jpg';
 const steps = [
     {
       label: 'Progress Record',
-      description: `For each ad campaign that you create, you can control how much
-                you're willing to spend on clicks and conversions, which networks
-                and geographical locations you want your ads to show on, and more.`,
+      description: `Track Your Athletic Growth with Precision
+Stay motivated by reviewing detailed progress reports, performance metrics, and training history tailored to your fitness journey.`,
         img: coach
     },
     {
       label: 'Book Coach',
-      description:
-        'An ad group contains one or more ads which target a shared set of keywords.',
-        img: booking
+      description: 'Find the Perfect Coach for Your Goals\nBrowse our expert coaches and book your personalized session today',
+      img: booking
     },
+    
     {
       label: 'Training Programs',
       description:
-        'An ad group contains one or more ads which target a shared set of keywords.',
-        img:team
+        'Unlock Your Full Potential with Customized Training. Explore structured training programs designed by expert coaches to improve skills, boost performance, and achieve your fitness goals—no matter your level.',
+      img: team
     },
+    
     {
       label: 'Discussion with Coach',
       description:
-        'An ad group contains one or more ads which target a shared set of keywords.',
-        img:motivatation
+        'Stay Connected and Informed. Engage in one-on-one or group discussions with your coach to ask questions, get feedback, and stay on track with your training goals. Clear communication leads to better results.',
+      img: motivatation
     },
+    
   ];
 
 function About_Section_Mission() {

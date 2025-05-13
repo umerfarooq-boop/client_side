@@ -89,11 +89,14 @@ const CoachProfile = () => {
         console.log("No location found in localStorage");
     }
 
+    // That is my Previous Code where get coach id and store in database
     const coach_id = localStorage.getItem('coach_id' || '');
+
+    const user_id = localStorage.getItem('user_id' || '');
 
     return (
         <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
-            <input type="hidden" value={coach_id} {...register('user_id')} />
+            <input type="hidden" value={user_id} {...register('created_by')} />
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                     <TextField
@@ -221,7 +224,7 @@ const CoachProfile = () => {
                     </FormControl>
                 </Grid>
 
-                <Grid item xs={12} sm={12}>
+                <Grid item xs={6} sm={6}>
                     <TextField
                         label="Coach Location"
                         value={location}
@@ -238,6 +241,32 @@ const CoachProfile = () => {
                         helperText={errors.coach_location?.message}
                     />
                 </Grid>
+                <Grid item xs={6} sm={6}>
+                    <TextField
+                        type='number'
+                        label="Session Charges"
+                        {...register('per_hour_charges', { 
+                            required: 'Coach Charges is required',
+                            pattern: {
+                                value: /^[0-9]+$/, // Only allows numeric values
+                                message: 'Charges must be a number'
+                            },
+                            min: {
+                                value: 1,
+                                message: 'Charges must be at least 1'
+                            },
+                            max: {
+                                value: 1000,
+                                message: 'Charges must not exceed 1000'
+                            }
+                        })}
+                        fullWidth
+                        size="small"
+                        error={!!errors.per_hour_charges}
+                        helperText={errors.per_hour_charges?.message}
+                    />
+                </Grid>
+
 
                 <Grid item xs={12} sm={6}>
                 <TextField

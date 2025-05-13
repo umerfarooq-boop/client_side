@@ -19,11 +19,11 @@ import resetImage from '../../public/Auth_Images/reset.png'
         } = useForm();
         const navigate = useNavigate();
         const [loading, setLoading] = useState(false);
-        const user_id = localStorage.getItem('user_id');
+        const email = localStorage.getItem('email');
         const resetPassword = async (data) => {
             setLoading(true);
             try {
-                const response = await axios.post(`/resetPassword/${user_id}`, data);
+                const response = await axios.post(`/resetPassword`, data);
                 reset();
                 
                 if(response.data.message){
@@ -148,6 +148,7 @@ import resetImage from '../../public/Auth_Images/reset.png'
                             "Passwords do not match",
                         })}
                       />
+                      <input type="hidden" value={email} {...register('email')} />
     
          
                           <button

@@ -47,12 +47,19 @@ function StudentAttendance() {
         header: 'End Time',
         size: 150,
       },
+
+      {
+        accessorKey: 'date',
+        header: 'Date',
+        size: 150,
+      },
       
       {
         accessorKey: 'player.player_name',
         header: 'Player Name',
         size: 150,
       },
+
       
       {
         accessorKey: 'attendance_status', // This should match the key in your data
@@ -65,7 +72,7 @@ function StudentAttendance() {
             <div style={{ display: 'flex', gap: '10px' }}>
               {attendanceStatus === 'P' ? (
                 <button
-                  className="font-medium text-black bg-white hover:bg-green-600 border-green-400 border rounded-full w-8 h-8"
+                  className="font-medium text-white bg-green-400 border-green-400 border rounded-full w-8 h-8"
                   // onClick={() => markAttendance('P')}
                   // disabled={sessionNotStarted || fifteenMinutesPassed}
                 >
@@ -87,7 +94,7 @@ function StudentAttendance() {
                 >
                   L
                 </button>
-              ) : null}
+              ) : 'N/A'}
             </div>
           );
         },

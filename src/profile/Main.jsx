@@ -59,10 +59,11 @@ const Main = ({ nextStep, setRole }) => {
     // console.log(location);
   };
 
-  
+  const user_id = localStorage.getItem('user_id');
 
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
+      <input type="hidden" value={user_id} {...register('user_id')} />
       <Grid container spacing={5}>
         {/* Date of Birth Field */}
         <Grid item xs={12} sm={6}>
@@ -187,6 +188,11 @@ const Main = ({ nextStep, setRole }) => {
         {role === 'coach' && (
           <MenuItem value="coach" disabled selected>
             Coach
+          </MenuItem>
+        )}
+        {role === 'admin' && (
+          <MenuItem value="admin" disabled selected>
+            Admin
           </MenuItem>
         )}
           </TextField>

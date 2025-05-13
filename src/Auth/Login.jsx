@@ -15,68 +15,179 @@ function Login() {
     setError,trigger,
     formState: { errors },
   } = useForm();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+
   const user_id = localStorage.getItem('user_id');
-  const Loginuser = async (data) => {
-    setLoading(true);
-    axios
-      .post('/login', data)
-      .then((response) => {
-        reset();
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('role', response.data.user.role);
-        localStorage.setItem('name', response.data.user.name);
-  
-        const role = localStorage.getItem('role');
 
-        if(role === 'player'){
-          navigate('/coachpost');
-        }else if(role === 'coach'){
-          navigate('/')
-        }else if(role === 'admin'){
-          navigate('/');
+const navigate = useNavigate();
+const [loading, setLoading] = useState(false);
+
+// const Loginuser = async (data) => {
+//   setLoading(true);
+//   axios
+//     .post('/login', data)
+//     .then((response) => {
+//       reset();
+//       const user = response.data.user;
+      
+//       // Store user data in localStorage
+//       localStorage.setItem('token', response.data.token);
+//       localStorage.setItem('role', user.role);
+//       localStorage.setItem('name', user.name);
+//       localStorage.setItem('email', user.email);
+//       localStorage.setItem('user_id', user.id);
+
+//       // Store role-specific IDs
+//       if (user.role === "coach") {
+//         localStorage.setItem('coach_id', user.id);
+//         // localStorage.setItem('coach_profile_id',response.data.user.coach_id);
+//       }
+//       if (user.role === "player") {
+//         localStorage.setItem('player_id', user.id);
+//         // localStorage.setItem('player_profile_id',response.data.user.player_id);
+//       }
+//       if (user.role === "admin") {
+//         localStorage.setItem('admin_id', user.id);
+//       }
+
+//       // Retrieve role after setting it
+//       const role = user.role; 
+
+//       // Navigate based on role
+//       if (role === 'player') {
+//         navigate('/coachpost');
+//       } else if (role === 'coach') {
+//         navigate('/');
+//       } else if (role === 'admin') {
+//         navigate(`/dashboard/${user.id}`);
+//       }
+
+//       setLoading(false);
+//     })
+//     .catch((error) => {
+//       setLoading(false);
+//       Swal.fire({
+//         title: "Error!",
+//         text: error.response?.data?.message || 'An error occurred.',
+//         icon: "error",
+//         button: "OK",
+//       });
+//     });
+// };
+
+
+const Loginuser = async (data) => {
+  try {
+      setLoading(true);
+
+      // Perform login
+      const response = await axios.post('/login', data);
+      reset();
+
+      const user = response.data.user;
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('role', user.role);
+      localStorage.setItem('name', user.name);
+      localStorage.setItem('email', user.email);
+      localStorage.setItem('user_id', user.id);
+
+      const email = localStorage.getItem('email');
+      const role = localStorage.getItem('role');
+      // If the role is a player, store player-related info
+      if (role === "player") {
+          try {
+            const profileResponse = await axios.get(`/profile-data/${user.id}/player`, {
+                headers: {
+                    Authorization: `Bearer ${response.data.token}`,
+                },
+            });
+
+            const profileData = profileResponse.data;
+            if (profileData && profileData.user && profileData.user.player) {
+                localStorage.setItem('player_id', profileData.user.player.id);
+                localStorage.setItem('playwith', profileData.user.player.playwith);
+                localStorage.setItem('profile_location', profileData.user.profile_location);
+            }
+        } catch (error) {
+            console.error("Error fetching coach profile data:", error);
         }
+      }
 
-        setLoading(false);
-        // navigate('/dashboard'); // Use the existing navigate instance
-      })
-      .catch((error) => {
-        setLoading(false);
-        Swal.fire({
+      // If role is coach, fetch additional profile data to get coach_id
+      if (role === "coach") {
+        try {
+            const profileResponse = await axios.get(`/profile-data/${user.id}/coach`, {
+                headers: {
+                    Authorization: `Bearer ${response.data.token}`,
+                },
+            });
+    
+            const profile = profileResponse.data.user;
+    
+            if (profile && profile.coach) {
+                if (profile.coach.status === 'block') {
+                    localStorage.clear();
+                    navigate('/account_suspend');
+                    return;
+                }
+                localStorage.setItem('coach_id', profile.coach.id);
+                localStorage.setItem('profile_location', profile.profile_location);
+            }
+    
+        } catch (error) {
+            console.error("Error fetching coach profile data:", error);
+        }
+    }
+    
+
+      if (role === "parent") {
+        try {
+          const response = await axios.get(`/getParent/${email}`);
+      
+          const parentData = response.data.ParentData;
+      
+          if (parentData) {
+            if (parentData.status === "block") {
+              localStorage.clear();
+              navigate("/account_suspend");
+              return;
+            }
+      
+            localStorage.setItem("parent_id", parentData.id);
+          }
+        } catch (error) {
+          console.error("Error fetching parent profile data:", error);
+        }
+      }
+      
+      
+
+      if (user.role === "admin") {
+          localStorage.setItem('admin_id', user.id);
+      }
+
+      // Redirect user based on role
+      if (user.role === 'player') {
+          navigate('/coachpost');
+      } else if (user.role === 'coach') {
+          navigate('/');
+      } else if (user.role === 'admin') {
+          navigate(`/dashboard/${user.id}`);
+      } else if(user.role === "parent"){
+        navigate(`/parent_home/${user_id}`)
+      }
+
+  } catch (error) {
+      Swal.fire({
           title: "Error!",
           text: error.response?.data?.message || 'An error occurred.',
           icon: "error",
           button: "OK",
-        });
       });
-  };
-
-  const StoreinLocalStorage = async () => {
-    try{
-      setLoading(true);
-      const response = await axios.post(`/forgotOtp/${user_id}`)
+  } finally {
       setLoading(false);
-      // navigate();
-      if(response){
-        Swal.fire({
-          title: "Success!",
-          text: "Otp Send on Your Email",
-          icon: "success",
-          button: "OK",
-        });
-      }else{
-        Swal.fire({
-          title: "Error!",
-          text: "Something went wrong. Please try again later.",
-          icon: "error",
-          button: "OK",
-        });
-      }
-    }catch(error){
-      console.log(error);
-    }
   }
+};
+
   
 
   return (
@@ -197,10 +308,10 @@ function Login() {
                         Already have an account?{" "}
                         <Link to={'/signup'}>
                           <span className="text-blue-900 font-semibold">
-                            Singup
+                            Sign-up
                           </span>
                         </Link> &nbsp;
-                        <Link to={`/forgotPass/${user_id}`} onClick={StoreinLocalStorage}>
+                        <Link to={'/forgot_email'}>
                           <span className="text-blue-900 font-semibold">
                             Forget Password
                           </span>

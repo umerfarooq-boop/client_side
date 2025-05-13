@@ -8,13 +8,17 @@ import { Link } from 'react-router-dom';
 import { RotatingLines } from 'react-loader-spinner';
 import { useAppointments } from '../context/AppointmentContext';
 import { ToastContainer,toast } from 'react-toastify';
+import Chat from '../Chat/Chat';
 
 
 function ChangeRequest({id}) {
 
    
     const [loading,setLoading] = useState(false);
-    const player_id = localStorage.getItem('player_id');
+    // const player_id = localStorage.getItem('player_id');
+    const currentUser = JSON.parse(localStorage.getItem('user_id')); // where 'user' contains full user info
+
+    
     let role = localStorage.getItem('role');
     role = 'player'
     
@@ -27,36 +31,37 @@ function ChangeRequest({id}) {
       const { updateStatus,fetchAppointments } = useAppointments();   
   
   
+      // const getData = async () => {
+      //   try {
+      //     const response = await axios.get(`/PlayerRequests/${id}`);
+      //     if (response.data?.CoachSchedule) {
+      //       const scheduleData = Array.isArray(response.data.CoachSchedule)
+      //         ? response.data.CoachSchedule
+      //         : [response.data.CoachSchedule];
+      //     }
+      //   } catch (error) {
+      //     console.error("Error fetching data:", error);
+      //   }
+      // };
   
-   useEffect(() => {
-          const getData = async () => {
-            try {
-              const response = await axios.get(`/PlayerRequests/${id}`);
-              if (response.data?.CoachSchedule) {
-                const scheduleData = Array.isArray(response.data.CoachSchedule)
-                  ? response.data.CoachSchedule
-                  : [response.data.CoachSchedule];
-              }
-            } catch (error) {
-              console.error("Error fetching data:", error);
-            }
-          };
-          getData();
-        }, [id,setData]);
-  
+      //    useEffect(() => {
           
+      //     getData();
+      //   }, [id,setData]);
+  
+      const getData = async () => {
+        try {
+          const response = await axios.get(`/PlayerRequests/${id}`);
+          if (response.data?.CoachSchedule) {
+            setData(response.data.CoachSchedule);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
         
           useEffect(() => {
-            const getData = async () => {
-              try {
-                const response = await axios.get(`/PlayerRequests/${id}`);
-                if (response.data?.CoachSchedule) {
-                  setData(response.data.CoachSchedule);
-                }
-              } catch (error) {
-                console.error("Error fetching data:", error);
-              }
-            };
+            
         
             getData();
           }, [id]);
@@ -78,7 +83,7 @@ function ChangeRequest({id}) {
             
                 if (response.status === 200 || response.status === 201) {
                   toast.success(`Status updated to '${newStatus}'`);
-                  
+                  getData();
                   updateStatus(aid, newStatus); // Update the calendar context
                   fetchAppointments(); // Refetch appointments to ensure the calendar is accurate
                 } else {
@@ -127,6 +132,11 @@ function ChangeRequest({id}) {
           {
             accessorKey: 'sport_category.name',
             header: 'Sport',
+            size: 150,
+          },
+          {
+            accessorKey: 'playwith',
+            header: 'Play with',
             size: 150,
           },
           {
@@ -183,12 +193,12 @@ function ChangeRequest({id}) {
           {
             accessorKey: 'status',
             header: 'Status',
-            size: 5,
+            size: 12,
             Cell: ({ row }) => {
               const item = row.original; // Extracting status from row data
           
               return (
-                <div style={{ display: 'flex', gap: '7px' }}>
+                <div style={{ display: 'flex', gap: '20px' }}>
                  {item.status === "processing" ? (
                   <div className="flex space-x-2">
                     <button
@@ -263,16 +273,26 @@ function ChangeRequest({id}) {
                     </div>
                       ) :
                       (
-                      <MaterialReactTable
+                        <MaterialReactTable
                           columns={columns}
                           data={data}
                           muiTableBodyCellProps={{
-                              style: { wordWrap: 'break-word', maxWidth: '200px' },
+                            style: { wordWrap: 'break-word', maxWidth: '200px' },
                           }}
                           muiTableContainerProps={{
-                              style: { overflowX: 'auto' }, // Horizontal scrolling for smaller screens
+                            style: {
+                              overflowX: 'auto', // Enables horizontal scrolling for smaller screens
+                              position: 'relative', // Keeps the table's stacking context in check
+                              zIndex: 1, // Lower z-index to ensure it does not overlap the chat box
+                            },
                           }}
-                      />
+                          enablePagination={false} // Disables pagination
+                        />
+
+
+
+
+
                       )
                     }
 
@@ -285,7 +305,7 @@ function ChangeRequest({id}) {
 
 
           </div>
-        </div>
+            </div>
     </>
   )
 }

@@ -69,29 +69,94 @@ import NewEquipmentRequest from './sidebar/AssignEquipment/NewEquipmentRequest';
 import EquipmentStock from './sidebar/AssignEquipment/EquipmentStock';
 import AllEquipments from './sidebar/AssignEquipment/AllEquipments';
 import FormDialog from './sidebar/AssignEquipment/FormDialog';
+import ReturnEquipment from './sidebar/AssignEquipment/ReturnEquipment';
+import AcceptEquipmentRequest from './sidebar/AssignEquipment/AcceptEquipmentRequest';
+import PageNotFound from './website/PageNotFound';
+import AccountSuspendPage from './website/AccountSuspendPage';
+import ParentHome from './ParentDashboard/ParentHome';
+import PlayerAttendance from './ParentDashboard/PlayerAttendance';
+import PlayerScore from './ParentDashboard/PlayerScore'
+import AddReviews from './PlayerReviews/AddReviews';
+import CheckoutForm from './Payment/CheckoutForm';
+import Emergency  from './emergency/emergency';
+import PaymentPage from './Payment/PaymentPage';
+import StripePaymentForm from './Payment/StripePaymentForm';
+import Question from './website/Question';
+import Testimonial from './website/Testimonial';
+import PlayerInvoice from './sidebar/Invoice/PlayerInvoice';
+import SingalPlayerInvoice from './sidebar/Invoice/SingalPlayerInvoice';
+import ForgotEmail from './Auth/ForgotEmail';
+import TestComponent from './website/TestComponent';
+import useInactivityLogout from './hooks/useInactivityLogout';
+import ChatUi from './Messenger/ChatUi';
+import EmergencyPlayersRecord from './emergency/EmergencyPlayersRecord';
+import EmergencyModule from './emergency/emergency';
+import EditAppointmentTable from './sidebar/EditAppointment/EditAppointmentTable';
 // import AllHomeSlides from './sidebar/Menagewebsite/Homslidder/AllHomeSlides';
 // import AddPost from './sidebar/News/AddPost';
+
 function App() {
   const {id} = useParams();
+  useInactivityLogout(50 * 60 * 1000);
   return (
     <>
       <Link to='/'></Link>
       <Routes>
+        <Route path='/test' element={<TestComponent />} />
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
         <Route path='/otp' element={<Otp />} />
-        <Route path='/resetpassword/:id' element={<ResetPassword />} />
-        <Route path='/forgotPass/:id' element={<ForgotOtp />} />
+        <Route path='/resetpassword' element={<ResetPassword />} />
+        <Route path='/forgotPass' element={<ForgotOtp />} />
+        <Route path='/forgot_email' element={<ForgotEmail />} />
         <Route path='/coachpost' element={<CoachPost />} />
         <Route path='/page' element={<Page />} />
         <Route path='/contact' element={<Contact />} />
+        <Route path='/question' element={<Question />} />
+        <Route path='/testimonial' element={<Testimonial />} />
         <Route path='/schedule/:id' element={<Schedule />} />
         <Route path='/admin-profile' element={<AdminProfile />} />
         <Route path='/coachdetail/:id' element={<CoachDetail />} />
         <Route path='/PlayerRequest/:id/:role' element={<PlayerRequest />} />
-        
+        <Route path='/*' element={<PageNotFound/>} />
+        <Route path='/account_suspend' element={<AccountSuspendPage/>} />
+        <Route path='/parent_home/:id' element={<ParentHome />} />
+        <Route path='/parent_player_attendance/:id' element={<PlayerAttendance />} />
+        <Route path='/parent_player_score/:id' element={<PlayerScore />} />
+
+        {/* Chat UI */}
+        <Route path='/ChatUi/:id' element={<ChatUi />} />
+        {/* Chat UI */}
+
+        {/* Payment Form Checkout */}
+        <Route path="/checkoutform/:id" element={<CheckoutForm />} />
+        <Route path="/payment" element={<PaymentPage />} />
+
+        <Route path="/stripepaymentform" element={<StripePaymentForm />} />
+
+        {/* Payment Form Checkout */}
+
+
+        {/* Emergency Module */}
+        <Route
+          path='/player_emergency/:id/*'
+          element={
+            <ProtectedRoute>
+              <EmergencyPlayersRecord />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/emergency/:id/*'
+          element={
+            <ProtectedRoute>
+              <EmergencyModule />
+            </ProtectedRoute>
+          }
+        />
+        {/* Emergency Module */}
         {/* Wrap the dashboard and other private routes with ProtectedRoute */}
         <Route
           path='/dashboard/:id/*'
@@ -105,6 +170,17 @@ function App() {
         /**
         * ! Edit Player Appointment
         */
+        <Route
+          path='/editplayer_appointment_table/:id'
+          element={
+            <ProtectedRoute>
+              <AppointmentProvider id={id}>
+                <EditAppointmentTable id={id}/>
+              </AppointmentProvider>
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path='/editplayer_appointment/:id'
           element={
@@ -627,6 +703,40 @@ function App() {
           }
         />
 
+        {/* Singal Equipment Request For Accepting */}
+
+        <Route
+          path='/accept_equipment_request/:id'
+          element={
+            <ProtectedRoute>
+              <AcceptEquipmentRequest />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Singal Equipment Request For Accepting */}
+
+
+        <Route
+          path='/return_equipment/:id'
+          element={
+            <ProtectedRoute>
+              <ReturnEquipment />
+            </ProtectedRoute>
+          }
+        />
+
+          {/* Add Coach Reviews */}
+          <Route
+          path='/add_reviews'
+          element={
+            <ProtectedRoute>
+              <AddReviews />
+            </ProtectedRoute>
+          }
+        />
+          {/* Add Coach Reviews */}
+
 
         /**
         * ! Appointment
@@ -642,6 +752,28 @@ function App() {
             </Container>
           } 
         />
+
+
+          {/* Invoive Show in Payment */}
+          <Route
+          path='/invoice'
+          element={
+            <ProtectedRoute>
+              <PlayerInvoice />
+            </ProtectedRoute>
+          }
+        />
+
+          <Route
+          path='/singal_invoice'
+          element={
+            <ProtectedRoute>
+              <SingalPlayerInvoice />
+            </ProtectedRoute>
+          }
+        />
+          {/* Invoive Show in Payment */}
+
       </Routes>
     </>
   );

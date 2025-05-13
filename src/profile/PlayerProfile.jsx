@@ -51,11 +51,14 @@ const handleFileChange = (e) => {
     setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
 };
 
+// That is same previous logic where store coach_id here i can store user_id in form
 const player_record = localStorage.getItem('coach_id' || '');
+
+const user_id = localStorage.getItem('user_id' || '');
 
     return (
         <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
-            <input type="hidden" value={player_record} {...register('user_id')} />
+            <input type="hidden" value={user_id} {...register('user_id')} />
             <Grid container spacing={5}>
                 <Grid item xs={12} sm={6}>
                     <TextField

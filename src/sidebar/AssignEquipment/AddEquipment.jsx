@@ -3,17 +3,21 @@ import Dashboard from '../Dashboard'
 import { ToastContainer,toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
 import axios from '../../axios'
+import { useNavigate } from 'react-router-dom'
 
 function AddEquipment() {
     const {handleSubmit,register,reset} = useForm()
     const coach_id = localStorage.getItem('coach_id');
-
+    const navigate = useNavigate();
     const AddEquip = async (data) => {
         try {
             const response = await axios.post('/assign_equipment', data);
             
             if (response.data.success) {
                 toast.success(response.data.message); // Display success message
+                setTimeout(() =>{
+                    navigate(-1);
+                },1500)
             } else {
                 toast.error(response.data.message); // Display error message from backend
             }

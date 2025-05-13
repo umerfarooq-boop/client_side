@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../../axios";
 import Dashboard from "../../Dashboard";
+import { RotatingLines } from 'react-loader-spinner';
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css";
 
 function Edit_player() {
+  const [loading, setLoading] = useState(true);
   const { id } = useParams(); // Get the coach ID from URL parameters
   const navigation = useNavigate();
   const {
@@ -34,6 +36,7 @@ function Edit_player() {
         const sportCategory = await axios.get("/category");
         if (sportCategory.data && Array.isArray(sportCategory.data.category)) {
           setCategory(sportCategory.data.category);
+          setLoading(false)
         } else if (sportCategory.data && sportCategory.data.category) {
           setCategory([sportCategory.data.category]);
         }
@@ -71,65 +74,122 @@ function Edit_player() {
     }
   };
 
-  const editCoachInfo = (data) => {
-    const formData = new FormData();
+  // const editPlayerInfo = (data) => {
+  //   const formData = new FormData();
 
-    // Append form data for coach and academy
-    formData.append('name', data.name);
-    formData.append('experience', data.experience);
-    formData.append('level', data.level);
-    formData.append('phone_number', data.phone_number);
-    formData.append('coach_location', data.coach_location);
-    formData.append('academy_name', data.academy_name);
-    formData.append('academy_location', data.academy_location);
-    formData.append('address', data.address);
-    formData.append('academy_phonenumber', data.academy_phonenumber);
+  //   // Append form data for coach and academy
+  //   formData.append('player_name', data.name);
+  //   formData.append('player_phonenumber', data.player_phonenumber);
+  //   formData.append('player_gender', data.player_gender);
+  //   formData.append('cat_id', data.cat_id);
   
-    // Append files conditionally
+  //   // Append files conditionally
+  //   if (data.image[0]) {
+  //     formData.append('image', data.image[0]);
+  //   }
+
+  //   // Make the API call to update coach and academy details
+  //   axios
+  //     .post(`/UpdatePlayerData/${id}`, formData,{
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     })
+  //     .then((response) => {
+  //       toast.success("Record Updated Successfully");
+  //       console.log(response.data); // Debug response if needed
+  //       navigation('/allcoach');
+  //     })
+  //     .catch((error) => {
+  //       toast.error("Failed to Update Record");
+  //       console.error(error.response?.data || error.message);
+  //     });
+  // };
+  
+
+  const editPlayerInfo = (data) => {
+    const formData = new FormData();
+  
+    formData.append('player_name', data.player_name);
+    formData.append('player_phonenumber', data.player_phonenumber);
+    formData.append('player_gender', data.player_gender);
+    formData.append('cat_id', selectedCategory);
+  
     if (data.image[0]) {
       formData.append('image', data.image[0]);
     }
-    if (data.certificate[0]) {
-      formData.append('certificate', data.certificate[0]);
-    }
-    if (data.academy_certificate[0]) {
-      formData.append('academy_certificate', data.academy_certificate[0]);
-    }
-
-    // Make the API call to update coach and academy details
+  
+    // Append parent info
+    data.parent.forEach((parent, index) => {
+      formData.append(`parent[${index}][name]`, parent.name);
+      formData.append(`parent[${index}][cnic]`, parent.cnic);
+      formData.append(`parent[${index}][phone_number]`, parent.phone_number);
+    });
+  
     axios
-      .post(`/updateRecord/${id}`, formData,{
+      .post(`/UpdatePlayerData/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
       .then((response) => {
         toast.success("Record Updated Successfully");
-        console.log(response.data); // Debug response if needed
-        navigation('/allcoach');
+        navigation(-1);
       })
       .catch((error) => {
         toast.error("Failed to Update Record");
         console.error(error.response?.data || error.message);
       });
   };
+
+  const user_id = localStorage.getItem('user_id');
+
+
+    const onSubmit = (data) => {
+      axios
+        .post(`/UpdatePassword/${user_id}`, data)
+        .then((response) => {
+          toast.success('Password updated successfully');
+          reset();
+        })
+        .catch((error) => {
+          toast.error('Failed to update password');
+          console.error(error.response?.data || error.message);
+        });
+    };
   
 
   return (
     <>
       <Dashboard>
+        {
+       loading ? (
+                     <div className="flex flex-col items-center justify-center h-screen">
+                   <RotatingLines 
+                     visible={true}
+                     height="96"
+                     width="96"
+                     color="grey"
+                     strokeWidth="5"
+                     animationDuration="0.75"
+                     ariaLabel="rotating-lines-loading"
+                   />
+                 </div>
+                   ) :
+                   (
+                    <>
         <ToastContainer />
-        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
-          <div className="text-center mb-4">
-            <h1 className="text-2xl xl:text-4xl font-bold text-blue-900">
-              Edit Coach
-            </h1>
+         <div className="text-center mb-16 mt-16">
+              <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
+                Edit{" "}
+                <span className="text-indigo-600">Player</span>
+              </h3>
           </div>
           {data.map((index, key) => (
             <form
               className="flex flex-col gap-6"
               key={key}
-              onSubmit={handleSubmit(editCoachInfo)}
+              onSubmit={handleSubmit(editPlayerInfo)}
             >
               <div className="-mx-3 md:flex mb-6">
                 {/* Post Title */}
@@ -272,15 +332,14 @@ function Edit_player() {
                     className="block w-full text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded-lg file:py-2 file:px-4 file:border-0 file:mr-4 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                   />
                 </div>
-
-
               </div>
 
-              <div className="text-center mb-4">
-                <h1 className="text-2xl xl:text-4xl font-bold text-blue-900">
-                  Edit Parent Record
-                </h1>
-              </div>
+              <div className="text-center mb-16 mt-16">
+              <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
+                Edit{" "}
+                <span className="text-indigo-600">Player Parent</span>
+              </h3>
+          </div>
 
               {
   index.player_parent.map((parent, key) => (
@@ -360,16 +419,59 @@ function Edit_player() {
 
               {/* Certificate Accademy */}
 
-              <button
-                type="submit"
-                className="mt-5 tracking-wide font-semibold bg-blue-900 text-white py-4 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center"
-              >
-                Submit
-              </button>
+             <button
+  type="submit"
+  className="mt-5 tracking-wide font-semibold bg-indigo-600 text-white py-4 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out flex items-center justify-center"
+>
+  Submit
+</button>
+
+{/* <button
+  type="submit"
+  className="mt-5 w-fit px-6 text-sm tracking-wide font-semibold bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition duration-300 ease-in-out"
+>
+  Submit
+</button> */}
+
             </form>
           ))}
-        </div>
-      </Dashboard>
+
+<div className="text-center mb-16 mt-16">
+              <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
+                Update{" "}
+                <span className="text-indigo-600">Password</span>
+              </h3>
+          </div>
+          <div className="border p-4 max-w-md mx-auto mt-4 rounded shadow">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <input
+                type="password"
+                placeholder="New Password"
+                {...register('password')}
+                className="w-full mb-3 p-2 border rounded"
+                required
+              />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                {...register('password_confirmation')}
+                className="w-full mb-3 p-2 border rounded"
+                required
+              />
+              <button
+  type="submit"
+  className="w-full mt-2 tracking-wide font-semibold bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out"
+>
+  Update Password
+</button>
+
+            </form>
+          </div>
+
+
+        
+        </>
+        )}      </Dashboard>
     </>
   );
 }
