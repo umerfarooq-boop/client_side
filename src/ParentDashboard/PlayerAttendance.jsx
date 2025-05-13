@@ -48,46 +48,56 @@ function PlayerAttendance() {
             size: 150,
         },
         {
-            accessorKey: 'attendance_status',
-            header: 'Attendance Status',
+            accessorKey: 'date',
+            header: 'Date',
             size: 150,
-            Cell: ({ cell }) => {
-              const status = cell.getValue()?.toUpperCase();
-          
-              if (status === 'P') {
-                return (
-                  <button
-                    className="font-medium text-black bg-white hover:bg-green-600 border-green-400 border rounded-full w-8 h-8"
-                    disabled
-                  >
-                    P
-                  </button>
-                );
-              } else if (status === 'A') {
-                return (
-                  <button
-                    className="font-medium text-black bg-white hover:bg-red-600 border-red-400 border rounded-full w-8 h-8"
-                    disabled
-                  >
-                    A
-                  </button>
-                );
-              } else if (status === 'L') {
-                return (
-                  <button
-                    className="font-medium text-black bg-white hover:bg-blue-600 border-blue-400 border rounded-full w-8 h-8"
-                    disabled
-                  >
-                    L
-                  </button>
-                );
-              } else {
-                return (
-                  <span className="text-gray-500">N/A</span>
-                );
-              }
+        },
+        {
+          accessorKey: 'attendance_status', // Key for accessing attendance data
+          header: 'Attendance Status', // Column header
+          size: 150, // Width of the column
+          Cell: ({ cell }) => {
+            const status = cell.getValue()?.toUpperCase(); // Fetch and normalize status
+        
+            if (status === 'P') {
+              // Marked as Present
+              return (
+                <button
+                  className="font-medium text-black bg-white hover:bg-green-600 border-green-400 border rounded-full w-8 h-8"
+                  disabled
+                >
+                  P
+                </button>
+              );
+            } else if (status === 'A') {
+              // Marked as Absent
+              return (
+                <button
+                  className="font-medium text-black bg-white hover:bg-red-600 border-red-400 border rounded-full w-8 h-8"
+                  disabled
+                >
+                  A
+                </button>
+              );
+            } else if (status === 'L') {
+              // Marked as Late
+              return (
+                <button
+                  className="font-medium text-black bg-white hover:bg-blue-600 border-blue-400 border rounded-full w-8 h-8"
+                  disabled
+                >
+                  L
+                </button>
+              );
+            } else {
+              // Unmarked attendance or invalid value
+              return (
+                <span className="text-gray-500">N/A</span>
+              );
             }
           }
+        }
+        
           
     ], []);
 

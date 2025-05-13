@@ -77,6 +77,16 @@ function Show_EditAppointment() {
     }
   };
 
+  const Reject = async (id) =>{
+    const response = await axios.get(`/reject_edit_appointment/${id}`);
+    if(response.data.success){
+      toast.success(response.data.message);
+      getData();      
+    }else{
+      toast.error('Record Not Delete');
+    }
+  }
+
   const columns = useMemo(
     () => [
       {
@@ -156,12 +166,12 @@ function Show_EditAppointment() {
               >
                 Accept
               </button>
-              <Link
+              <button
                 className="bg-red-600 text-black font-semibold py-1 px-3 rounded shadow hover:bg-red-700 transition duration-300"
-                to={`/editplayer_appointment/${appointmentId}`}
+                onClick={() => Reject(row.original.id)}
               >
                 Reject
-              </Link>
+              </button>
             </div>
           );
         },

@@ -95,6 +95,17 @@ function EditPlayerAppointment() {
       const [inputHour, inputMin] = timeValue.split(":").map(Number);
       const inputMinutes = inputHour * 60 + inputMin;
     
+      // Get the current user's appointment time
+      const [myStartHour, myStartMin] = appointment[0]?.start_time?.split(":").map(Number) || [];
+      const [myEndHour, myEndMin] = appointment[0]?.end_time?.split(":").map(Number) || [];
+    
+      const myStartMinutes = myStartHour * 60 + myStartMin;
+      const myEndMinutes = myEndHour * 60 + myEndMin;
+    
+      // ✅ If this time is inside user's original booking, allow it
+      const isCurrentUserSlot = inputMinutes >= myStartMinutes && inputMinutes < myEndMinutes;
+      if (isCurrentUserSlot) return false;
+    
       let teamBookingCount = 0;
       let hasIndividualBooking = false;
     
@@ -105,32 +116,32 @@ function EditPlayerAppointment() {
         const startMinutes = startHour * 60 + startMin;
         const endMinutes = endHour * 60 + endMin;
     
-        const inRange = inputMinutes >= startMinutes && inputMinutes < endMinutes;
+        const overlaps = inputMinutes >= startMinutes && inputMinutes < endMinutes;
     
-        if (inRange) {
-          if (slot.playwith === "individual") {
-            hasIndividualBooking = true;
-          } else if (slot.playwith === "team") {
-            teamBookingCount += slot.bookings; // Assuming bookings = 1 per record
-          }
+        // 💡 Ignore current user's own slot
+        const isSameSlot =
+          slot.id === appointment[0]?.id ||
+          (
+            slot.start_time === appointment[0]?.start_time &&
+            slot.end_time === appointment[0]?.end_time &&
+            slot.from_date === appointment[0]?.from_date
+          );
+    
+        if (isSameSlot) continue;
+    
+        if (overlaps) {
+          if (slot.playwith === "individual") hasIndividualBooking = true;
+          if (slot.playwith === "team") teamBookingCount += slot.bookings;
         }
       }
     
-      // If any individual booked, block this slot for everyone
       if (hasIndividualBooking) return true;
+      if (playwith === "team" && teamBookingCount >= 2) return true;
+      if (playwith === "individual" && teamBookingCount > 0) return true;
     
-      // If current user wants to book as team
-      if (playwith === "team") {
-        return teamBookingCount >= 2; // Block if 2 team bookings already done
-      }
-    
-      // If current user wants to book as individual and team booking already exists
-      if (playwith === "individual" && teamBookingCount > 0) {
-        return true; // Block individual if a team already booked
-      }
-    
-      return false; // Otherwise allow
+      return false;
     };
+    
 
   const onSubmit = async (data) => {
     try {
@@ -294,7 +305,7 @@ function EditPlayerAppointment() {
       )}
     />
   </div>
-) : null}
+          ) : null}
 
 
 

@@ -107,8 +107,8 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
         <Route path='/otp' element={<Otp />} />
-        <Route path='/resetpassword/:id' element={<ResetPassword />} />
-        <Route path='/forgotPass/:id' element={<ForgotOtp />} />
+        <Route path='/resetpassword' element={<ResetPassword />} />
+        <Route path='/forgotPass' element={<ForgotOtp />} />
         <Route path='/forgot_email' element={<ForgotEmail />} />
         <Route path='/coachpost' element={<CoachPost />} />
         <Route path='/page' element={<Page />} />

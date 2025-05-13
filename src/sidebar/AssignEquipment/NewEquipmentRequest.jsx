@@ -17,24 +17,23 @@ function NewEquipmentRequest() {
     const [open, setOpen] = useState(false);
     const handleClickOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    
+    const fetchData = async () => {
+      try {
+          const response = await axios.get(`/request_equipment/${coach_record}`);
+          if (response.data && Array.isArray(response.data.requestequipment)) {
+              setData(response.data.requestequipment); // Directly set the array
+          } else if (response.data && response.data.requestequipment) {
+              setData([response.data.requestequipment]); // Wrap single item in an array
+          } else {
+              console.warn("No equipment data available.");
+          }
+          setLoading(false);
+      } catch (error) {
+          console.error("Error fetching data:", error);
+          setLoading(false);
+      }
+  };
     useEffect(()=>{
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`/request_equipment/${coach_record}`);
-                if (response.data && Array.isArray(response.data.requestequipment)) {
-                    setData(response.data.requestequipment); // Directly set the array
-                } else if (response.data && response.data.requestequipment) {
-                    setData([response.data.requestequipment]); // Wrap single item in an array
-                } else {
-                    console.warn("No equipment data available.");
-                }
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                setLoading(false);
-            }
-        };
         fetchData();
     },[coach_record])
 
@@ -111,9 +110,10 @@ function NewEquipmentRequest() {
 
   const handleDeleteChange = async (id) => {
     const response = await axios.get(`/DeleteEquipmentRequest/${id}`);
-    if(response.data && response.data.message ===  201){
+    if(response.data && response.data.success){
       toast.success(response.data.message);
     }
+
   }
   
 

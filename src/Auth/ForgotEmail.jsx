@@ -16,43 +16,52 @@ function ForgotEmail() {
     formState: { errors },
   } = useForm();
 
-  const user_id = localStorage.getItem('user_id');
 
 const navigate = useNavigate();
 const [loading, setLoading] = useState(false);
-  const StoreinLocalStorage = async () => {
-    try{
-      setLoading(true);
-      
-      const response = await axios.post(`/forgotOtp/${user_id}`);
-        const email = response.data.email;
 
-        if (email) {
-            localStorage.setItem('email', email);
-            console.log('Stored email:', email);
-        }
-      setLoading(false);
-      // navigate();
-      if(response){
-        Swal.fire({
-          title: "Success!",
-          text: "Otp Send on Your Email",
-          icon: "success",
-          button: "OK",
-        });
-        navigate('/forgotPass/:user_id');
-      }else{
-        Swal.fire({
-          title: "Error!",
-          text: "Something went wrong. Please try again later.",
-          icon: "error",
-          button: "OK",
-        });
-      }
-    }catch(error){
-      console.log(error);
+const StoreinLocalStorage = async (data) => {
+  try {
+    setLoading(true);
+
+    const response = await axios.post('/forgotOtp',data);
+    const email = response.data.user.email;
+
+    if (email) {
+      localStorage.setItem('email', email);
+      console.log('Stored email:', email);
     }
+
+    setLoading(false);
+
+    if (response) {
+      Swal.fire({
+        title: "Success!",
+        text: "OTP sent to your email.",
+        icon: "success",
+        button: "OK",
+      });
+      navigate(`/forgotPass`);
+    } else {
+      Swal.fire({
+        title: "Error!",
+        text: "Something went wrong. Please try again later.",
+        icon: "error",
+        button: "OK",
+      });
+    }
+  } catch (error) {
+    setLoading(false);
+    console.error("Error sending OTP:", error);
+    Swal.fire({
+      title: "Error!",
+      text: "Failed to send OTP. Please check your details and try again.",
+      icon: "error",
+      button: "OK",
+    });
   }
+};
+
   
 
   return (
@@ -86,7 +95,7 @@ const [loading, setLoading] = useState(false);
                 <div className="text-center">
                   <div className="flex items-center">
                   <h1 className="text-3xl font-extrabold text-blue-900">
-                    Sign in
+                    Forgot Password
                   </h1>&nbsp;&nbsp;
                   <img src={mainlogo} className="h-10 mt-5 w-10 m-auto" alt="" />
                   </div>

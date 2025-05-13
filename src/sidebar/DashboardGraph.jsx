@@ -96,7 +96,7 @@ const COLORS = ['#FF8042', '#FFBB28', '#00C49F', '#0088FE', '#FF4444','#4F46E5',
 // ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 function DashboardGraph() {
   const [activeTab, setActiveTab] = useState("profile");
-
+  const [chartData,setChartData] = useState([]);
 
 
   // Slider settings
