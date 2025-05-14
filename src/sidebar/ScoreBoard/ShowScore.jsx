@@ -5,10 +5,11 @@ import axios from '../../axios'
 import { useParams } from 'react-router-dom';
 import { RotatingLines } from 'react-loader-spinner';
 import { ToastContainer, toast } from 'react-toastify';
-
+import loadingAnimation from '../../loader/Animation - 1747181954747.json';
+import Lottie from 'lottie-react';
 function ShowScore() {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loader, setLoading] = useState(true);
   const { id } = useParams();
 
   const fetchData = async () => {
@@ -118,31 +119,22 @@ function ShowScore() {
     <Dashboard>
       <ToastContainer />
       <br />
-      {
-        loading ? (
-          <div className="flex flex-col items-center justify-center h-screen ">
-            <RotatingLines
-              visible={true}
-              height="96"
-              width="96"
-              color="grey"
-              strokeWidth="5"
-              animationDuration="0.75"
-              ariaLabel="rotating-lines-loading"
-            />
-          </div>
-        ) : (
-          <MaterialReactTable
-            columns={columns}
-            data={data}
-            muiTableBodyCellProps={{
-              style: { wordWrap: 'break-word', width: 'auto' },
-            }}
-            muiTableContainerProps={{
-              style: { overflowX: 'auto' },
-            }}
-          />
-        )
+      {loader ? (
+        <div style={{ width: 200, height: 200, margin: 'auto' }}>
+          <Lottie animationData={loadingAnimation} loop={true} />
+        </div>
+      ) : (
+        <MaterialReactTable
+          columns={columns}
+          data={data}
+          muiTableBodyCellProps={{
+            style: { wordWrap: 'break-word', width: 'auto' },
+          }}
+          muiTableContainerProps={{
+            style: { overflowX: 'auto' },
+          }}
+        />
+      )
       }
     </Dashboard>
   );

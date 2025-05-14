@@ -40,43 +40,43 @@ function Appoinment() {
   // const playwith = localStorage.getItem("playwith");
   const [playwith, setPlaywith] = useState(localStorage.getItem("playwith"));
 
- 
-    useEffect(() => {
-      const fetchBookedSlots = async () => {
-        if (from_date) {
-          try {
-            const response = await axios.get(
-              `/fetchBookedSlots/${id}?date=${from_date}`
-            );
-            setBookedSlots(response.data.bookedSlots || []);
-          } catch (error) {
-            console.error("Error fetching booked slots:", error);
-          }
+
+  useEffect(() => {
+    const fetchBookedSlots = async () => {
+      if (from_date) {
+        try {
+          const response = await axios.get(
+            `/fetchBookedSlots/${id}?date=${from_date}`
+          );
+          setBookedSlots(response.data.bookedSlots || []);
+        } catch (error) {
+          console.error("Error fetching booked slots:", error);
         }
-      };
-      fetchBookedSlots();
-    }, [from_date, id]);
+      }
+    };
+    fetchBookedSlots();
+  }, [from_date, id]);
 
 
   const isTimeSlotDisabled = (timeValue) => {
     const playwith = localStorage.getItem("playwith"); // "team" or "individual"
     if (!bookedSlots || bookedSlots.length === 0) return false;
-  
+
     const [inputHour, inputMin] = timeValue.split(":").map(Number);
     const inputMinutes = inputHour * 60 + inputMin;
-  
+
     let teamBookingCount = 0;
     let hasIndividualBooking = false;
-  
+
     for (const slot of bookedSlots) {
       const [startHour, startMin] = slot.start_time.split(":").map(Number);
       const [endHour, endMin] = slot.end_time.split(":").map(Number);
-  
+
       const startMinutes = startHour * 60 + startMin;
       const endMinutes = endHour * 60 + endMin;
-  
+
       const inRange = inputMinutes >= startMinutes && inputMinutes < endMinutes;
-  
+
       if (inRange) {
         if (slot.playwith === "individual") {
           hasIndividualBooking = true;
@@ -85,80 +85,80 @@ function Appoinment() {
         }
       }
     }
-  
+
     // If any individual booked, block this slot for everyone
     if (hasIndividualBooking) return true;
-  
+
     // If current user wants to book as team
     if (playwith === "team") {
       return teamBookingCount >= 2; // Block if 2 team bookings already done
     }
-  
+
     // If current user wants to book as individual and team booking already exists
     if (playwith === "individual" && teamBookingCount > 0) {
       return true; // Block individual if a team already booked
     }
-  
+
     return false; // Otherwise allow
   };
-  
+
 
   const Addevent = async (eventData) => {
-      try {
-        const response = await axios.post("/coachschedule", eventData);
-        if (response.status === 201) {
-          toast.success("Schedule Created Successfully");
-          reset();
-          localStorage.setItem('isPaid',false);
-          const firstCoach = response.data.coach;
+    try {
+      const response = await axios.post("/coachschedule", eventData);
+      if (response.status === 201) {
+        toast.success("Schedule Created Successfully");
+        reset();
+        localStorage.setItem('isPaid', false);
+        const firstCoach = response.data.coach;
 
-          if (firstCoach) {
-            // Debugging: Log the first coach object
-            console.log("First Coach Object:", firstCoach);
+        if (firstCoach) {
+          // Debugging: Log the first coach object
+          console.log("First Coach Object:", firstCoach);
 
-            // Storing coach_id from the main coach object
-            const coach_record = firstCoach?.coach_id;
-            if (coach_record !== undefined) {
-              localStorage.setItem("coach_record", coach_record);
-            } else {
-              console.error("coach_id is undefined.");
-            }
-
-            // Storing created_by from the nested coach object
-            const coach_userid = firstCoach?.coach.created_by;
-            if (coach_userid !== undefined) {
-              localStorage.setItem("coach_userid", coach_userid);
-            } else {
-              console.error(
-                "created_by is undefined in the nested coach object."
-              );
-            }
+          // Storing coach_id from the main coach object
+          const coach_record = firstCoach?.coach_id;
+          if (coach_record !== undefined) {
+            localStorage.setItem("coach_record", coach_record);
           } else {
-            console.error("No coach object found in the response.");
+            console.error("coach_id is undefined.");
           }
-          const newEvent = {
-            title: eventData.event_name,
-            start: new Date(`${eventData.from_date}T${eventData.start_time}`),
-            end: new Date(`${eventData.to_date}T${eventData.end_time}`),
-            status: eventData.status,
-            player_name: "Player Name",
-          };
 
-          addAppointment(newEvent);
-          fetchAppointments(); // Refresh appointments
-        }
-      } catch (error) {
-        if (error.response?.status === 403) {
-          toast.error(error.response.data.message); // Show the message sent by the backend
-        } else if (error.response?.status === 409) {
-          toast.error(
-            "This time slot is already booked. Please choose a different time."
-          );
+          // Storing created_by from the nested coach object
+          const coach_userid = firstCoach?.coach.created_by;
+          if (coach_userid !== undefined) {
+            localStorage.setItem("coach_userid", coach_userid);
+          } else {
+            console.error(
+              "created_by is undefined in the nested coach object."
+            );
+          }
         } else {
-          toast.error("Failed to add schedule");
+          console.error("No coach object found in the response.");
         }
+        const newEvent = {
+          title: eventData.event_name,
+          start: new Date(`${eventData.from_date}T${eventData.start_time}`),
+          end: new Date(`${eventData.to_date}T${eventData.end_time}`),
+          status: eventData.status,
+          player_name: "Player Name",
+        };
+
+        addAppointment(newEvent);
+        fetchAppointments(); // Refresh appointments
       }
-    
+    } catch (error) {
+      if (error.response?.status === 403) {
+        toast.error(error.response.data.message); // Show the message sent by the backend
+      } else if (error.response?.status === 409) {
+        toast.error(
+          "This time slot is already booked. Please choose a different time."
+        );
+      } else {
+        toast.error("Failed to add schedule");
+      }
+    }
+
   };
 
   function checkPlayer() {
@@ -205,8 +205,8 @@ function Appoinment() {
           <div className="flex items-center justify-center">
             <div className="mx-auto w-full max-w-[550px] bg-white">
               <form onSubmit={handleSubmit(Addevent)}>
-              <input type="hidden" value={playwith} {...register('playwith')} />
-<input type="hidden" value={1} {...register('booking_count')} />
+                <input type="hidden" value={playwith} {...register('playwith')} />
+                <input type="hidden" value={1} {...register('booking_count')} />
                 <div className="-mx-3 flex flex-wrap">
                   <div className="w-full px-3 sm:w-1/2">
                     <div className="mb-5">
@@ -265,11 +265,10 @@ function Appoinment() {
                               <>
                                 <select
                                   {...field}
-                                  className={`w-full rounded-md border bg-white py-3 px-6 text-base ${
-                                    fieldState.error
-                                      ? "border-red-500"
-                                      : "border-gray-300"
-                                  }`}
+                                  className={`w-full rounded-md border bg-white py-3 px-6 text-base ${fieldState.error
+                                    ? "border-red-500"
+                                    : "border-gray-300"
+                                    }`}
                                   disabled={!from_date}
                                 >
                                   <option value="" disabled selected>
@@ -280,9 +279,8 @@ function Appoinment() {
                                     const isPM = hour >= 12;
                                     const displayHour =
                                       hour > 12 ? hour - 12 : hour;
-                                    const timeLabel = `${displayHour.toString().padStart(2, "0")}:00 ${
-                                      isPM ? "PM" : "AM"
-                                    }`;
+                                    const timeLabel = `${displayHour.toString().padStart(2, "0")}:00 ${isPM ? "PM" : "AM"
+                                      }`;
                                     const timeValue = `${hour.toString().padStart(2, "0")}:00`;
 
                                     return (
@@ -347,7 +345,7 @@ function Appoinment() {
                         className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" 
                       /> */}
 
-                      
+
                       {playwith === "individual" || playwith === "team" ? (
                         <div>
                           <Controller
@@ -370,11 +368,10 @@ function Appoinment() {
                               <>
                                 <select
                                   {...field}
-                                  className={`w-full rounded-md border bg-white py-3 px-6 text-base ${
-                                    fieldState.error
-                                      ? "border-red-500"
-                                      : "border-gray-300"
-                                  }`}
+                                  className={`w-full rounded-md border bg-white py-3 px-6 text-base ${fieldState.error
+                                    ? "border-red-500"
+                                    : "border-gray-300"
+                                    }`}
                                   disabled={!from_date}
                                 >
                                   <option value="" disabled selected>
@@ -385,9 +382,8 @@ function Appoinment() {
                                     const isPM = hour >= 12;
                                     const displayHour =
                                       hour > 12 ? hour - 12 : hour;
-                                    const timeLabel = `${displayHour.toString().padStart(2, "0")}:00 ${
-                                      isPM ? "PM" : "AM"
-                                    }`;
+                                    const timeLabel = `${displayHour.toString().padStart(2, "0")}:00 ${isPM ? "PM" : "AM"
+                                      }`;
                                     const timeValue = `${hour.toString().padStart(2, "0")}:00`;
 
                                     return (
@@ -470,7 +466,7 @@ function Appoinment() {
                   <button
                     type="submit"
                     onClick={checkPlayer}
-                    className="hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                    className="w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none transition-transform duration-200 hover:scale-[1.02]"
                   >
                     Book Appointment
                   </button>

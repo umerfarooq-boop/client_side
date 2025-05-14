@@ -8,8 +8,10 @@ import {
 } from "@material-tailwind/react";
 // import About from './About'
 import Menu from "@mui/material/Menu";
+import SportsCricketIcon from "@mui/material/MenuItem";
 import MenuItem from "@mui/material/MenuItem";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import LogoutIcon from "@mui/icons-material/Logout";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -567,7 +569,7 @@ function Dashboard({ children }) {
                           </Link>
                           <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                             Notifications
-                            <span className="absolute bottom-full left-1/2 w-2 h-2 bg-gray-800 transform -translate-x-1/2 -translate-y-1/2 rotate-45"></span>
+                            <span className="absolute bottom-full left-1/2 w-2 h-2 bg-indigo-600 transform -translate-x-1/2 translate-y-1/2 rotate-45"></span>
                           </span>
                         </div>
                       )}
@@ -582,7 +584,7 @@ function Dashboard({ children }) {
                         </Link>
                         <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                           Chats
-                          <span className="absolute bottom-full left-1/2 w-2 h-2 bg-gray-800 transform -translate-x-1/2 -translate-y-1/2 rotate-45"></span>
+                          <span className="absolute bottom-full left-1/2 w-2 h-2 bg-indigo-600 transform -translate-x-1/2 translate-y-1/2 rotate-45"></span>
                         </span>
                       </div>
 
@@ -601,7 +603,7 @@ function Dashboard({ children }) {
                         />
                         <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                           Profile
-                          <span className="absolute bottom-full left-1/2 w-2 h-2 bg-gray-800 transform -translate-x-1/2 -translate-y-1/2 rotate-45"></span>
+                          <span className="absolute bottom-full left-1/2 w-2 h-2 bg-indigo-600 transform -translate-x-1/2 translate-y-1/2 rotate-45"></span>
                         </span>
                       </div>
                     </div>
@@ -841,72 +843,109 @@ function Dashboard({ children }) {
                   onClose={handleClose}
                   MenuListProps={{
                     "aria-labelledby": "basic-button",
+                    className: "py-0 font-['Oswald'] " // Apply Oswald font to the entire menu
                   }}
                 >
-                  <MenuItem onClick={handleClose} className="font-medium">
-                    <AccountCircleIcon />
-                    {role}
+                  {/* Profile Menu Item */}
+                  <MenuItem
+                    onClick={handleClose}
+                    className="font-medium transition-all duration-300 hover:bg-indigo-50 hover:text-indigo-600 hover:scale-[1.02] font-['Oswald']"
+                  >
+                    <AccountCircleIcon className="mr-2" />
+                    <span className=" font-['Oswald']">{role}</span>
                   </MenuItem>
+
                   {status === "active" ? (
-                    <div>
+                    <div className="font-['Oswald']">
                       <div>
-                        <MenuItem>
+                        <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
                           <Link
                             to={`/dashboard/${login_id}`}
                             onClick={handleClose}
+                            className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
                           >
-                            <SpaceDashboardIcon />
+                            <SpaceDashboardIcon className="mr-2" />
                             Dashboard
                           </Link>
                         </MenuItem>
-                        <MenuItem>
-                          <Link to="/invoice" >
-                            <ReceiptLongIcon />
+
+                        <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                          <Link
+                            to="/invoice"
+                            className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                          >
+                            <ReceiptLongIcon className="mr-2" />
                             Invoice
                           </Link>
                         </MenuItem>
-                        <MenuItem>
-                          <Link to={`/player_emergency/${coach_id}`} >
-                            <ContactEmergencyIcon />
+
+                        <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                          <Link
+                            to={`/player_emergency/${coach_id}`}
+                            className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                          >
+                            <ContactEmergencyIcon className="mr-2" />
                             Emergency
                           </Link>
                         </MenuItem>
                       </div>
-                      {role === "player" ? (
+
+                      {role === "player" && (
                         <div>
-                          <MenuItem>
+                          <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
                             <Link
                               to={`/PlayerRequest/${player_id}/${role}`}
                               onClick={handleClose}
+                              className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
                             >
-                              <BookmarkAddedIcon />
+                              <EditCalendarIcon className="mr-2" />
                               Booking Request
                             </Link>
                           </MenuItem>
-                          <MenuItem>
+                          <MenuItem className="transition-all duration-200 hover:bg-indigo-50 hover:scale-[1.02]">
+                            <Link
+                              to={`/player_booked_equipment/${player_id}`}
+                              onClick={handleClose}
+                              className="flex items-center w-full hover:text-indigo-600 cursor-pointer font-['Oswald']"
+                            >
+                              <EventAvailableIcon className="mr-2" />
+                              Booked Request
+                            </Link>
+                          </MenuItem>
+                          <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
                             <Link
                               to={"/equipment_request"}
                               onClick={handleClose}
+                              className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
                             >
-                              <BookmarkAddedIcon />
+                              <BookmarkAddedIcon className="mr-2" />
                               Equipment Request
                             </Link>
                           </MenuItem>
                         </div>
-                      ) : null}
+                      )}
                     </div>
                   ) : (
-                    <MenuItem>
-                      <Link to={""} onClick={handleClose}>
-                        <RemoveCircleIcon />
+                    <MenuItem className="transition-all duration-300 hover:bg-gray-100 font-['Oswald']">
+                      <Link
+                        to={""}
+                        onClick={handleClose}
+                        className="flex items-center w-full text-gray-500 font-['Oswald']"
+                      >
+                        <RemoveCircleIcon className="mr-2" />
                         Not Active
                       </Link>
                     </MenuItem>
                   )}
 
-                  <MenuItem>
-                    <Link to={"/login"} onClick={handleClose}>
-                      <LogoutIcon /> Logout
+                  <MenuItem className="transition-all duration-300 hover:bg-red-50 hover:scale-[1.02] font-['Oswald']">
+                    <Link
+                      to={"/login"}
+                      onClick={handleClose}
+                      className="flex items-center w-full hover:text-red-600 transition-colors duration-300 font-['Oswald']"
+                    >
+                      <LogoutIcon className="mr-2" />
+                      Logout
                     </Link>
                   </MenuItem>
                 </Menu>

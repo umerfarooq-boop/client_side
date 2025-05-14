@@ -6,15 +6,20 @@ import logo from '../../public/logo.png'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
+
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+
 import { useEffect } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import axios from '../axios'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Fade from '@mui/material/Fade';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import SportsCricketIcon from '@mui/icons-material/SportsCricket';
 import ChatIcon from '@mui/icons-material/Chat';
 import Badge from "@mui/material/Badge";
@@ -436,36 +441,112 @@ function Nav() {
                     open={open}
                     onClose={handleClose}
                     MenuListProps={{
-                      'aria-labelledby': 'basic-button',
+                      "aria-labelledby": "basic-button",
+                      className: "py-0 font-['Oswald'] " // Apply Oswald font to the entire menu
                     }}
                   >
-                    <MenuItem onClick={handleClose} className='font-medium'><AccountCircleIcon />{role}</MenuItem>
-                    {
-                      status === 'active' ? (
-                        <div>
-                          <MenuItem><Link to={`/dashboard/${login_id}`} onClick={handleClose}><SpaceDashboardIcon />Dashboard</Link></MenuItem>
-                          {
-                            role === 'player' ? (
-                              <div>
-                                <MenuItem><Link to={`/PlayerRequest/${player_id}/${role}`} onClick={handleClose}><BookmarkAddedIcon />Booking Request</Link></MenuItem>
-                                {
-                                  isEditPaid === 'false' ? (
-                                    <MenuItem><Link to={`/editplayer_appointment_table/${player_id}`} onClick={handleClose}><BookmarkAddedIcon />Edit Booking Request</Link></MenuItem>
+                    {/* Profile Menu Item */}
+                    <MenuItem
+                      onClick={handleClose}
+                      className="font-medium transition-all duration-300 hover:bg-indigo-50 hover:text-indigo-600 hover:scale-[1.02] font-['Oswald']"
+                    >
+                      <AccountCircleIcon className="mr-2" />
+                      <span className=" font-['Oswald']">{role}</span>
+                    </MenuItem>
 
-                                  ) : null
-                                }
-                                <MenuItem><Link to={'/equipment_request/'} onClick={handleClose}><SportsCricketIcon />Equipment Request</Link></MenuItem>
-                                <MenuItem><Link to={`/player_booked_equipment/${player_id}`} onClick={handleClose}><SportsCricketIcon />Booked Request</Link></MenuItem>
-                                <MenuItem><Link to={'/singal_invoice'} onClick={handleClose}><SportsCricketIcon />Invoice</Link></MenuItem>
-                              </div>
-                            ) : null
-                          }
+                    {status === "active" ? (
+                      <div className="font-['Oswald']">
+                        <div>
+                          <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                            <Link
+                              to={`/dashboard/${login_id}`}
+                              onClick={handleClose}
+                              className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                            >
+                              <SpaceDashboardIcon className="mr-2" />
+                              Dashboard
+                            </Link>
+                          </MenuItem>
+
+                          <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                            <Link
+                              to="/invoice"
+                              className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                            >
+                              <ReceiptLongIcon className="mr-2" />
+                              Invoice
+                            </Link>
+                          </MenuItem>
+
+                          <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                            <Link
+                              to={`/player_emergency/${coach_id}`}
+                              className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                            >
+                              <ContactEmergencyIcon className="mr-2" />
+                              Emergency
+                            </Link>
+                          </MenuItem>
                         </div>
-                      ) : (
-                        <MenuItem><Link to={''} onClick={handleClose}><RemoveCircleIcon />Not Active</Link></MenuItem>
-                      )
-                    }
-                    <MenuItem><Link to={'/login'} onClick={handleClose}><LogoutIcon /> Logout</Link></MenuItem>
+
+                        {role === "player" && (
+                          <div>
+                            <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                              <Link
+                                to={`/PlayerRequest/${player_id}/${role}`}
+                                onClick={handleClose}
+                                className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                              >
+                                <EditCalendarIcon className="mr-2" />
+                                Booking Request
+                              </Link>
+                            </MenuItem>
+                            <MenuItem className="transition-all duration-200 hover:bg-indigo-50 hover:scale-[1.02]">
+                              <Link
+                                to={`/player_booked_equipment/${player_id}`}
+                                onClick={handleClose}
+                                className="flex items-center w-full hover:text-indigo-600 cursor-pointer font-['Oswald']"
+                              >
+                                <EventAvailableIcon className="mr-2" />
+                                Booked Request
+                              </Link>
+                            </MenuItem>
+                            <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                              <Link
+                                to={"/equipment_request"}
+                                onClick={handleClose}
+                                className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                              >
+                                <BookmarkAddedIcon className="mr-2" />
+                                Equipment Request
+                              </Link>
+                            </MenuItem>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <MenuItem className="transition-all duration-300 hover:bg-gray-100 font-['Oswald']">
+                        <Link
+                          to={""}
+                          onClick={handleClose}
+                          className="flex items-center w-full text-gray-500 font-['Oswald']"
+                        >
+                          <RemoveCircleIcon className="mr-2" />
+                          Not Active
+                        </Link>
+                      </MenuItem>
+                    )}
+
+                    <MenuItem className="transition-all duration-300 hover:bg-red-50 hover:scale-[1.02] font-['Oswald']">
+                      <Link
+                        to={"/login"}
+                        onClick={handleClose}
+                        className="flex items-center w-full hover:text-red-600 transition-colors duration-300 font-['Oswald']"
+                      >
+                        <LogoutIcon className="mr-2" />
+                        Logout
+                      </Link>
+                    </MenuItem>
                   </Menu>
                 </div>
               ) : (
@@ -481,7 +562,7 @@ function Nav() {
             }
           </div>
         </MobileNav>
-      </Navbar>
+      </Navbar >
 
 
 
