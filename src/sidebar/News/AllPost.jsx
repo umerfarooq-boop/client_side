@@ -200,7 +200,8 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { MaterialReactTable } from 'material-react-table';
 import axios from '../../axios';
 import { Link } from 'react-router-dom';
-import { RotatingLines } from 'react-loader-spinner';
+import loadingAnimation from '../../loader/Animation - 1747181954747.json';
+import Lottie from 'lottie-react';
 import { ToastContainer, toast } from 'react-toastify';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
@@ -209,7 +210,7 @@ import CancelSharpIcon from '@mui/icons-material/CancelSharp';
 
 function AllPost() {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loader, setLoader] = useState(true);
   const coach_id = localStorage.getItem('coach_id');
 
   const fetchData = async () => {
@@ -217,6 +218,7 @@ function AllPost() {
       const response = await axios.get(`ShowSignleCoachPost/${coach_id}`);
       if (response.data && response.data.post) {
         setData(response.data.post);
+        // setLoader(false)
       } else {
         setData([]);
       }
@@ -224,7 +226,7 @@ function AllPost() {
       console.error("Error fetching data:", error);
       setData([]);
     } finally {
-      setLoading(false);
+      setLoader(false)
     }
   };
 
@@ -338,17 +340,9 @@ function AllPost() {
   return (
     <Dashboard>
       <ToastContainer />
-      {loading ? (
-        <div className="flex flex-col items-center justify-center h-screen">
-          <RotatingLines
-            visible={true}
-            height="96"
-            width="96"
-            color="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            ariaLabel="rotating-lines-loading"
-          />
+      {loader ? (
+        <div style={{ width: 200, height: 200, margin: 'auto' }}>
+          <Lottie animationData={loadingAnimation} loop={true} />
         </div>
       ) : (
         <>
@@ -388,7 +382,7 @@ function AllPost() {
             renderTopToolbarCustomActions={() => (
               <Link
                 to="/AddPost"
-                className="focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 italic"
+                className="focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 "
               >
                 Add Post
               </Link>

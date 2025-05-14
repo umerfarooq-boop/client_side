@@ -51,14 +51,15 @@ const Notifications = ({ coachId }) => {
             );
           }
         } else if (role === 'player') {
-          response = await axios.get(`/getNotificationsPlayer/${coachId}`);
-          if (response && response.data.status) {
-            setPlayerNotifications(response.data.playernotifications);
-            setPlayerUnreadCount( // ✅ Use correct setter
-              response.data.playernotifications.filter((n) => !n.is_read).length
-            );
-          }
-        }
+  response = await axios.get(`/getNotificationsPlayer/${playerId}`); // ✅ Fix here
+  if (response && response.data.status) {
+    setPlayerNotifications(response.data.playernotifications);
+    setPlayerUnreadCount(
+      response.data?.playernotifications.filter((n) => !n.is_read).length
+    );
+  }
+}
+
       } catch (error) {
         console.error("Error fetching notifications:", error);
       }
