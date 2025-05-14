@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Oswald:wght@200..700&display=swap');
+
+body {
+  color: black;
+  font-family: "Oswald", sans-serif;
+}
+
+/* Oswald font styles */
+.oswald-regular {
+  font-family: "Oswald", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.oswald-bold {
+  font-family: "Oswald", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Noto Sans JP font styles */
+.noto-light {
+  font-family: "Noto Sans JP", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.noto-regular {
+  font-family: "Noto Sans JP", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.pro-sidebar {
+  background-color: whitesmoke;
+  color: white;
+  position: fixed;
+}
+
+.pro-menu-item {
+  padding: 10px;
+}
+
+.pro-menu-item:hover {
+  background-color: rgb(67 56 202 / var(--tw-bg-opacity))
+}
+
+.css-1dgpa8w-MuiContainer-root {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.milk {
+  background: #000;
+}
