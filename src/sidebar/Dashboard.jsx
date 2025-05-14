@@ -176,6 +176,8 @@ function Dashboard({ children }) {
     login_id = localStorage.getItem("parent_id");
   }
 
+  const user_id = localStorage.getItem('user_id');
+
   // console.log(`Login id is: ${login_id}`);
   const popupState = usePopupState({ variant: "popover", popupId: "demoMenu" });
 
@@ -604,24 +606,6 @@ function Dashboard({ children }) {
                       </div>
                     </div>
 
-                  ) : role === "admin" ? (
-                    <div key={key}>
-                      <img
-                        src={
-                          index.coach?.image
-                            ? `http://127.0.0.1:8000/uploads/coach_image/${index.coach?.image}`
-                            : "/default-avatar.png"
-                        }
-                        className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
-                        alt="Thumbnail"
-                        id="basic-button"
-                        aria-controls={open ? "basic-menu" : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? "true" : undefined}
-                        onClick={handleClick}
-                        loading="lazy"
-                      />
-                    </div>
                   ) : role === "coach" ? (
                     <div key={key} className="hidden sm:flex items-center justify-end gap-4 p-2 text-sm">
                       {/* Notifications block (only for coach) */}
@@ -673,6 +657,13 @@ function Dashboard({ children }) {
 
                   ) : null
                 )}
+
+                {
+                  role === 'admin' ? (
+                    <Link to={'/login'} className='text-black' >Logout</Link>
+                  ) : null
+                }
+
                 <Menu
                   id="basic-menu"
                   anchorEl={anchorEl}

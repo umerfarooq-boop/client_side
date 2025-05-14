@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navbar, MobileNav, Typography, Button, IconButton } from "@material-tailwind/react";
+import { Navbar, MobileNav, Typography, Button, IconButton, button } from "@material-tailwind/react";
 import { Link, Routes, Route } from 'react-router-dom';
 import About from './About'
 import logo from '../../public/logo.png'
@@ -126,6 +126,8 @@ function Nav() {
   }
 
   const isEditPaid = localStorage.getItem('isEditPaid');
+
+  const user_id = localStorage.getItem('user_id');
 
   // Ensure you store and use user_id
 
@@ -279,9 +281,18 @@ function Nav() {
                           />
 
                         </div>
+                      ) : role === 'admin' ? (
+                        <h1 className='text-black'>Umer</h1>
                       ) : null
                     ))
                   }
+
+                  {
+                    role === 'admin' ? (
+                      <Link to={`dashboard/${user_id}`} className='text-black' >Dashboard</Link>
+                    ) : null
+                  }
+
                   <Menu
                     id="basic-menu"
                     anchorEl={anchorEl}
@@ -401,17 +412,7 @@ function Nav() {
                         </div>
                       ) : role === 'admin' ? (
                         <div key={key}>
-                          <img
-                            src={`http://127.0.0.1:8000/uploads/player_image/${index.player?.image}`}
-                            className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
-                            alt="Thumbnail"
-                            id="basic-button"
-                            aria-controls={open ? 'basic-menu' : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? 'true' : undefined}
-                            onClick={handleClick}
-                            loading="lazy"
-                          />
+                          <h1>Umer Farooq</h1>
                         </div>
                       ) : (
                         <div key={key}>

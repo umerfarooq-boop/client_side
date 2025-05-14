@@ -7,7 +7,7 @@ import { RotatingLines } from 'react-loader-spinner';
 import { ToastContainer, toast } from 'react-toastify';
 
 function ShowScore() {
-  const [data, setData] = useState([]); 
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
@@ -53,11 +53,11 @@ function ShowScore() {
         size: 150,
       },
     ];
-  
+
     // Check if there's data to inspect player_type
     if (data.length > 0) {
       const playerType = data[0].player_type;
-  
+
       if (playerType === 'bowler') {
         baseColumns.push(
           {
@@ -109,18 +109,19 @@ function ShowScore() {
         );
       }
     }
-  
+
     return baseColumns;
   }, [data]);
-  
+
 
   return (
     <Dashboard>
       <ToastContainer />
+      <br />
       {
         loading ? (
-          <div className="flex flex-col items-center justify-center h-screen">
-            <RotatingLines 
+          <div className="flex flex-col items-center justify-center h-screen ">
+            <RotatingLines
               visible={true}
               height="96"
               width="96"
