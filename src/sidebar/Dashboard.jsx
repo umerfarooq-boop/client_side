@@ -44,6 +44,8 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import axios from "../axios";
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import ChatIcon from '@mui/icons-material/Chat';
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 import _logo from '../../public/StepContent/ali.jpg'
@@ -554,28 +556,52 @@ function Dashboard({ children }) {
                   role === "player" ? (
                     <div key={key} className="flex items-center gap-3 p-2">
                       {role === "player" && (
-                        <div className="sm:block">
-                          <Notifications fontSize="small" coachId={id} />
+                        <div className="relative group">
+                          <Link
+                            to="#" // Add your notifications route here
+                            className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out cursor-pointer text-gray-700 hover:text-indigo-600"
+                          >
+                            <NotificationsNoneOutlinedIcon sx={{ fontSize: 30 }} />
+                          </Link>
+                          <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                            Notifications
+                            <span className="absolute bottom-full left-1/2 w-2 h-2 bg-gray-800 transform -translate-x-1/2 -translate-y-1/2 rotate-45"></span>
+                          </span>
                         </div>
                       )}
 
                       {/* Chat link with icon */}
-                      <Link to={`/ChatUi/${player_id}`} className="text-black">
-                        <ChatIcon fontSize="small" />
-                      </Link>
+                      <div className="relative group">
+                        <Link
+                          to={`/ChatUi/${player_id}`}
+                          className="scale-100 hover:scale-110 transform transition duration-200 ease-in-out cursor-pointer text-gray-700 hover:text-indigo-600"
+                        >
+                          <ChatBubbleOutlineOutlinedIcon sx={{ fontSize: 28 }} />
+                        </Link>
+                        <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                          Chats
+                          <span className="absolute bottom-full left-1/2 w-2 h-2 bg-gray-800 transform -translate-x-1/2 -translate-y-1/2 rotate-45"></span>
+                        </span>
+                      </div>
 
                       {/* Player image */}
-                      <img
-                        src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
-                        className="w-10 h-10 rounded-full border-2 border-indigo-450 shadow-lg cursor-pointer object-cover"
-                        alt="Thumbnail"
-                        id="basic-button"
-                        aria-controls={open ? "basic-menu" : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? "true" : undefined}
-                        onClick={handleClick}
-                        loading="lazy"
-                      />
+                      <div className="relative group">
+                        <img
+                          src={`http://127.0.0.1:8000/uploads/player_image/${index.player.image}`}
+                          className="w-10 h-10 rounded-full border-2 border-indigo-450 shadow-lg cursor-pointer object-cover hover:scale-105 transform transition duration-200"
+                          alt="Thumbnail"
+                          id="basic-button"
+                          aria-controls={open ? "basic-menu" : undefined}
+                          aria-haspopup="true"
+                          aria-expanded={open ? "true" : undefined}
+                          onClick={handleClick}
+                          loading="lazy"
+                        />
+                        <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                          Profile
+                          <span className="absolute bottom-full left-1/2 w-2 h-2 bg-gray-800 transform -translate-x-1/2 -translate-y-1/2 rotate-45"></span>
+                        </span>
+                      </div>
                     </div>
 
                   ) : role === "admin" ? (
@@ -600,31 +626,47 @@ function Dashboard({ children }) {
                     <div key={key} className="hidden sm:flex items-center justify-end gap-4 p-2 text-sm">
                       {/* Notifications block (only for coach) */}
                       {role === "coach" && (
-                        <div className="flex-shrink-0">
-                          <Notifications fontSize="small" coachId={id} />
+                        <div className="relative group flex-shrink-0">
+                          <Link
+                            to="#"
+                            className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out cursor-pointer text-gray-700 hover:text-indigo-600"
+                          >
+                            <Notifications fontSize="small" coachId={id} />
+                          </Link>
+                          <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                            Notifications
+                            <span className="absolute bottom-full left-1/2 w-2 h-2 bg-indigo-600 transform -translate-x-1/2 translate-y-1/2 rotate-45"></span>
+                          </span>
                         </div>
                       )}
 
                       {/* Chat icon link */}
-                      <div className="flex-shrink-0">
-                        <Link to={`/ChatUi/${coach_id}`}>
-                          <ChatIcon fontSize="small" style={{ color: 'black' }} />
+                      <div className="relative group flex-shrink-0">
+                        <Link
+                          to={`/ChatUi/${coach_id}`}
+                          className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out cursor-pointer text-gray-700 hover:text-indigo-600"
+                        >
+                          <ChatBubbleOutlineOutlinedIcon sx={{ fontSize: 20 }} />
                         </Link>
+                        <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                          Chats
+                          <span className="absolute bottom-full left-1/2 w-2 h-2 bg-indigo-600 transform -translate-x-1/2 translate-y-1/2 rotate-45"></span>
+                        </span>
                       </div>
 
                       {/* Coach image */}
-                      <div className="flex-shrink-0">
+                      <div className="relative group flex-shrink-0">
                         <img
                           src={`http://127.0.0.1:8000/uploads/coach_image/${index.coach.image}`}
-                          className="w-10 h-10 rounded-full border border-indigo-450 shadow cursor-pointer object-cover"
-                          alt="Thumbnail"
-                          id="basic-button"
-                          aria-controls={open ? "basic-menu" : undefined}
-                          aria-haspopup="true"
-                          aria-expanded={open ? "true" : undefined}
+                          className="w-10 h-10 rounded-full border border-indigo-450 shadow cursor-pointer object-cover hover:scale-105 transform transition duration-200"
+                          alt="Profile"
                           onClick={handleClick}
                           loading="lazy"
                         />
+                        <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                          Profile
+                          <span className="absolute bottom-full left-1/2 w-2 h-2 bg-indigo-600 transform -translate-x-1/2 translate-y-1/2 rotate-45"></span>
+                        </span>
                       </div>
                     </div>
 
@@ -959,7 +1001,7 @@ function Dashboard({ children }) {
           </button>
           </Link>
         </div> */}
-      <div className="p-10">
+      <div className="">
         {location.pathname === `/dashboard/${login_id}` && <DashboardGraph />}
         {children}
       </div>

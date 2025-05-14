@@ -5,6 +5,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "../axios";
 import { useParams } from "react-router-dom";
+import Dashboard from "../sidebar/Dashboard";
 function ChatUi() {
   const { id } = useParams();
   const [data, setData] = useState([]);
@@ -41,29 +42,29 @@ function ChatUi() {
     let player_id = "";
 
     if (role === 'coach') {
-        coach_id = localStorage.getItem('coach_id');
-        player_id = reciever;
+      coach_id = localStorage.getItem('coach_id');
+      player_id = reciever;
     } else if (role === 'player') {
-        player_id = localStorage.getItem('player_id');
-        coach_id = reciever; // Fix: receiver is the coach
+      player_id = localStorage.getItem('player_id');
+      coach_id = reciever; // Fix: receiver is the coach
     }
 
     try {
-        await axios.post("/send-message", {
-            sender_id: id,
-            receiver_id: reciever,
-            message: inputValue,
-            coach_id: coach_id,
-            player_id: player_id,
-            role:role
-        });
+      await axios.post("/send-message", {
+        sender_id: id,
+        receiver_id: reciever,
+        message: inputValue,
+        coach_id: coach_id,
+        player_id: player_id,
+        role: role
+      });
 
-        setMessages((prev) => [...prev, { sender: "user", text: inputValue }]);
-        setInputValue("");
+      setMessages((prev) => [...prev, { sender: "user", text: inputValue }]);
+      setInputValue("");
     } catch (error) {
-        console.error("Sending failed", error);
+      console.error("Sending failed", error);
     }
-};
+  };
 
 
   const messagesEndRef = useRef(null);
@@ -87,18 +88,18 @@ function ChatUi() {
           const formatted = response.data.map((msg) => ({
             sender: msg.sender_id === parseInt(id) ? "user" : "other",
             text: msg.message,
-            created_at: new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
-        }));
+            created_at: new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          }));
           setMessages(formatted);
         }
       } catch (error) {
         console.error("Failed to fetch messages", error);
       }
     };
-   
-    
-    
-// 
+
+
+
+    // 
     fetchMessages(); // initial call
     const interval = setInterval(fetchMessages, 3000); // poll every 3s
 
@@ -110,9 +111,8 @@ function ChatUi() {
 
   return (
     <>
-      <Nav />
-
-      <div className="flex h-screen bg-indigo-600">
+      <Dashboard />
+      <div className="flex mt-0  h-screen bg-indigo-600">
         {/* Chat Sidebar */}
         {isSidebarOpen ? (
           <div className="bg-indigo-800 text-white w-64 flex flex-col">
@@ -127,50 +127,48 @@ function ChatUi() {
               {data && data.length > 0 ? (
                 data.map((item, index) => (
                   <div>
-{role === "player" ? (
-  <div>
-    <div
-      key={index}
-      className={`flex items-center p-3 cursor-pointer transition duration-200 ${
-        selectedContact === item.coach?.id
-          ? "bg-indigo-700"
-          : "hover:bg-indigo-700"
-      }`}
-      onClick={() => handleSelectContact(item.coach?.id)}
-    >
-      <img
-        src={`http://127.0.0.1:8000/uploads/coach_image/${item.coach?.image || "default.jpg"}`}
-        alt={item.coach?.name || "Coach"}
-        className="w-10 h-10 rounded-full mr-3"
-      />
-      <span>{item.coach?.name || "Unnamed Coach"}</span>
-    </div>
-  </div>
-) 
-
-                    
-                    : role === "coach" ? (
+                    {role === "player" ? (
                       <div>
                         <div
                           key={index}
-                          className={`flex items-center p-3 cursor-pointer transition duration-200 ${
-                            selectedContact === item.player?.id
-                              ? "bg-indigo-700"
-                              : "hover:bg-indigo-700"
-                          }`}
-                          onClick={() => handleSelectContact(item.player?.id)}
+                          className={`flex items-center p-3 cursor-pointer transition duration-200 ${selectedContact === item.coach?.id
+                            ? "bg-indigo-700"
+                            : "hover:bg-indigo-700"
+                            }`}
+                          onClick={() => handleSelectContact(item.coach?.id)}
                         >
                           <img
-                            src={`http://127.0.0.1:8000/uploads/player_image/${item.player?.image || "default.jpg"}`}
-                            alt={item.player?.player_name || "Player"}
+                            src={`http://127.0.0.1:8000/uploads/coach_image/${item.coach?.image || "default.jpg"}`}
+                            alt={item.coach?.name || "Coach"}
                             className="w-10 h-10 rounded-full mr-3"
                           />
-                          <span>
-                            {item.player?.player_name || "Unnamed Coach"}
-                          </span>
+                          <span>{item.coach?.name || "Unnamed Coach"}</span>
                         </div>
                       </div>
-                    ) : null}
+                    )
+
+
+                      : role === "coach" ? (
+                        <div>
+                          <div
+                            key={index}
+                            className={`flex items-center p-3 cursor-pointer transition duration-200 ${selectedContact === item.player?.id
+                              ? "bg-indigo-700"
+                              : "hover:bg-indigo-700"
+                              }`}
+                            onClick={() => handleSelectContact(item.player?.id)}
+                          >
+                            <img
+                              src={`http://127.0.0.1:8000/uploads/player_image/${item.player?.image || "default.jpg"}`}
+                              alt={item.player?.player_name || "Player"}
+                              className="w-10 h-10 rounded-full mr-3"
+                            />
+                            <span>
+                              {item.player?.player_name || "Unnamed Coach"}
+                            </span>
+                          </div>
+                        </div>
+                      ) : null}
                   </div>
                 ))
               ) : (
@@ -185,7 +183,7 @@ function ChatUi() {
               <ChatIcon className="text-white" />
             </IconButton>
 
-            
+
 
             {/* {data ? (
               <div className="flex flex-col items-center">
@@ -258,16 +256,16 @@ function ChatUi() {
                 </div>
               </div>
               <div className="flex-1 overflow-y-auto p-2 border rounded bg-gray-100">
-  {messages.map((msg, index) => (
-    <div key={index} className={`mb-2 ${msg.sender === "user" ? "text-right" : "text-left"}`}>
-      <div className={`inline-block px-3 py-2 rounded-lg max-w-xs ${msg.sender === "user" ? "bg-indigo-500 text-white" : "bg-gray-300 text-black"}`}>
-        {msg.text}
-      </div>
-      <div className="text-xs text-gray-500">{msg.created_at}</div>
-    </div>
-  ))}
-  <div ref={messagesEndRef} /> {/* 👈 Scroll anchor */}
-</div>
+                {messages.map((msg, index) => (
+                  <div key={index} className={`mb-2 ${msg.sender === "user" ? "text-right" : "text-left"}`}>
+                    <div className={`inline-block px-3 py-2 rounded-lg max-w-xs ${msg.sender === "user" ? "bg-indigo-500 text-white" : "bg-gray-300 text-black"}`}>
+                      {msg.text}
+                    </div>
+                    <div className="text-xs text-gray-500">{msg.created_at}</div>
+                  </div>
+                ))}
+                <div ref={messagesEndRef} /> {/* 👈 Scroll anchor */}
+              </div>
 
               <div className="flex mt-4">
                 <input
@@ -292,6 +290,9 @@ function ChatUi() {
           )}
         </div>
       </div>
+
+
+
     </>
   );
 }

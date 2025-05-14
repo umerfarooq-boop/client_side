@@ -3,7 +3,8 @@ import axios from "../axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { RotatingLines } from "react-loader-spinner";
+import loadingAnimation from '../loader/Animation - 1747181954747.json';
+import Lottie from 'lottie-react';
 
 function Coach_Profile() {
   const [loader, setLoader] = useState(true); // Set loader to true initially
@@ -62,16 +63,8 @@ function Coach_Profile() {
       </div>
 
       {loader ? (
-        <div className="flex flex-col items-center justify-center h-screen">
-          <RotatingLines
-            visible={true}
-            height="96"
-            width="96"
-            color="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            ariaLabel="rotating-lines-loading"
-          />
+        <div style={{ width: 200, height: 200, margin: 'auto' }}>
+          <Lottie animationData={loadingAnimation} loop={true} />
         </div>
       ) : (
         <div className="slider-container max-w-full px-10 sm:px-6 lg:px-8">
