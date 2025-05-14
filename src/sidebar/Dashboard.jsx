@@ -565,7 +565,7 @@ function Dashboard({ children }) {
                             to="#" // Add your notifications route here
                             className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out cursor-pointer text-gray-700 hover:text-indigo-600"
                           >
-                            <NotificationsNoneOutlinedIcon sx={{ fontSize: 30 }} />
+                            <Notifications sx={{ fontSize: 30 }}  coachId = {id}/>
                           </Link>
                           <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                             Notifications

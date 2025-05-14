@@ -3,7 +3,8 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { MaterialReactTable } from 'material-react-table';
 import axios from '../../axios'
 import { Link, useParams } from 'react-router-dom';
-import { RotatingLines } from 'react-loader-spinner';
+import loadingAnimation from '../../loader/Animation - 1747181954747.json';
+import Lottie from 'lottie-react';
 import { ToastContainer, toast } from 'react-toastify';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
@@ -11,7 +12,7 @@ import CheckCircleSharpIcon from '@mui/icons-material/CheckCircleSharp';
 import CancelSharpIcon from '@mui/icons-material/CancelSharp';
 function ShowAttendance() {
     const [data, setData] = useState([]); 
-    const [loading, setLoading] = useState(true);
+    const [loader, setLoading] = useState(true);
     const [toggle,setToggle] = useState(true);
     const {id} = useParams();
     const fetchData = async () => {
@@ -161,20 +162,11 @@ function ShowAttendance() {
   return (
     <Dashboard>
         <ToastContainer/>
-        {
-            loading ? (
-              <div className="flex flex-col items-center justify-center h-screen">
-            <RotatingLines 
-              visible={true}
-              height="96"
-              width="96"
-              color="grey"
-              strokeWidth="5"
-              animationDuration="0.75"
-              ariaLabel="rotating-lines-loading"
-            />
-          </div>
-            ) :
+        {loader ? (
+        <div style={{ width: 200, height: 200, margin: 'auto' }}>
+          <Lottie animationData={loadingAnimation} loop={true} />
+        </div>
+      ) :
             (
             <MaterialReactTable
                 columns={columns}

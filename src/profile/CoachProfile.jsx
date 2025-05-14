@@ -2,6 +2,8 @@ import { useFormContext } from 'react-hook-form';
 import { TextField, Grid, FormControl, InputLabel, MenuItem, Select,InputAdornment  } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from '../axios';
+// import { Animation } from '../loader/Animation - 1747181954747.json';
+import lottie from "lottie-react";
 
 const CoachProfile = () => {
     const { register,watch, formState: { errors } } = useFormContext();
@@ -252,8 +254,8 @@ const CoachProfile = () => {
                                 message: 'Charges must be a number'
                             },
                             min: {
-                                value: 1,
-                                message: 'Charges must be at least 1'
+                                value: 300,
+                                message: 'Charges must be at least 300'
                             },
                             max: {
                                 value: 1000,
