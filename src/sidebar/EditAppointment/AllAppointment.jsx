@@ -51,11 +51,20 @@ import PlayerRequest from '../../website/PlayerRequest';
 import ChangeRequest from '../ChangeRequest';
 import { AppointmentProvider } from '../../context/AppointmentContext';
 import Show_EditAppointment from './Show_EditAppointment';
+<<<<<<< HEAD
 import { RotatingLines } from 'react-loader-spinner';
 import Dashboard from '../Dashboard';
 
 function AllAppointment() {
   const [loading, setLoading] = useState(true);
+=======
+import loadingAnimation from '../../loader/Animation - 1747181954747.json';
+import Lottie from 'lottie-react';
+import Dashboard from '../Dashboard';
+
+function AllAppointment() {
+  const [loader, setLoading] = useState(true);
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
   const { id } = useParams();
 
   useEffect(() => {
@@ -68,6 +77,7 @@ function AllAppointment() {
 
   return (
     <Dashboard>
+<<<<<<< HEAD
       {loading ? (
         <div className="flex flex-col items-center justify-center h-screen">
           <RotatingLines
@@ -81,13 +91,25 @@ function AllAppointment() {
           />
         </div>
       ) : (
+=======
+    {/* {loader ? (
+        <div style={{ width: 200, height: 200, margin: 'auto' }}>
+          <Lottie animationData={loadingAnimation} loop={true} />
+        </div>
+      )  */}
+      : (
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
         <div className="p-4">
           <AppointmentProvider>
             <ChangeRequest id={id} />
           </AppointmentProvider>
           <Show_EditAppointment />
         </div>
+<<<<<<< HEAD
       )}
+=======
+      )
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
     </Dashboard>
   );
 }

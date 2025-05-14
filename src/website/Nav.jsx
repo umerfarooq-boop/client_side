@@ -1,20 +1,38 @@
 import React from 'react'
+<<<<<<< HEAD
 import { Navbar, MobileNav, Typography, Button, IconButton } from "@material-tailwind/react";
+=======
+import { Navbar, MobileNav, Typography, Button, IconButton, button } from "@material-tailwind/react";
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
 import { Link, Routes, Route } from 'react-router-dom';
 import About from './About'
 import logo from '../../public/logo.png'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
+<<<<<<< HEAD
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+=======
+
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
 import { useEffect } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import axios from '../axios'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Fade from '@mui/material/Fade';
+<<<<<<< HEAD
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+=======
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
 import SportsCricketIcon from '@mui/icons-material/SportsCricket';
 import ChatIcon from '@mui/icons-material/Chat';
 import Badge from "@mui/material/Badge";
@@ -127,6 +145,11 @@ function Nav() {
 
   const isEditPaid = localStorage.getItem('isEditPaid');
 
+<<<<<<< HEAD
+=======
+  const user_id = localStorage.getItem('user_id');
+
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
   // Ensure you store and use user_id
 
   // console.log(`Login id is: ${login_id}`);
@@ -279,9 +302,24 @@ function Nav() {
                           />
 
                         </div>
+<<<<<<< HEAD
                       ) : null
                     ))
                   }
+=======
+                      ) : role === 'admin' ? (
+                        <h1 className='text-black'>Umer</h1>
+                      ) : null
+                    ))
+                  }
+
+                  {
+                    role === 'admin' ? (
+                      <Link to={`dashboard/${user_id}`} className='text-black' >Dashboard</Link>
+                    ) : null
+                  }
+
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                   <Menu
                     id="basic-menu"
                     anchorEl={anchorEl}
@@ -401,6 +439,7 @@ function Nav() {
                         </div>
                       ) : role === 'admin' ? (
                         <div key={key}>
+<<<<<<< HEAD
                           <img
                             src={`http://127.0.0.1:8000/uploads/player_image/${index.player?.image}`}
                             className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
@@ -412,6 +451,9 @@ function Nav() {
                             onClick={handleClick}
                             loading="lazy"
                           />
+=======
+                          <h1>Umer Farooq</h1>
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                         </div>
                       ) : (
                         <div key={key}>
@@ -435,6 +477,7 @@ function Nav() {
                     open={open}
                     onClose={handleClose}
                     MenuListProps={{
+<<<<<<< HEAD
                       'aria-labelledby': 'basic-button',
                     }}
                   >
@@ -465,6 +508,114 @@ function Nav() {
                       )
                     }
                     <MenuItem><Link to={'/login'} onClick={handleClose}><LogoutIcon /> Logout</Link></MenuItem>
+=======
+                      "aria-labelledby": "basic-button",
+                      className: "py-0 font-['Oswald'] " // Apply Oswald font to the entire menu
+                    }}
+                  >
+                    {/* Profile Menu Item */}
+                    <MenuItem
+                      onClick={handleClose}
+                      className="font-medium transition-all duration-300 hover:bg-indigo-50 hover:text-indigo-600 hover:scale-[1.02] font-['Oswald']"
+                    >
+                      <AccountCircleIcon className="mr-2" />
+                      <span className=" font-['Oswald']">{role}</span>
+                    </MenuItem>
+
+                    {status === "active" ? (
+                      <div className="font-['Oswald']">
+                        <div>
+                          <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                            <Link
+                              to={`/dashboard/${login_id}`}
+                              onClick={handleClose}
+                              className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                            >
+                              <SpaceDashboardIcon className="mr-2" />
+                              Dashboard
+                            </Link>
+                          </MenuItem>
+
+                          <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                            <Link
+                              to="/invoice"
+                              className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                            >
+                              <ReceiptLongIcon className="mr-2" />
+                              Invoice
+                            </Link>
+                          </MenuItem>
+
+                          <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                            <Link
+                              to={`/player_emergency/${coach_id}`}
+                              className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                            >
+                              <ContactEmergencyIcon className="mr-2" />
+                              Emergency
+                            </Link>
+                          </MenuItem>
+                        </div>
+
+                        {role === "player" && (
+                          <div>
+                            <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                              <Link
+                                to={`/PlayerRequest/${player_id}/${role}`}
+                                onClick={handleClose}
+                                className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                              >
+                                <EditCalendarIcon className="mr-2" />
+                                Booking Request
+                              </Link>
+                            </MenuItem>
+                            <MenuItem className="transition-all duration-200 hover:bg-indigo-50 hover:scale-[1.02]">
+                              <Link
+                                to={`/player_booked_equipment/${player_id}`}
+                                onClick={handleClose}
+                                className="flex items-center w-full hover:text-indigo-600 cursor-pointer font-['Oswald']"
+                              >
+                                <EventAvailableIcon className="mr-2" />
+                                Booked Request
+                              </Link>
+                            </MenuItem>
+                            <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                              <Link
+                                to={"/equipment_request"}
+                                onClick={handleClose}
+                                className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                              >
+                                <BookmarkAddedIcon className="mr-2" />
+                                Equipment Request
+                              </Link>
+                            </MenuItem>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <MenuItem className="transition-all duration-300 hover:bg-gray-100 font-['Oswald']">
+                        <Link
+                          to={""}
+                          onClick={handleClose}
+                          className="flex items-center w-full text-gray-500 font-['Oswald']"
+                        >
+                          <RemoveCircleIcon className="mr-2" />
+                          Not Active
+                        </Link>
+                      </MenuItem>
+                    )}
+
+                    <MenuItem className="transition-all duration-300 hover:bg-red-50 hover:scale-[1.02] font-['Oswald']">
+                      <Link
+                        to={"/login"}
+                        onClick={handleClose}
+                        className="flex items-center w-full hover:text-red-600 transition-colors duration-300 font-['Oswald']"
+                      >
+                        <LogoutIcon className="mr-2" />
+                        Logout
+                      </Link>
+                    </MenuItem>
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                   </Menu>
                 </div>
               ) : (
@@ -480,7 +631,11 @@ function Nav() {
             }
           </div>
         </MobileNav>
+<<<<<<< HEAD
       </Navbar>
+=======
+      </Navbar >
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
 
 
 

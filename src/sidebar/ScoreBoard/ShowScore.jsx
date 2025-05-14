@@ -5,10 +5,18 @@ import axios from '../../axios'
 import { useParams } from 'react-router-dom';
 import { RotatingLines } from 'react-loader-spinner';
 import { ToastContainer, toast } from 'react-toastify';
+<<<<<<< HEAD
 
 function ShowScore() {
   const [data, setData] = useState([]); 
   const [loading, setLoading] = useState(true);
+=======
+import loadingAnimation from '../../loader/Animation - 1747181954747.json';
+import Lottie from 'lottie-react';
+function ShowScore() {
+  const [data, setData] = useState([]);
+  const [loader, setLoading] = useState(true);
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
   const { id } = useParams();
 
   const fetchData = async () => {
@@ -53,11 +61,19 @@ function ShowScore() {
         size: 150,
       },
     ];
+<<<<<<< HEAD
   
     // Check if there's data to inspect player_type
     if (data.length > 0) {
       const playerType = data[0].player_type;
   
+=======
+
+    // Check if there's data to inspect player_type
+    if (data.length > 0) {
+      const playerType = data[0].player_type;
+
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
       if (playerType === 'bowler') {
         baseColumns.push(
           {
@@ -109,14 +125,22 @@ function ShowScore() {
         );
       }
     }
+<<<<<<< HEAD
   
     return baseColumns;
   }, [data]);
   
+=======
+
+    return baseColumns;
+  }, [data]);
+
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
 
   return (
     <Dashboard>
       <ToastContainer />
+<<<<<<< HEAD
       {
         loading ? (
           <div className="flex flex-col items-center justify-center h-screen">
@@ -142,6 +166,25 @@ function ShowScore() {
             }}
           />
         )
+=======
+      <br />
+      {loader ? (
+        <div style={{ width: 200, height: 200, margin: 'auto' }}>
+          <Lottie animationData={loadingAnimation} loop={true} />
+        </div>
+      ) : (
+        <MaterialReactTable
+          columns={columns}
+          data={data}
+          muiTableBodyCellProps={{
+            style: { wordWrap: 'break-word', width: 'auto' },
+          }}
+          muiTableContainerProps={{
+            style: { overflowX: 'auto' },
+          }}
+        />
+      )
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
       }
     </Dashboard>
   );

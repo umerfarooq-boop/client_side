@@ -47,6 +47,7 @@ function PlayerRequest() {
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
+<<<<<<< HEAD
   const [PaymentStatus,setPaymentStatus] = useState([]);
   const getData = async () => {
     try {
@@ -68,6 +69,25 @@ function PlayerRequest() {
   
   useEffect(() => {
     
+=======
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await axios.get(`/SinglePlayerRequest/${player_id}/${role}`);
+        if (response.data?.SinglePlayerRequest) {
+          const scheduleData = Array.isArray(response.data.SinglePlayerRequest)
+            ? response.data.SinglePlayerRequest
+            : [response.data.SinglePlayerRequest];
+          setData(scheduleData);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
     getData();
   }, [player_id, role]);
 
@@ -135,6 +155,7 @@ function PlayerRequest() {
       size: 5,
       Cell: ({ row }) => {
         const status = row.original.status;
+<<<<<<< HEAD
         const paymentStatus = row.original.payment_status; // Get it per row
         const playerId = row.original.id; // Assuming this is the player ID
     
@@ -205,6 +226,86 @@ function PlayerRequest() {
       },
     }
     
+=======
+        return (
+          <div style={{ display: 'flex', gap: '10px', marginRight: '60px' }}>
+          {/* Processing Status */}
+          {status === 'processing' && isPaid === 'false' && (
+            <div className="flex flex-wrap gap-2 items-center">
+              <button
+                className="bg-yellow-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300"
+              >
+                Processing
+              </button>
+              <Link
+                to={`/checkoutform/${row?.original?.player_id}`}
+                className="bg-yellow-600 text-black font-semibold py-1.5 px-4 rounded shadow hover:bg-orange-500 transition duration-300"
+              >
+                First
+              </Link>
+            </div>
+          )}
+          {status === 'processing' && isPaid === 'true' && (
+            <div className="flex flex-wrap gap-2 items-center">
+              <button
+                className="bg-yellow-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-lime-500 transition duration-300"
+              >
+                Processing
+              </button>
+              
+            </div>
+          )}
+        
+          {/* Booked and Not Paid */}
+          {status === 'booked' && isPaid === 'false' && (
+            <div className="flex flex-wrap gap-2 items-center">
+              <button
+                className="bg-blue-400 text-black font-semibold py-1 px-2 rounded shadow hover:bg-blue-500 transition duration-300"
+              >
+                Booked (Unpaid)
+              </button>
+              <Link
+                to={`/checkoutform/${row?.original?.player_id}`}
+                className="bg-yellow-600 text-black font-semibold py-1.5 px-4 rounded shadow hover:bg-orange-500 transition duration-300"
+              >
+                First
+              </Link>
+            </div>
+          )}
+        
+          {/* Booked and Paid */}
+          {status === 'booked' && isPaid === 'true' && (
+            <div className="flex flex-wrap gap-2 items-center">
+              <button
+                className="bg-green-600 text-black font-semibold py-1 px-2 rounded shadow hover:bg-green-500 transition duration-300"
+              >
+                Booked (Paid)
+              </button>
+              <Link
+                to={`/editplayer_appointment/${row?.original?.id}`}
+                className="bg-yellow-600 text-black font-semibold py-1.5 px-4 rounded shadow hover:bg-orange-500 transition duration-300"
+              >
+                Edit Appointment
+              </Link>
+            </div>
+          )}
+        
+          {/* Rejected Status */}
+          {status === 'reject' && isPaid === 'true' && (
+            <button
+              className="bg-red-600 text-black font-semibold py-1 px-5 rounded shadow hover:bg-red-500 transition duration-300"
+            >
+              Rejected
+            </button>
+          )}
+        </div>
+        
+
+
+        );
+      },
+    },
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
   ], []);
 
   return (

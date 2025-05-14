@@ -6,6 +6,11 @@ import { useAppointments } from "../context/AppointmentContext";
 import axios from "../axios";
 import { RotatingLines } from "react-loader-spinner";
 import Chat from "../Chat/Chat";
+<<<<<<< HEAD
+=======
+import loadingAnimation from '../loader/Animation - 1747181954747.json';
+import Lottie from 'lottie-react';
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
 
 const localizer = momentLocalizer(moment);
 
@@ -14,7 +19,11 @@ function MyCalendar({ id }) {   // ✅ receive id here
   const [category, setCategory] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [view, setView] = useState("month");
+<<<<<<< HEAD
   const [loading, setLoading] = useState(false);
+=======
+  const [loader, setLoading] = useState(false);
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
 
   const player_id = localStorage.getItem('player_id');
   const coach_record = localStorage.getItem('coach_record');
@@ -46,6 +55,7 @@ function MyCalendar({ id }) {   // ✅ receive id here
 
   return (
     <div style={{ height: "80vh", width: "100%", padding: "40px" }}>
+<<<<<<< HEAD
       {
         loading ? (
           <div className="flex items-center justify-center" style={{ height: "100%" }}>
@@ -111,6 +121,64 @@ function MyCalendar({ id }) {   // ✅ receive id here
 
           </div>
         )
+=======
+      {loader ? (
+        <div style={{ width: 200, height: 200, margin: 'auto' }}>
+          <Lottie animationData={loadingAnimation} loop={true} />
+        </div>
+      ) : (
+        <div>
+          <Calendar
+            localizer={localizer}
+            events={appointments}
+            startAccessor="start"
+            endAccessor="end"
+            views={["month", "week", "agenda"]}
+            titleAccessor="title"
+            style={{ height: 500 }}
+            onNavigate={(newDate) => setSelectedDate(newDate)}
+            onDrillDown={(date, view) => {
+              if (view === "agenda") return;
+              setView("agenda");
+              setSelectedDate(date);
+            }}
+            date={selectedDate}
+            view={view}
+            onView={(newView) => setView(newView)}
+            components={{
+              agenda: {
+                event: ({ event }) => (
+                  <div>
+                    <strong>{event.title}</strong>
+                    <div>Player: {event.player_name}</div>
+                  </div>
+                ),
+              },
+            }}
+            eventPropGetter={(event) => {
+              let backgroundColor;
+              if (event.status === "processing") {
+                backgroundColor = "yellow";
+              } else if (event.status === "booked") {
+                backgroundColor = "#22c55e";
+              } else if (event.status === "reject") {
+                backgroundColor = "red";
+              }
+
+              return {
+                style: {
+                  backgroundColor,
+                  color: "black",
+                },
+              };
+            }}
+          />
+
+
+
+        </div>
+      )
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
       }
     </div>
   );

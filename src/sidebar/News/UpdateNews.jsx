@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import React, { useEffect, useState } from "react";
 // import Dashboard from "../Dashboard";
 // import { useParams } from "react-router-dom";
@@ -282,11 +283,28 @@ function Updatenews() {
   const { id } = useParams();
   const navigate = useNavigate(); // Initialize navigate from react-router-dom
 
+=======
+import React, { useEffect, useState } from "react";
+import Dashboard from "../Dashboard";
+import { useParams } from "react-router-dom";
+import axios from "../../axios";
+import { ToastContainer, toast } from "react-toastify";
+import { useForm } from 'react-hook-form';
+import 'ckeditor5/ckeditor5.css';
+import loadingAnimation from '../../loader/Animation - 1747181954747.json';
+import Lottie from 'lottie-react';
+import { useNavigate } from "react-router-dom";
+
+function Updatenews() {
+  const [loader,setLoading] = useState(false);
+  const { id } = useParams();
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
   const {
     handleSubmit,
     reset,
     watch,
     register,
+<<<<<<< HEAD
     setValue,
     formState: { errors },
   } = useForm({ mode: "onTouched" });
@@ -294,12 +312,20 @@ function Updatenews() {
   const location = localStorage.getItem("location") || "";
   const [post, setPost] = useState([]);
 
+=======
+    formState: { errors },
+  } = useForm();
+  const navigate = useNavigate();
+  const location = localStorage.getItem("location" || "");
+  const [post, setPost] = useState([]);
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
   useEffect(() => {
     const getPost = async () => {
       try {
         setLoading(true);
         const response = await axios.get(`/posts/${id}`);
         setPost(response.data.post);
+<<<<<<< HEAD
         const postData = response.data.post[0];
         setValue("post_title", postData.post_title);
         setValue("post_name", postData.post_name);
@@ -317,19 +343,36 @@ function Updatenews() {
     getPost();
   }, [id, location, setValue]);
 
+=======
+        console.log(response.data.post);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPost();
+  }, [id]);
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
   const updatePost = async (data) => {
     try {
       const formData = new FormData();
       for (let key in data) {
+<<<<<<< HEAD
         if (key !== "post_image") {
           formData.append(key, data[key]);
         }
       }
       if (data.post_image && data.post_image[0]) {
+=======
+        formData.append(key, data[key]);
+      }
+      if (data.post_image[0]) {
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
         formData.append("post_image", data.post_image[0]);
       }
 
       await axios.post(`/updatePost/${id}`, formData, {
+<<<<<<< HEAD
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -339,6 +382,16 @@ function Updatenews() {
       navigate(-1); // -1 goes back to the previous page in the browser history
 
       reset(); // Reset the form state
+=======
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      toast.success("Post Updated Successfully");
+      reset();
+      setTimeout(() => navigate(-1), 1000);
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
     } catch (error) {
       console.error("Error updating post:", error);
       toast.error("Failed to Update Post");
@@ -352,6 +405,7 @@ function Updatenews() {
     }
   };
 
+<<<<<<< HEAD
   // Custom validator to ensure input is not just whitespace
   const notEmpty = value => value?.trim() !== '' || "This field cannot be empty";
 
@@ -475,6 +529,199 @@ function Updatenews() {
         </form>
       )}
     </Dashboard>
+=======
+  return (
+    <>
+      <>
+        <Dashboard>
+          <ToastContainer />
+          {/* <form onSubmit={handleSubmit(addPost)} className="flex flex-col gap-6"> */}
+         {loader ? (
+        <div style={{ width: 200, height: 200, margin: 'auto' }}>
+          <Lottie animationData={loadingAnimation} loop={true} />
+        </div>
+      ) : (
+              <div>
+                          {post.map((index, key) => (
+            <form
+              className="flex flex-col gap-6 px-6 py-4"
+              onSubmit={handleSubmit(updatePost)}
+              key={index}
+            >
+             
+              <div className="md:flex md:space-x-4">
+                {/* Post Title */}
+                <div className="md:w-1/2 px-3 mb-6 md:mb-0">
+                  <label
+                    className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                    htmlFor="post_title"
+                  >
+                    Post Title
+                  </label>
+                  <input
+                    type="text"
+                    id="post_title"
+                    placeholder="Post Title"
+                    defaultValue={index.post_title}
+                    {...register("post_title", {
+                      required: "Post Title is required",
+                    })}
+                    className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
+                      errors.post_title
+                        ? "border-red-500"
+                        : "border-grey-lighter"
+                    } rounded py-3 px-4 mb-3`}
+                  />
+                  {errors.post_title && (
+                    <p className="text-red text-xs italic">
+                      Please fill out this field.
+                    </p>
+                  )}
+                </div>
+
+                {/* Post Name */}
+                <div className="md:w-1/2 px-3">
+                  <label
+                    className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                    htmlFor="post_name"
+                  >
+                    Post Name
+                  </label>
+                  <input
+                    type="text"
+                    id="post_name"
+                    placeholder="Post Name"
+                    defaultValue={index.post_name}
+                    {...register("post_name", {
+                      required: "Post Name is required",
+                    })}
+                    className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
+                      errors.post_name
+                        ? "border-red-500"
+                        : "border-grey-lighter"
+                    } rounded py-3 px-4`}
+                  />
+                </div>
+              </div>
+
+              <div className="-mx-3 md:flex mb-6">
+                {/* Post Description */}
+                <div className="md:w-full px-3 mb-6 md:mb-0">
+                <label
+                  className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                  htmlFor="post_description"
+                >
+                  Post Description
+                </label>
+                <textarea
+                  id="post_description"
+                  placeholder="Post Description"
+                  defaultValue={index.post_description}
+                  {...register('post_description', { required: "Post Description is required" })}
+                  className={`appearance-none block w-full h-40 bg-grey-lighter text-grey-darker border ${
+                    errors.post_description
+                      ? "border-red-500"
+                      : "border-grey-lighter"
+                  } rounded py-3 px-4 mb-3`}
+                />
+              </div>
+
+
+
+                {/* Post Location */}
+                {/* <div className="md:w-1/2 px-3"> */}
+                {/* <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor="post_location">
+          Post Location
+        </label> */}
+                <input
+                  type="hidden"
+                  defaultValue={location}
+                  id="post_location"
+                  placeholder="Post Location"
+                  {...register("post_location")}
+                  className={`appearance-none block w-full bg-grey-lighter text-grey-darker border ${
+                    errors.post_location
+                      ? "border-red-500"
+                      : "border-grey-lighter"
+                  } rounded py-3 px-4`}
+                />
+              </div>
+              {/* </div> */}
+
+              <div className="-mx-3 md:flex mb-6">
+                {/* Post Image */}
+                <div className="md:w-1/2 px-3 mb-6 md:mb-0">
+                  <label
+                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                    htmlFor="image"
+                  >
+                    Post Image
+                  </label>
+                  <input
+                    type="file"
+                    id="image"
+                    {...register("post_image")}
+                    onChange={handleImageChange}
+                    className="block w-full text-gray-700 bg-white border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+                  />
+                </div>
+
+
+                {/* Post Status */}
+                <div className="md:w-1/2 px-3">
+                  <label
+                    className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                    htmlFor="post_status"
+                  >
+                    Post Status
+                  </label>
+                  <select
+                    id="post_status"
+                    defaultValue={index.post_status}
+                    {...register("post_status", {
+                      required: "Post Status is required",
+                    })}
+                    className={`block appearance-none w-full bg-grey-lighter border ${
+                      errors.post_status
+                        ? "border-red-500"
+                        : "border-grey-lighter"
+                    } text-grey-darker py-3 px-4 pr-8 rounded`}
+                  >
+                    <option selected disabled>
+                      Select Status
+                    </option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Coach ID (hidden) */}
+              <input
+                type="hidden"
+                {...register("coach_id")}
+                value={index.coach_id}
+              />
+              {/* <input type="text"  value={index.coach_id} /> */}
+
+              {/* Submit Button */}
+              <div className="flex justify-start mt-6">
+              <button
+                type="submit"
+                 className="bg-blue-700 text-white py-3 px-6 rounded hover:bg-blue-800 transition duration-200"
+              >
+                Submit
+              </button>
+              </div>
+            </form>
+          ))}
+              </div>
+            )
+          }
+        </Dashboard>
+      </>
+    </>
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
   );
 }
 
