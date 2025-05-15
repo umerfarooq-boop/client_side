@@ -85,6 +85,40 @@ const CheckoutForm = () => {
     };
     
     
+<<<<<<< HEAD
+    const [data,setData] = useState([]);
+    const email = localStorage.getItem('email');
+    const player_id = localStorage.getItem('player_id');
+    const isEditPaid = localStorage.getItem('isEditPaid');
+    const isPaid = localStorage.getItem('isPaid');
+    useEffect(() => {
+        const GetPlayerBooking = async () => {
+            try {
+                if (isEditPaid === 'false') {
+                    const response = await axios.get(`/get_edit_appointment/${player_id}`);
+                    if (response.data && Array.isArray(response.data.editappointment)) {
+                        setData(response.data.editappointment);
+                    } else if (response.data && response.data.editappointment) {
+                        setData([response.data.editappointment]);
+                    }
+                } else if (isPaid === 'false') {
+                    const response = await axios.get(`/checkout_form/${player_id}`);
+                    if (response.data && Array.isArray(response.data.player_booking)) {
+                        setData(response.data.player_booking);
+                    } else if (response.data && response.data.player_booking) {
+                        setData([response.data.player_booking]);
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching booking data:", error);
+            }
+        };
+    
+        GetPlayerBooking();
+    }, [player_id, isEditPaid, isPaid]);
+
+
+=======
     
     const [data,setData] = useState([]);
     const email = localStorage.getItem('email');
@@ -100,6 +134,7 @@ const CheckoutForm = () => {
         }
         GetPlayerBooking();
     },[player_id]);
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
 
     const formatTime = (time) => {
         const [hours, minutes] = time.split(":").map(Number);
@@ -109,6 +144,25 @@ const CheckoutForm = () => {
         return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).replace(":00", "");
     };
 
+<<<<<<< HEAD
+    const getCountDays = (newToDate, originalToDate) => {
+        const newDate = new Date(newToDate);
+        const oldDate = new Date(originalToDate);
+      
+        if (isNaN(newDate) || isNaN(oldDate)) {
+          console.warn("Invalid date(s):", newToDate, originalToDate);
+          return 0;
+        }
+      
+        const diffTime = newDate - oldDate;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      
+        console.log(`DiffDays from ${originalToDate} to ${newToDate} = ${diffDays}`);
+        return diffDays > 0 ? diffDays : 0;
+      };
+      
+      
+=======
     const getDayCount = (from, to) => {
         const start = new Date(from);
         const end = new Date(to);
@@ -117,6 +171,7 @@ const CheckoutForm = () => {
         return diffDays + 1; // always count at least 1 day
       };
       
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
 
     const handleFieldChange = (fieldName, value) => {
         // Set the field's updated value in the form
@@ -237,12 +292,27 @@ const CheckoutForm = () => {
                             <TextField 
                                 variant="outlined" 
                                 size="small" 
+<<<<<<< HEAD
+                                {...register('from_date')} 
+                                label="From Date" 
+                                defaultValue={index.from_date} 
+                                type="date" 
+                                InputProps={{ readOnly: true }} 
+                            />
+                            <TextField 
+                                variant="outlined" 
+                                size="small" 
+=======
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                                 {...register('to_date')} 
                                 label="To Date" 
                                 defaultValue={index.to_date} 
                                 type="date" 
                                 InputProps={{ readOnly: true }} 
                             />
+<<<<<<< HEAD
+                            
+=======
                             <TextField 
                                 variant="outlined" 
                                 size="small" 
@@ -252,6 +322,7 @@ const CheckoutForm = () => {
                                 type="date" 
                                 InputProps={{ readOnly: true }} 
                             />
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                             </div>
                                     </div>
                                 ))
@@ -299,9 +370,13 @@ const CheckoutForm = () => {
                                     <div className="flex items-center justify-between mt-3">
                                     <span className="flex items-center gap-2 font-semibold">📅 Schedule:</span>
                                     <span className="text-lg font-medium">
+<<<<<<< HEAD
+                                        {index.count_days}
+=======
                                         {index.to_date && index.from_date 
                                         ? `${getDayCount(index.from_date, index.to_date)} days`
                                         : "N/A"}
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                                     </span>
                                     </div>
 
@@ -322,16 +397,38 @@ const CheckoutForm = () => {
                                     <div className="flex items-center justify-between border-t border-dashed pt-4 mt-4">
                                     <span className="flex items-center gap-2 text-lg font-bold text-yellow-600">💵 Total Amount:</span>
                                     <span className="text-xl font-extrabold text-black">
+<<<<<<< HEAD
+                                        {index.count_days && index.coach?.per_hour_charges
+                                            ? `Rs ${index.count_days * index.coach.per_hour_charges}`
+                                            : "N/A"}
+                                        </span>
+
+=======
                                         {index.to_date && index.from_date && index.coach?.per_hour_charges
                                         ? `Rs ${getDayCount(index.from_date, index.to_date) * index.coach.per_hour_charges}`
                                         : "N/A"}
                                     </span>
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                                     </div>
                                     {/* // Hidden fields */}
 
                                     <input type="hidden" {...register('per_hour_charges')} value={index.coach?.per_hour_charges} />
                                     
                                     <div className="hidden">
+<<<<<<< HEAD
+                                        <input
+                                            type="number" // Changed type to "number" for numeric validation
+                                            {...register("total_charges")}
+                                            value={
+                                                
+                                                     index.count_days * index.coach.per_hour_charges // Ensure numeric value
+                                                    || 0 // Default to 0 if conditions are not met
+                                            }
+                                            readOnly // Optional: Make the field read-only if it shouldn't be edited by the user
+                                        />
+                                    </div>
+
+=======
                                     <TextField
                                         variant="outlined"
                                         size="small"
@@ -351,6 +448,7 @@ const CheckoutForm = () => {
                                     />
 
                                     </div>
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
 
 
 

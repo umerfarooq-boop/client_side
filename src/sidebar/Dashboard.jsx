@@ -8,8 +8,15 @@ import {
 } from "@material-tailwind/react";
 // import About from './About'
 import Menu from "@mui/material/Menu";
+<<<<<<< HEAD
 import MenuItem from "@mui/material/MenuItem";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+=======
+import SportsCricketIcon from "@mui/material/MenuItem";
+import MenuItem from "@mui/material/MenuItem";
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
 import LogoutIcon from "@mui/icons-material/Logout";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -44,8 +51,13 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import axios from "../axios";
+<<<<<<< HEAD
+import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+=======
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
 import ChatIcon from '@mui/icons-material/Chat';
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 import _logo from '../../public/StepContent/ali.jpg'
@@ -182,6 +194,11 @@ function Dashboard({ children }) {
     login_id = localStorage.getItem("parent_id");
   }
 
+<<<<<<< HEAD
+=======
+  const user_id = localStorage.getItem('user_id');
+
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
   // console.log(`Login id is: ${login_id}`);
   const popupState = usePopupState({ variant: "popover", popupId: "demoMenu" });
 
@@ -609,11 +626,19 @@ function Dashboard({ children }) {
                             to="#" // Add your notifications route here
                             className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out cursor-pointer text-gray-700 hover:text-indigo-600"
                           >
-                            <Notifications sx={{ fontSize: 30 }}  coachId = {id}/>
+<<<<<<< HEAD
+                            <Notifications coachId={id}/>
                           </Link>
                           <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                             Notifications
                             <span className="absolute bottom-full left-1/2 w-2 h-2 bg-gray-800 transform -translate-x-1/2 -translate-y-1/2 rotate-45"></span>
+=======
+                            <Notifications sx={{ fontSize: 30 }}  coachId = {id}/>
+                          </Link>
+                          <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                            Notifications
+                            <span className="absolute bottom-full left-1/2 w-2 h-2 bg-indigo-600 transform -translate-x-1/2 translate-y-1/2 rotate-45"></span>
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                           </span>
                         </div>
                       )}
@@ -628,7 +653,11 @@ function Dashboard({ children }) {
                         </Link>
                         <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                           Chats
+<<<<<<< HEAD
                           <span className="absolute bottom-full left-1/2 w-2 h-2 bg-gray-800 transform -translate-x-1/2 -translate-y-1/2 rotate-45"></span>
+=======
+                          <span className="absolute bottom-full left-1/2 w-2 h-2 bg-indigo-600 transform -translate-x-1/2 translate-y-1/2 rotate-45"></span>
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                         </span>
                       </div>
 
@@ -647,29 +676,15 @@ function Dashboard({ children }) {
                         />
                         <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                           Profile
+<<<<<<< HEAD
                           <span className="absolute bottom-full left-1/2 w-2 h-2 bg-gray-800 transform -translate-x-1/2 -translate-y-1/2 rotate-45"></span>
+=======
+                          <span className="absolute bottom-full left-1/2 w-2 h-2 bg-indigo-600 transform -translate-x-1/2 translate-y-1/2 rotate-45"></span>
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                         </span>
                       </div>
                     </div>
 
-                  ) : role === "admin" ? (
-                    <div key={key}>
-                      <img
-                        src={
-                          index.coach?.image
-                            ? `http://127.0.0.1:8000/uploads/coach_image/${index.coach?.image}`
-                            : "/default-avatar.png"
-                        }
-                        className="hidden lg:block w-10 h-10 rounded-full border-2 border-indigo-450 shadow-2xl shadow-indigo-900 cursor-pointer object-cover"
-                        alt="Thumbnail"
-                        id="basic-button"
-                        aria-controls={open ? "basic-menu" : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? "true" : undefined}
-                        onClick={handleClick}
-                        loading="lazy"
-                      />
-                    </div>
                   ) : role === "coach" ? (
                     <div key={key} className="hidden sm:flex items-center justify-end gap-4 p-2 text-sm">
                       {/* Notifications block (only for coach) */}
@@ -679,7 +694,11 @@ function Dashboard({ children }) {
                             to="#"
                             className="scale-105 hover:scale-110 transform transition duration-200 ease-in-out cursor-pointer text-gray-700 hover:text-indigo-600"
                           >
+<<<<<<< HEAD
+                            <Notifications coachId={id} />
+=======
                             <Notifications fontSize="small" coachId={id} />
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                           </Link>
                           <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                             Notifications
@@ -688,6 +707,11 @@ function Dashboard({ children }) {
                         </div>
                       )}
 
+<<<<<<< HEAD
+                      
+
+=======
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                       {/* Chat icon link */}
                       <div className="relative group flex-shrink-0">
                         <Link
@@ -721,6 +745,23 @@ function Dashboard({ children }) {
 
                   ) : null
                 )}
+
+<<<<<<< HEAD
+                
+{
+  role === 'admin' ? (
+     <h1 className="text-black">Umer</h1>
+  ):null
+}
+                
+=======
+                {
+                  role === 'admin' ? (
+                    <Link to={'/login'} className='text-black' >Logout</Link>
+                  ) : null
+                }
+
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                 <Menu
                   id="basic-menu"
                   anchorEl={anchorEl}
@@ -833,7 +874,11 @@ function Dashboard({ children }) {
                     <div key={key}>
                       <div className="block sm:block">
                         {role === "player" ? (
+<<<<<<< HEAD
+                          <Notifications coachId={player_id} />
+=======
                           <Notifications coachId={id} />
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                         ) : null}
                       </div>
                       <img
@@ -853,7 +898,11 @@ function Dashboard({ children }) {
                         {/* Notifications - Visible on mobile and larger screens */}
                         <div className="block sm:block">
                           {role === "coach" ? (
+<<<<<<< HEAD
+                            <Notifications coachId={coach_id} />
+=======
                             <Notifications coachId={id} />
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                           ) : null}
                         </div>
 
@@ -898,6 +947,7 @@ function Dashboard({ children }) {
                   onClose={handleClose}
                   MenuListProps={{
                     "aria-labelledby": "basic-button",
+<<<<<<< HEAD
                   }}
                 >
                   <MenuItem onClick={handleClose} className="font-medium">
@@ -925,10 +975,55 @@ function Dashboard({ children }) {
                         <MenuItem>
                           <Link to={`/player_emergency/${coach_id}`} >
                             <ContactEmergencyIcon />
+=======
+                    className: "py-0 font-['Oswald'] " // Apply Oswald font to the entire menu
+                  }}
+                >
+                  {/* Profile Menu Item */}
+                  <MenuItem
+                    onClick={handleClose}
+                    className="font-medium transition-all duration-300 hover:bg-indigo-50 hover:text-indigo-600 hover:scale-[1.02] font-['Oswald']"
+                  >
+                    <AccountCircleIcon className="mr-2" />
+                    <span className=" font-['Oswald']">{role}</span>
+                  </MenuItem>
+
+                  {status === "active" ? (
+                    <div className="font-['Oswald']">
+                      <div>
+                        <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                          <Link
+                            to={`/dashboard/${login_id}`}
+                            onClick={handleClose}
+                            className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                          >
+                            <SpaceDashboardIcon className="mr-2" />
+                            Dashboard
+                          </Link>
+                        </MenuItem>
+
+                        <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                          <Link
+                            to="/invoice"
+                            className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                          >
+                            <ReceiptLongIcon className="mr-2" />
+                            Invoice
+                          </Link>
+                        </MenuItem>
+
+                        <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                          <Link
+                            to={`/player_emergency/${coach_id}`}
+                            className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                          >
+                            <ContactEmergencyIcon className="mr-2" />
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                             Emergency
                           </Link>
                         </MenuItem>
                       </div>
+<<<<<<< HEAD
                       {role === "player" ? (
                         <div>
                           <MenuItem>
@@ -946,24 +1041,80 @@ function Dashboard({ children }) {
                               onClick={handleClose}
                             >
                               <BookmarkAddedIcon />
+=======
+
+                      {role === "player" && (
+                        <div>
+                          <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                            <Link
+                              to={`/PlayerRequest/${player_id}/${role}`}
+                              onClick={handleClose}
+                              className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                            >
+                              <EditCalendarIcon className="mr-2" />
+                              Booking Request
+                            </Link>
+                          </MenuItem>
+                          <MenuItem className="transition-all duration-200 hover:bg-indigo-50 hover:scale-[1.02]">
+                            <Link
+                              to={`/player_booked_equipment/${player_id}`}
+                              onClick={handleClose}
+                              className="flex items-center w-full hover:text-indigo-600 cursor-pointer font-['Oswald']"
+                            >
+                              <EventAvailableIcon className="mr-2" />
+                              Booked Request
+                            </Link>
+                          </MenuItem>
+                          <MenuItem className="transition-all duration-300 hover:bg-indigo-50 hover:scale-[1.02]">
+                            <Link
+                              to={"/equipment_request"}
+                              onClick={handleClose}
+                              className="flex items-center w-full hover:text-indigo-600 transition-colors duration-300 font-['Oswald']"
+                            >
+                              <BookmarkAddedIcon className="mr-2" />
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                               Equipment Request
                             </Link>
                           </MenuItem>
                         </div>
+<<<<<<< HEAD
                       ) : null}
                     </div>
                   ) : (
                     <MenuItem>
                       <Link to={""} onClick={handleClose}>
                         <RemoveCircleIcon />
+=======
+                      )}
+                    </div>
+                  ) : (
+                    <MenuItem className="transition-all duration-300 hover:bg-gray-100 font-['Oswald']">
+                      <Link
+                        to={""}
+                        onClick={handleClose}
+                        className="flex items-center w-full text-gray-500 font-['Oswald']"
+                      >
+                        <RemoveCircleIcon className="mr-2" />
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                         Not Active
                       </Link>
                     </MenuItem>
                   )}
 
+<<<<<<< HEAD
                   <MenuItem>
                     <Link to={"/login"} onClick={handleClose}>
                       <LogoutIcon /> Logout
+=======
+                  <MenuItem className="transition-all duration-300 hover:bg-red-50 hover:scale-[1.02] font-['Oswald']">
+                    <Link
+                      to={"/login"}
+                      onClick={handleClose}
+                      className="flex items-center w-full hover:text-red-600 transition-colors duration-300 font-['Oswald']"
+                    >
+                      <LogoutIcon className="mr-2" />
+                      Logout
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
                     </Link>
                   </MenuItem>
                 </Menu>

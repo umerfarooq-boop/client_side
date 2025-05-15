@@ -17,7 +17,11 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+<<<<<<< HEAD
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+=======
 
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
 import axios from "../axios";
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -51,6 +55,16 @@ const Notifications = ({ coachId }) => {
             );
           }
         } else if (role === 'player') {
+<<<<<<< HEAD
+          response = await axios.get(`/getNotificationsPlayer/${coachId}`);
+          if (response && response.data.status) {
+            setPlayerNotifications(response.data.playernotifications);
+            setPlayerUnreadCount( // ✅ Use correct setter
+              response.data.playernotifications.filter((n) => !n.is_read).length
+            );
+          }
+        }
+=======
   response = await axios.get(`/getNotificationsPlayer/${playerId}`); // ✅ Fix here
   if (response && response.data.status) {
     setPlayerNotifications(response.data.playernotifications);
@@ -60,6 +74,7 @@ const Notifications = ({ coachId }) => {
   }
 }
 
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
       } catch (error) {
         console.error("Error fetching notifications:", error);
       }
@@ -123,7 +138,11 @@ const Notifications = ({ coachId }) => {
   color="inherit"
 >
   <Badge badgeContent={role === 'coach' ? unreadCount : PlayerunreadCount} color="error">
+<<<<<<< HEAD
+    <NotificationsNoneOutlinedIcon sx={{ fontSize: 20 }} className="text-black"/>
+=======
     <NotificationsIcon className="text-black"/>
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
   </Badge>
 </IconButton>
 

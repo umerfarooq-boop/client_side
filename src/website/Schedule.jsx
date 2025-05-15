@@ -111,12 +111,20 @@ function Schedule() {
     <div>
       <AppointmentProvider id={id}>
         <Nav />
+<<<<<<< HEAD
         <div className="text-center mt-16 mb-5">
+=======
+        <div className="text-center mt-12 mb-2">
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
           <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
             Schedule<span className="text-indigo-600">&nbsp;Booking</span>
           </h3>
         </div>
+<<<<<<< HEAD
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 px-auto py-auto m-auto">
+=======
+        <div className="mb-2 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 px-auto py-auto m-auto">
+>>>>>>> 6ef1bc75752e89bb098cea7186676fa760692d1d
           <div className="p-4">
             <DirectionMap id={id} />
           </div>
