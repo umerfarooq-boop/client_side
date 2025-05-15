@@ -3,7 +3,8 @@ import axios from "../../axios";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
 import Dashboard from "../Dashboard";
-import { RotatingLines } from 'react-loader-spinner';
+import loadingAnimation from '../../loader/Animation - 1747181954747.json';
+import Lottie from 'lottie-react';
 import { MaterialReactTable } from 'material-react-table';
 
 const AddScore = () => {
@@ -211,7 +212,7 @@ const AddScore = () => {
 
   // Player Score
   const [data, setData] = useState([]); 
-  const [loading, setLoading] = useState(true);
+  const [loader, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
@@ -486,34 +487,39 @@ const AddScore = () => {
       </div>
 
       {/* Player Score */}
-      <div className="mt-10">
-      {
-        loading ? (
-          <div className="flex flex-col items-center justify-center h-screen">
-            <RotatingLines 
-              visible={true}
-              height="96"
-              width="96"
-              color="grey"
-              strokeWidth="5"
-              animationDuration="0.75"
-              ariaLabel="rotating-lines-loading"
-            />
-          </div>
-        ) : (
+      <div className="mt-10 px-4">
+    {loader ? (
+        <div style={{ width: 200, height: 200, margin: 'auto' }}>
+          <Lottie animationData={loadingAnimation} loop={true} />
+      </div>
+    ) : (
+      <>
+        <div className="text-center mb-6">
+          <h3 className="text-3xl font-extrabold italic tracking-tight text-gray-900">
+            Players <span className="text-indigo-600">Score</span>
+          </h3>
+        </div>
+
+        {/* Card container for scrollable table */}
+        <div className="bg-white shadow-md rounded-lg p-4 overflow-x-auto max-h-[600px]">
           <MaterialReactTable
             columns={columns}
             data={data}
             muiTableBodyCellProps={{
-              style: { wordWrap: 'break-word', width: 'auto' },
+              style: { wordWrap: 'break-word', whiteSpace: 'normal' },
             }}
             muiTableContainerProps={{
               style: { overflowX: 'auto' },
             }}
           />
-        )
-      }
-      </div>
+        </div>
+        
+      </>
+    )
+  }
+
+</div>
+
       {/* Player Score */}
     </Dashboard>
   );

@@ -1,7 +1,8 @@
 import axios from "../axios";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { RotatingLines } from "react-loader-spinner";
+import loadingAnimation from '../loader/Animation - 1747181954747.json';
+import Lottie from 'lottie-react';
 import { useState } from "react";
 import Swal from "sweetalert2";
 import mainlogo from '../../public/mainlogo.png'
@@ -30,7 +31,7 @@ localStorage.removeItem('profile_location');
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loader, setLoading] = useState(false);
   const Signupuser = async (data) => {
     // localStorage.removeItem('email');
     // localStorage.removeItem('token');
@@ -88,21 +89,11 @@ localStorage.removeItem('profile_location');
 
   return (
     <>
-      {loading ? (
-        <div className="flex flex-col items-center justify-center h-screen">
-          <RotatingLines
-            visible={true}
-            height="96"
-            width="96"
-            color="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            ariaLabel="rotating-lines-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-          />
+      {loader ? (
+        <div style={{ width: 200, height: 200, margin: 'auto' }}>
+          <Lottie animationData={loadingAnimation} loop={true} />
         </div>
-      ) : (
+      )  : (
         <div className="h-[100vh] items-center flex justify-center px-5 lg:px-0">
           <div className="max-w-screen-xl max-h-auto bg-white border shadow sm:rounded-lg flex justify-center flex-1">
             <div className="flex-1 bg-blue-900 text-center hidden md:flex">

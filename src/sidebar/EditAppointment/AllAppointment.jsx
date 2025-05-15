@@ -51,8 +51,8 @@ import PlayerRequest from '../../website/PlayerRequest';
 import ChangeRequest from '../ChangeRequest';
 import { AppointmentProvider } from '../../context/AppointmentContext';
 import Show_EditAppointment from './Show_EditAppointment';
-import loadingAnimation from '../../loader/Animation - 1747181954747.json';
-import Lottie from 'lottie-react';
+// import loadingAnimation from '../../loader/Animation - 1747181954747.json';
+// import Lottie from 'lottie-react';
 import Dashboard from '../Dashboard';
 
 function AllAppointment() {
@@ -74,14 +74,14 @@ function AllAppointment() {
           <Lottie animationData={loadingAnimation} loop={true} />
         </div>
       )  */}
-      : (
+
         <div className="p-4">
           <AppointmentProvider>
             <ChangeRequest id={id} />
           </AppointmentProvider>
           <Show_EditAppointment />
         </div>
-      )
+      
     </Dashboard>
   );
 }

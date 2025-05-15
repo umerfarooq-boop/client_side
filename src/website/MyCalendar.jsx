@@ -4,7 +4,8 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useAppointments } from "../context/AppointmentContext";
 import axios from "../axios";
-import { RotatingLines } from "react-loader-spinner";
+import loadingAnimation from '../loader/Animation - 1747181954747.json';
+import Lottie from 'lottie-react';
 import Chat from "../Chat/Chat";
 
 const localizer = momentLocalizer(moment);
@@ -14,7 +15,7 @@ function MyCalendar({ id }) {   // ✅ receive id here
   const [category, setCategory] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [view, setView] = useState("month");
-  const [loading, setLoading] = useState(false);
+  const [loader, setLoading] = useState(false);
 
   const player_id = localStorage.getItem('player_id');
   const coach_record = localStorage.getItem('coach_record');
@@ -46,20 +47,11 @@ function MyCalendar({ id }) {   // ✅ receive id here
 
   return (
     <div style={{ height: "80vh", width: "100%", padding: "40px" }}>
-      {
-        loading ? (
-          <div className="flex items-center justify-center" style={{ height: "100%" }}>
-            <RotatingLines
-              visible={true}
-              height="96"
-              width="96"
-              color="grey"
-              strokeWidth="5"
-              animationDuration="0.75"
-              ariaLabel="rotating-lines-loading"
-            />
-          </div>
-        ) : (
+      {loader ? (
+        <div style={{ width: 200, height: 200, margin: 'auto' }}>
+          <Lottie animationData={loadingAnimation} loop={true} />
+        </div>
+      ): (
           <div>
             <Calendar
               localizer={localizer}

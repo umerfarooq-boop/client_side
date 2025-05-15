@@ -161,7 +161,6 @@ import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import Icon from "@mui/material/Icon";
 
 function EquipmentStock() {
     const [data, setData] = useState([]); 
@@ -169,7 +168,7 @@ function EquipmentStock() {
     const [toggle, setToggle] = useState(true);
     const player_id = localStorage.getItem('player_id');
     const coach_id = localStorage.getItem('coach_id');
-    const [isTableVisible, setIsTableVisible] = useState(true);
+    const [isTableVisible, setIsTableVisible] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -195,7 +194,7 @@ function EquipmentStock() {
         () => [
             {
                 accessorKey: 'equipment_name',
-                header: 'Player Name',
+                header: 'Equipment Name',
                 size: 150,
             },
             {
@@ -214,83 +213,72 @@ function EquipmentStock() {
 
     return (
         <div className="w-full min-h-screen flex flex-col">
-            {/* Optional Loader */}
-            {/* {loading ? (
-                <div className="flex flex-col items-center justify-center h-full">
-                    {/* Add your loader here */}
-            
-                <div className="flex flex-col flex-grow">
-                    <div className="text-center mb-8 mt-8">
-                        <h3 className="text-xl sm:text-3xl leading-normal font-extrabold tracking-tight text-gray-900">
-                            All <span className="text-indigo-600">Equipment</span>
-                        </h3>
-                    </div>
-
-                    {/* Dropdown Button */}
-                    <div
-                        className={`mb-4 flex ${
-                            isTableVisible ? "justify-end" : "justify-center"
-                        }`}
-                    >
-                       <div className="mb-4 flex justify-end w-full px-4">
-  <button
-    onClick={() => setIsTableVisible(!isTableVisible)}
-    className="flex items-center gap-2 px-5 py-2 text-white bg-indigo-700 hover:bg-indigo-800 rounded-lg text-sm font-medium focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900"
-  >
-    {isTableVisible ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-    {isTableVisible ? "Hide Table" : "Show Table"}
-  </button>
-</div>
-
-                    </div>
-
-                    <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{
-                            opacity: isTableVisible ? 1 : 0,
-                            height: isTableVisible ? "auto" : 0,
-                        }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                        className="overflow-hidden"
-                    >
-                        {isTableVisible && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.5, ease: "easeInOut" }}
-                            >
-                                {/* Ensure MaterialReactTable is inside a responsive container */}
-                                <div className="overflow-x-auto w-full">
-                                    <MaterialReactTable
-                                        columns={columns}
-                                        data={data}
-                                        muiTableBodyCellProps={{
-                                            style: { wordWrap: "break-word", maxWidth: "200px" },
-                                        }}
-                                        muiTableContainerProps={{
-                                            style: {
-                                                width: '100%',  // Ensure full width
-                                                maxWidth: '100%', // Prevent overflow beyond container
-                                                overflowX: 'auto', // Allow horizontal scrolling
-                                            },
-                                        }}
-                                        renderTopToolbarCustomActions={() => (
-                                            <Link
-                                                to={"/AddEquipment"}
-                                                className="focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900"
-                                            >
-                                                Add Equipment
-                                            </Link>
-                                        )}
-                                    />
-                                </div>
-                            </motion.div>
-                        )}
-                    </motion.div>
+            <div className="flex flex-col flex-grow">
+                <div className="text-center mb-8 mt-8">
+                    <h3 className="text-xl sm:text-3xl leading-normal font-extrabold tracking-tight text-gray-900">
+                        All <span className="text-indigo-600">Equipment</span>
+                    </h3>
                 </div>
-            )
+
+                {/* Dropdown Button */}
+                <div
+                    className={`mb-4 flex ${isTableVisible ? "justify-end" : "justify-center"}`}
+                >
+                    <div className="mb-4 flex justify-end w-full px-4">
+                        <button
+                            onClick={() => setIsTableVisible(!isTableVisible)}
+                            className="flex items-center gap-2 px-5 py-2 text-white bg-indigo-700 hover:bg-indigo-800 rounded-lg text-sm font-medium focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900"
+                        >
+                            {isTableVisible ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                            {isTableVisible ? "Hide Table" : "Show Table"}
+                        </button>
+                    </div>
+                </div>
+
+                <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{
+                        opacity: isTableVisible ? 1 : 0,
+                        height: isTableVisible ? "auto" : 0,
+                    }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    className="overflow-hidden"
+                >
+                    {isTableVisible && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.5, ease: "easeInOut" }}
+                        >
+                            {/* Ensure MaterialReactTable is inside a responsive container */}
+                            <div className="bg-white shadow-md rounded-lg p-4 overflow-x-auto max-h-[600px]">
+                                <MaterialReactTable
+                                    columns={columns}
+                                    data={data}
+                                    muiTableBodyCellProps={{
+                                        style: { wordWrap: "break-word", whiteSpace: "normal" },
+                                    }}
+                                    muiTableContainerProps={{
+                                        style: {
+                                            overflowX: 'auto',  // Allow horizontal scrolling
+                                        },
+                                    }}
+                                    renderTopToolbarCustomActions={() => (
+                                        <Link
+                                            to={"/AddEquipment"}
+                                            className="focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900"
+                                        >
+                                            Add Equipment
+                                        </Link>
+                                    )}
+                                />
+                            </div>
+                        </motion.div>
+                    )}
+                </motion.div>
+            </div>
         </div>
     );
 }

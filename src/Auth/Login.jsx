@@ -1,7 +1,8 @@
 import axios from '../axios';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { RotatingLines } from 'react-loader-spinner';
+import loadingAnimation from '../loader/Animation - 1747181954747.json';
+import Lottie from 'lottie-react';
 import { Link, useNavigate } from 'react-router-dom';
 import mainlogo from '../../public/mainlogo.png'
 import login from '../../public/Auth_Images/login.png'
@@ -19,7 +20,7 @@ function Login() {
   const user_id = localStorage.getItem('user_id');
 
 const navigate = useNavigate();
-const [loading, setLoading] = useState(false);
+const [loader, setLoading] = useState(false);
 
 // const Loginuser = async (data) => {
 //   setLoading(true);
@@ -192,19 +193,11 @@ const Loginuser = async (data) => {
 
   return (
     <>
-      {loading ? (
-        <div className="justify-center items-center flex flex-col h-screen">
-          <RotatingLines
-            visible={true}
-            height="96"
-            width="96"
-            color="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            ariaLabel="rotating-lines-loading"
-          />
+      {loader ? (
+        <div style={{ width: 200, height: 200, margin: 'auto' }}>
+          <Lottie animationData={loadingAnimation} loop={true} />
         </div>
-      ) : (
+      )  : (
         <>
           <div className="h-[100vh] items-center flex justify-center px-5 lg:px-0">
           <div className="max-w-screen-lg bg-white border shadow sm:rounded-lg flex justify-center flex-1">

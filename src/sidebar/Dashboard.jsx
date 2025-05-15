@@ -90,7 +90,9 @@ function Dashboard({ children }) {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    // setAnchorEl(null);
+     localStorage.clear();           // Clear local storage
+    navigate("/");                  // Redirect to Home (assuming route is "/")
   };
 
   const [profile, setProfile] = useState([]);
@@ -164,6 +166,10 @@ function Dashboard({ children }) {
     setAnchor(null);
   };
 
+  const handleLogout = () => {
+    localStorage.clear();           // Clear local storage
+    navigate("/");                  // Redirect to Home (assuming route is "/")
+  };
   // let login_id = null;
 
   if (role === "player") {
@@ -494,45 +500,87 @@ function Dashboard({ children }) {
             </Link>
           </li>
         </ul>
-      ) : role === "parent" ? (
-        <div className="gap-4 mb-2 block md:block sm:block xsm:block lg:flex xl:flex">
-          <Typography
-            as="li"
-            variant="small"
-            color="blue-gray"
-            className="flex items-center gap-x-2 p-1 font-medium"
-          >
-            <EventNoteIcon className="text-[#90A4AE]" fontSize="small" />
-            <Link
-              to={`/parent_player_attendance/${login_id}`}
-              className="flex items-center text-black"
-            >
-              Attendance
-            </Link>
-          </Typography>
+      ) :
+      // ) : role === "parent" ? (
+      //   <div className="gap-4 mb-2 block md:block sm:block xsm:block lg:flex xl:flex">
+      //     <Typography
+      //       as="li"
+      //       variant="small"
+      //       color="blue-gray"
+      //       className="flex items-center gap-x-2 p-1 font-medium"
+      //     >
+      //       <EventNoteIcon className="text-[#90A4AE]" fontSize="small" />
+      //       <Link
+      //         to={`/parent_player_attendance/${login_id}`}
+      //         className="flex items-center text-black"
+      //       >
+      //         Attendance
+      //       </Link>
+      //     </Typography>
 
-          <Typography
-            as="li"
-            variant="small"
-            color="blue-gray"
-            className="flex items-center gap-x-2 p-1 font-medium"
-          >
-            <EmojiEventsIcon className="text-[#90A4AE]" fontSize="small" />
-            <Link
-              to={`/parent_player_score/${login_id}`}
-              className="flex items-center text-black"
-            >
-              Score
-            </Link>
-          </Typography>
+      //     <Typography
+      //       as="li"
+      //       variant="small"
+      //       color="blue-gray"
+      //       className="flex items-center gap-x-2 p-1 font-medium"
+      //     >
+      //       <EmojiEventsIcon className="text-[#90A4AE]" fontSize="small" />
+      //       <Link
+      //         to={`/parent_player_score/${login_id}`}
+      //         className="flex items-center text-black"
+      //       >
+      //         Score
+      //       </Link>
+      //     </Typography>
 
-          <div className="ml-auto">
-            <button className="bg-indigo-900 text-white px-4 py-1.5 rounded-md hover:bg-indigo-700">
-              Logout
-            </button>
-          </div>
-        </div>
-      ) : null}
+      //     <div className="ml-auto">
+      //       <button className="bg-indigo-900 text-white px-4 py-1.5 rounded-md hover:bg-indigo-700">
+      //         Logout
+      //       </button>
+      //     </div>
+      //   </div>
+       role === "parent" ? (
+    <div className="gap-4 mb-2 block md:block sm:block xsm:block lg:flex xl:flex">
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="flex items-center gap-x-2 p-1 font-medium"
+      >
+        <EventNoteIcon className="text-[#90A4AE]" fontSize="small" />
+        <Link
+          to={`/parent_player_attendance/${login_id}`}
+          className="flex items-center text-black"
+        >
+          Attendance
+        </Link>
+      </Typography>
+
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="flex items-center gap-x-2 p-1 font-medium"
+      >
+        <EmojiEventsIcon className="text-[#90A4AE]" fontSize="small" />
+        <Link
+          to={`/parent_player_score/${login_id}`}
+          className="flex items-center text-black"
+        >
+          Score
+        </Link>
+      </Typography>
+
+      <div className="ml-auto">
+        <button
+          onClick={handleLogout}
+          className="bg-indigo-900 text-white px-4 py-1.5 rounded-md hover:bg-indigo-700"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  ) : null}
     </ul>
   );
 
